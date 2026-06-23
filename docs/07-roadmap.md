@@ -15,6 +15,8 @@ Android を先行ターゲットとし、本アプリの中核体験を最短で
 
 > ゴール: 「事前登録 → フルスクリーン進捗 → 自動再配分」という [01](./01-overview.md) で定義した狙う体験を、最小構成で成立させる。
 
+> 📋 **本 MVP の各ステップは GitHub Issue として起票済み**（親 Epic 6 + 子 22 = 計 28 件）。Issue との対応・ラベル（`claude-code` / `needs-human`）凡例は [08. 実装 Issue](./08-implementation-issues.md) を参照。
+
 ## Phase 2（再配分とカスタマイズの拡充）
 
 - **`fixed-end`（終了時刻固定）** モードの追加

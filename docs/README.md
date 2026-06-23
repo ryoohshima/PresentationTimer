@@ -17,11 +17,13 @@
 | 05 | [コアロジック](./05-core-logic.md) | タイマー状態機械・時間再配分アルゴリズム | 設計提案 ★ |
 | 06 | [画面 & UX](./06-screens.md) | 画面一覧・遷移・フルスクリーン表示要件 | 設計提案 ★ |
 | 07 | [ロードマップ](./07-roadmap.md) | MVP → 拡張のスコープと段階 | 設計提案 ★ |
+| 08 | [実装 Issue（MVP）](./08-implementation-issues.md) | MVP を起票した GitHub Issue の対応表・ラベル凡例 | 進行管理 |
 
 ★ = 提示された RFC には含まれず、設計提案として新規に起草した章。実装フェーズでの検証により変更されうる。
 
 ## ドキュメントのステータス
 
-- **段階**: RFC（実装前の設計レビュー）
+- **段階**: RFC（設計レビュー）→ MVP 実装フェーズへ移行中
 - **確定度**: §1〜3 は提示済み RFC ベース / §4〜7 は提案ベース（要レビュー）
-- **次アクション**: `05-core-logic.md`（時間再配分アルゴリズム）を最優先でレビューし、合意後に `packages/core-logic` の実装へ進む
+- **進行管理**: MVP の全ステップを GitHub Issue 化済み（親 Epic 6 + 子 22 = 計 28 件）。対応表は [08. 実装 Issue](./08-implementation-issues.md) を参照
+- **次アクション**: [#11 proportional 再配分アルゴリズム実装](https://github.com/ryoohshima/AgendaTimer/issues/11)（MVP の核）から着手する
