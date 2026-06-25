@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  # apps/* は次フェーズで追加する（docs/07 ロードマップ参照）
+  - "apps/*"
 allowBuilds:
   # vitest が内部利用する esbuild のネイティブバイナリ取得を許可する
   esbuild: true
