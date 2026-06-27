@@ -148,9 +148,9 @@ describe('redistribute による比例再配分', () => {
       status: 'running',
     });
     const next = redistribute(state);
-    expect(next.agenda[1].allocatedSec).toBe(244);
-    expect(next.agenda[2].allocatedSec).toBe(146);
-    expect(state.agenda[1].allocatedSec).toBe(300); // イミュータブル
+    expect(next.agenda[1]!.allocatedSec).toBe(244);
+    expect(next.agenda[2]!.allocatedSec).toBe(146);
+    expect(state.agenda[1]!.allocatedSec).toBe(300); // イミュータブル
   });
 
   test('巻き（delta < 0）で残項目 allocatedSec が plannedSec 比で緩む', () => {
@@ -164,8 +164,8 @@ describe('redistribute による比例再配分', () => {
       status: 'running',
     });
     const next = redistribute(state);
-    expect(next.agenda[1].allocatedSec).toBe(356);
-    expect(next.agenda[2].allocatedSec).toBe(214);
+    expect(next.agenda[1]!.allocatedSec).toBe(356);
+    expect(next.agenda[2]!.allocatedSec).toBe(214);
   });
 
   test('過不足ゼロ（delta = 0）では allocatedSec が変化しない', () => {
@@ -194,8 +194,8 @@ describe('redistribute による比例再配分', () => {
       status: 'running',
     });
     const next = redistribute(state);
-    expect(next.agenda[1].allocatedSec).toBe(300); // ロック済み、不変
-    expect(next.agenda[2].allocatedSec).toBe(90);
+    expect(next.agenda[1]!.allocatedSec).toBe(300); // ロック済み、不変
+    expect(next.agenda[2]!.allocatedSec).toBe(90);
   });
 
   test('allocatedSec が MIN_ALLOCATED_SEC 未満になる場合はクランプされる', () => {
@@ -211,7 +211,7 @@ describe('redistribute による比例再配分', () => {
       status: 'running',
     });
     const next = redistribute(state);
-    expect(next.agenda[1].allocatedSec).toBe(MIN_ALLOCATED_SEC);
+    expect(next.agenda[1]!.allocatedSec).toBe(MIN_ALLOCATED_SEC);
   });
 
   test('再配分プールが空（全ロック）のとき state を変えない', () => {
