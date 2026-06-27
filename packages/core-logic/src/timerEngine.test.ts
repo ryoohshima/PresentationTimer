@@ -12,7 +12,7 @@ import {
   resume,
   start,
   tick,
-} from "./timerEngine.js";
+} from "./timerEngine";
 
 const makeAgenda = (): AgendaItem[] => [
   { id: "a", title: "A", plannedSec: 300, allocatedSec: 300, isLocked: false },

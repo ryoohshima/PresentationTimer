@@ -1,1 +1,1 @@
-export * from "./timerEngine.js";
+export * from "./timerEngine";
