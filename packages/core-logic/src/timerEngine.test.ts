@@ -1,12 +1,14 @@
 import { describe, expect, test } from 'vitest';
 import type { AgendaItem, TimerState } from '@agenda-timer/types';
 import {
+  MIN_ALLOCATED_SEC,
   advanceItem,
   getCurrentItem,
   getOverUnderSec,
   getProgressRate,
   getRemainingSec,
   pause,
+  redistribute,
   resume,
   start,
   tick,
@@ -124,5 +126,117 @@ describe('派生値セレクタ', () => {
     expect(getCurrentItem(state)).toBeUndefined();
     expect(getRemainingSec(state)).toBeUndefined();
     expect(getProgressRate(state)).toBeUndefined();
+  });
+});
+
+const makeAgenda3 = (): AgendaItem[] => [
+  { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+  { id: 'b', title: 'B', plannedSec: 300, allocatedSec: 300, isLocked: false },
+  { id: 'c', title: 'C', plannedSec: 180, allocatedSec: 180, isLocked: false },
+];
+
+describe('redistribute による比例再配分', () => {
+  test('押し（delta > 0）で残項目 allocatedSec が plannedSec 比で圧縮される', () => {
+    // currentItem A: allocatedSec=300, elapsed=390 → delta=+90
+    // pool: B(300), C(180), total=480
+    // B: round(max(30, 300 - 90*(300/480))) = round(243.75) = 244
+    // C: round(max(30, 180 - 90*(180/480))) = round(146.25) = 146
+    const state = makeState({
+      agenda: makeAgenda3(),
+      currentIndex: 0,
+      elapsedInItemSec: 390,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(244);
+    expect(next.agenda[2]!.allocatedSec).toBe(146);
+    expect(state.agenda[1]!.allocatedSec).toBe(300); // イミュータブル
+  });
+
+  test('巻き（delta < 0）で残項目 allocatedSec が plannedSec 比で緩む', () => {
+    // currentItem A: allocatedSec=300, elapsed=210 → delta=-90
+    // B: round(max(30, 300 - (-90)*(300/480))) = round(356.25) = 356
+    // C: round(max(30, 180 - (-90)*(180/480))) = round(213.75) = 214
+    const state = makeState({
+      agenda: makeAgenda3(),
+      currentIndex: 0,
+      elapsedInItemSec: 210,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(356);
+    expect(next.agenda[2]!.allocatedSec).toBe(214);
+  });
+
+  test('過不足ゼロ（delta = 0）では allocatedSec が変化しない', () => {
+    const state = makeState({
+      agenda: makeAgenda3(),
+      currentIndex: 0,
+      elapsedInItemSec: 300,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next).toBe(state);
+  });
+
+  test('isLocked 項目は分母・配分から除外され他の項目で全量を吸収する', () => {
+    // Pool: B はロックのため除外、C のみ吸収
+    // C: round(max(30, 180 - 90*(180/180))) = round(90) = 90
+    const agenda: AgendaItem[] = [
+      { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+      { id: 'b', title: 'B', plannedSec: 300, allocatedSec: 300, isLocked: true },
+      { id: 'c', title: 'C', plannedSec: 180, allocatedSec: 180, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 390,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(300); // ロック済み、不変
+    expect(next.agenda[2]!.allocatedSec).toBe(90);
+  });
+
+  test('allocatedSec が MIN_ALLOCATED_SEC 未満になる場合はクランプされる', () => {
+    // delta=400 → B: max(30, 60-400) = 30 = MIN_ALLOCATED_SEC
+    const agenda: AgendaItem[] = [
+      { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+      { id: 'b', title: 'B', plannedSec: 60, allocatedSec: 60, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 700,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(MIN_ALLOCATED_SEC);
+  });
+
+  test('再配分プールが空（全ロック）のとき state を変えない', () => {
+    const agenda: AgendaItem[] = [
+      { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+      { id: 'b', title: 'B', plannedSec: 300, allocatedSec: 300, isLocked: true },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 390,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next).toBe(state);
+  });
+
+  test('reallocationMode が off のとき state を変えない', () => {
+    const state = makeState({
+      agenda: makeAgenda3(),
+      currentIndex: 0,
+      elapsedInItemSec: 390,
+      reallocationMode: 'off',
+    });
+    const next = redistribute(state);
+    expect(next).toBe(state);
   });
 });
