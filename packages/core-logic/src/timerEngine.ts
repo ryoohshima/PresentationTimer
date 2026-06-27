@@ -71,21 +71,33 @@ export function redistribute(state: TimerState): TimerState {
 
   const poolPlannedTotal = pool.reduce((sum, { item }) => sum + item.plannedSec, 0);
   const poolIndexSet = new Set(pool.map(({ index }) => index));
+  const lastPoolIndex = pool[pool.length - 1]!.index;
+
+  // 丸め残差を最後の項目で吸収するため、プール全体の目標合計を先に確定する
+  const poolAllocatedTotal = pool.reduce((sum, { item }) => sum + item.allocatedSec, 0);
+  const targetTotal = poolAllocatedTotal - delta;
+
+  let sumAllocated = 0;
 
   const newAgenda = state.agenda.map((item, index) => {
     if (!poolIndexSet.has(index)) return item;
 
-    const share =
-      poolPlannedTotal === 0
-        ? 1 / pool.length
-        : item.plannedSec / poolPlannedTotal;
-
-    return {
-      ...item,
-      allocatedSec: Math.round(
+    let newAllocatedSec: number;
+    if (index === lastPoolIndex) {
+      // 残差吸収: 前項目の丸め誤差をここで吸収して合計を目標値に合わせる
+      newAllocatedSec = Math.max(MIN_ALLOCATED_SEC, targetTotal - sumAllocated);
+    } else {
+      const share =
+        poolPlannedTotal === 0
+          ? 1 / pool.length
+          : item.plannedSec / poolPlannedTotal;
+      newAllocatedSec = Math.round(
         Math.max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share)
-      ),
-    };
+      );
+    }
+
+    sumAllocated += newAllocatedSec;
+    return { ...item, allocatedSec: newAllocatedSec };
   });
 
   return { ...state, agenda: newAgenda };

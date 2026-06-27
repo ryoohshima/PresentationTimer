@@ -239,4 +239,53 @@ describe('redistribute による比例再配分', () => {
     const next = redistribute(state);
     expect(next).toBe(state);
   });
+
+  test('poolPlannedTotal が 0 のとき均等配分にフォールバックする', () => {
+    // 全プール項目の plannedSec=0 → ゼロ除算回避のため均等配分
+    // delta=60, pool: B(plannedSec=0, alloc=120), C(plannedSec=0, alloc=120)
+    // B: round(max(30, 120 - 60*(1/2))) = round(90) = 90
+    // C (last): remaining = (240-60) - 90 = 90
+    const agenda: AgendaItem[] = [
+      { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+      { id: 'b', title: 'B', plannedSec: 0, allocatedSec: 120, isLocked: false },
+      { id: 'c', title: 'C', plannedSec: 0, allocatedSec: 120, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 360,
+      totalPlannedSec: 300,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(90);
+    expect(next.agenda[2]!.allocatedSec).toBe(90);
+  });
+
+  test('丸め残差は最後のプール項目で吸収される', () => {
+    // delta=1, プール3項目（plannedSec均等）→ 各項目に 1/3 ずつ配分
+    // B: round(max(30, 100 - 1/3)) = round(99.67) = 100
+    // C: round(max(30, 100 - 1/3)) = round(99.67) = 100
+    // D (last): remaining = (300-1) - 100 - 100 = 99（残差吸収）
+    const agenda: AgendaItem[] = [
+      { id: 'a', title: 'A', plannedSec: 300, allocatedSec: 300, isLocked: false },
+      { id: 'b', title: 'B', plannedSec: 100, allocatedSec: 100, isLocked: false },
+      { id: 'c', title: 'C', plannedSec: 100, allocatedSec: 100, isLocked: false },
+      { id: 'd', title: 'D', plannedSec: 100, allocatedSec: 100, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 301,
+      totalPlannedSec: 600,
+      status: 'running',
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(100);
+    expect(next.agenda[2]!.allocatedSec).toBe(100);
+    expect(next.agenda[3]!.allocatedSec).toBe(99);
+    // プール合計が poolAllocatedTotal - delta = 300 - 1 = 299 に一致する
+    const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]!.allocatedSec, 0);
+    expect(poolTotal).toBe(299);
+  });
 });
