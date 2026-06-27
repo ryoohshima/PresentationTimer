@@ -1,6 +1,10 @@
 packages:
   - "packages/*"
   - "apps/*"
+# Expo(SDK 52)+React Native は pnpm の isolated install だとネイティブモジュールを
+# 解決できないことがあるため、Expo 公式推奨の hoisted リンカを使う
+# 参照: https://docs.expo.dev/guides/monorepos/
+nodeLinker: hoisted
 allowBuilds:
   # vitest が内部利用する esbuild のネイティブバイナリ取得を許可する
   esbuild: true
