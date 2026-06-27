@@ -50,12 +50,45 @@ export function advanceItem(state: TimerState): TimerState {
 /**
  * 現項目で生じた過不足を残項目の allocatedSec へ反映する（advanceItem 内部から利用）。
  *
- * TODO(MVP): proportional / fixed-end の再配分アルゴリズムを実装する（docs/05-core-logic.md）。
- * 現状は再配分を行わず state をそのまま返すプレースホルダ（= off モード相当）であり、
- * advanceItem の項目進行ロジックのみが有効。
+ * proportional モード: 再配分プール（index > currentIndex かつ !isLocked）各項目の
+ * plannedSec 比で delta を配分し、MIN_ALLOCATED_SEC でクランプして整数秒に丸める。
+ * off モードおよびプールが空の場合は state をそのまま返す。
  */
 export function redistribute(state: TimerState): TimerState {
-  return state;
+  if (state.reallocationMode !== 'proportional') return state;
+
+  const currentItem = state.agenda[state.currentIndex];
+  if (currentItem === undefined) return state;
+
+  const delta = state.elapsedInItemSec - currentItem.allocatedSec;
+  if (delta === 0) return state;
+
+  const pool = state.agenda
+    .map((item, index) => ({ item, index }))
+    .filter(({ index, item }) => index > state.currentIndex && !item.isLocked);
+
+  if (pool.length === 0) return state;
+
+  const poolPlannedTotal = pool.reduce((sum, { item }) => sum + item.plannedSec, 0);
+  const poolIndexSet = new Set(pool.map(({ index }) => index));
+
+  const newAgenda = state.agenda.map((item, index) => {
+    if (!poolIndexSet.has(index)) return item;
+
+    const share =
+      poolPlannedTotal === 0
+        ? 1 / pool.length
+        : item.plannedSec / poolPlannedTotal;
+
+    return {
+      ...item,
+      allocatedSec: Math.round(
+        Math.max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share)
+      ),
+    };
+  });
+
+  return { ...state, agenda: newAgenda };
 }
 
 // --- セレクタ（派生値の導出。状態には保持しない: docs/04） -----------------
