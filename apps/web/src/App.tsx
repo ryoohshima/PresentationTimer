@@ -1,6 +1,6 @@
 import { getCurrentItem, getRemainingSec } from "@agenda-timer/core-logic";
-import { useTimerStore } from "@agenda-timer/store";
 import { useEffect } from "react";
+import { useTimerStore } from "./store/useTimerStore.js";
 
 export function App() {
   const { state, setAgenda, start, pause, resume, tick } = useTimerStore();
@@ -19,9 +19,7 @@ export function App() {
   return (
     <main style={{ fontFamily: "sans-serif", padding: "2rem" }}>
       <h1>Agenda Timer</h1>
-      <p>
-        グローバルストア（@agenda-timer/store）経由で TimerState を管理しているでござる。
-      </p>
+      <p>グローバルストア（TimerContext）経由で TimerState を管理しているでござる。</p>
       <dl>
         <dt>ステータス</dt>
         <dd>{state.status}</dd>
@@ -31,11 +29,25 @@ export function App() {
         <dd>{remainingSec ?? "—"} 秒</dd>
       </dl>
       <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-        {state.status === "idle" && <button type="button" onClick={start}>開始</button>}
-        {state.status === "running" && <button type="button" onClick={pause}>一時停止</button>}
-        {state.status === "paused" && <button type="button" onClick={resume}>再開</button>}
+        {state.status === "idle" && (
+          <button type="button" onClick={start}>
+            開始
+          </button>
+        )}
         {state.status === "running" && (
-          <button type="button" onClick={() => tick(10)}>+10 秒</button>
+          <button type="button" onClick={pause}>
+            一時停止
+          </button>
+        )}
+        {state.status === "paused" && (
+          <button type="button" onClick={resume}>
+            再開
+          </button>
+        )}
+        {state.status === "running" && (
+          <button type="button" onClick={() => tick(10)}>
+            +10 秒
+          </button>
         )}
       </div>
     </main>
