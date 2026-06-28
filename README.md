@@ -12,7 +12,7 @@ GitHub のリポジトリ画面右上 **`Use this template`** ボタンから新
 ### CLI から
 
 ```sh
-gh repo create <new-repo-name> --template Ryo-Ohshima/github-template --private
+gh repo create <new-repo-name> --template ryoohshima/github-template --private
 ```
 
 ## 含まれるファイル
@@ -25,7 +25,7 @@ gh repo create <new-repo-name> --template Ryo-Ohshima/github-template --private
 | `.github/ISSUE_TEMPLATE/bug_report.md` | バグ報告テンプレート（日本語） |
 | `.github/ISSUE_TEMPLATE/feature_request.md` | 機能要望テンプレート（日本語） |
 | `.github/ISSUE_TEMPLATE/config.yml` | blank issue を無効化しテンプレ選択を強制 |
-| `.github/CODEOWNERS` | PR レビュー自動割り当て（初期値 `@Ryo-Ohshima`） |
+| `.github/CODEOWNERS` | PR レビュー自動割り当て（初期値 `@ryoohshima`） |
 | `.github/release.yml` | リリースノート自動カテゴリ分類（コミット規約整合） |
 | `.github/dependabot.yml` | npm + github-actions 週次自動更新 |
 | `.github/workflows/claude.yml` | `@claude` メンションで Claude Code を起動 |
@@ -84,5 +84,5 @@ Issue で `@claude ping` をコメントし、`Actions` タブで workflow run �
 ## 設計方針
 
 - スタック非依存で汎用的なものに限定（CI 本体は雛形のみ）
-- 規約は [`claude-code/rules/git-guideline.md`](https://github.com/Ryo-Ohshima/claude-code) のコミットプレフィックスと整合
+- 規約は [`claude-code/rules/git-guideline.md`](https://github.com/ryoohshima/claude-code) のコミットプレフィックスと整合
 - すべてのテンプレ・メッセージは日本語

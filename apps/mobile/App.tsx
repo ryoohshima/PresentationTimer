@@ -1,15 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import type { TimerState } from '@agenda-timer/types';
-import { getRemainingSec } from '@agenda-timer/core-logic';
+import { getRemainingSec } from "@agenda-timer/core-logic";
+import type { TimerState } from "@agenda-timer/types";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
 const initialState: TimerState = {
   agenda: [],
   currentIndex: 0,
-  status: 'idle',
+  status: "idle",
   elapsedInItemSec: 0,
   totalPlannedSec: 0,
-  reallocationMode: 'proportional',
+  reallocationMode: "proportional",
 };
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
     <View style={styles.container}>
       <Text style={styles.title}>AgendaTimer</Text>
       <Text style={styles.status}>
-        Status: {initialState.status} / Remaining: {remaining ?? '—'}
+        Status: {initialState.status} / Remaining: {remaining ?? "—"}
       </Text>
       <StatusBar style="auto" />
     </View>
@@ -29,17 +29,17 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   status: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
 });

@@ -1,19 +1,13 @@
-# Node.js プロジェクト用 CI 雛形
-#
-# 使用方法:
-#   1. このファイルを ci.yml にリネーム（拡張子 .example を外す）
-#   2. プロジェクトのスクリプト名（lint / typecheck / test）に合わせて run: を調整
-#   3. パッケージマネージャ・Node バージョンをプロジェクトに合わせて変更
-#
-# .example のままだと GitHub Actions に認識されないため、リネームするまで実行されない。
+# CI: lint / typecheck / test を develop・main への push / PR で実行する。
+# lint は Biome の CI 専用コマンド（biome ci）で整形崩れ・lint・import順を無改変で一括検査する。
 
 name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,7 +28,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+      - run: pnpm exec biome ci .
 
   typecheck:
     runs-on: ubuntu-latest

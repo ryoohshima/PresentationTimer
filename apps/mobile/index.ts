@@ -1,6 +1,6 @@
-import { registerRootComponent } from 'expo';
+import { registerRootComponent } from "expo";
 
-import App from './App';
+import App from "./App";
 
 // registerRootComponent でルートコンポーネントを AppRegistry に登録する。
 // monorepo + hoisted 構成では expo/AppEntry.js の相対 import が壊れるため、
