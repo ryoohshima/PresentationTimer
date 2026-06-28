@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.js";
+import { TimerProvider } from "./store/TimerProvider.js";
 
 const rootElement = document.getElementById("root");
 if (rootElement === null) {
@@ -9,6 +10,8 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <TimerProvider>
+      <App />
+    </TimerProvider>
   </StrictMode>,
 );
