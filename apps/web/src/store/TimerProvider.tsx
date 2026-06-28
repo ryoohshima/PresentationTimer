@@ -1,9 +1,5 @@
-import { type ReactNode } from "react";
-import {
-  TimerDispatchContext,
-  TimerStateContext,
-  useTimerReducer,
-} from "./useTimerStore";
+import type { ReactNode } from "react";
+import { TimerDispatchContext, TimerStateContext, useTimerReducer } from "./useTimerStore";
 
 interface Props {
   children: ReactNode;
@@ -14,9 +10,7 @@ export function TimerProvider({ children }: Props) {
   const [state, dispatch] = useTimerReducer();
   return (
     <TimerStateContext.Provider value={state}>
-      <TimerDispatchContext.Provider value={dispatch}>
-        {children}
-      </TimerDispatchContext.Provider>
+      <TimerDispatchContext.Provider value={dispatch}>{children}</TimerDispatchContext.Provider>
     </TimerStateContext.Provider>
   );
 }
