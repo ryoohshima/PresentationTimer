@@ -1,28 +1,28 @@
 import { getRemainingSec } from "@agenda-timer/core-logic";
-import type { TimerState } from "@agenda-timer/types";
+import { TimerProvider, useTimerStore } from "@agenda-timer/store";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
-const initialState: TimerState = {
-  agenda: [],
-  currentIndex: 0,
-  status: "idle",
-  elapsedInItemSec: 0,
-  totalPlannedSec: 0,
-  reallocationMode: "proportional",
-};
-
-export default function App() {
-  const remaining = getRemainingSec(initialState);
+function AppContent() {
+  const { state } = useTimerStore();
+  const remaining = getRemainingSec(state);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>AgendaTimer</Text>
       <Text style={styles.status}>
-        Status: {initialState.status} / Remaining: {remaining ?? "—"}
+        Status: {state.status} / Remaining: {remaining ?? "—"}
       </Text>
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <TimerProvider>
+      <AppContent />
+    </TimerProvider>
   );
 }
 

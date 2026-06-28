@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@agenda-timer/core-logic": "workspace:*",
+    "@agenda-timer/store": "workspace:*",
     "@agenda-timer/types": "workspace:*",
     "@expo/metro-runtime": "~4.0.1",
     "expo": "~52.0.0",

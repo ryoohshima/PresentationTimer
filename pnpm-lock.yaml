@@ -26,6 +26,9 @@ importers:
       '@agenda-timer/core-logic':
         specifier: workspace:*
         version: link:../../packages/core-logic
+      '@agenda-timer/store':
+        specifier: workspace:*
+        version: link:../../packages/store
       '@agenda-timer/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -81,6 +84,9 @@ importers:
       '@agenda-timer/core-logic':
         specifier: workspace:*
         version: link:../../packages/core-logic
+      '@agenda-timer/store':
+        specifier: workspace:*
+        version: link:../../packages/store
       '@agenda-timer/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -106,6 +112,15 @@ importers:
 
   packages/core-logic:
     dependencies:
+      '@agenda-timer/types':
+        specifier: workspace:*
+        version: link:../types
+
+  packages/store:
+    dependencies:
+      '@agenda-timer/core-logic':
+        specifier: workspace:*
+        version: link:../core-logic
       '@agenda-timer/types':
         specifier: workspace:*
         version: link:../types
