@@ -6,6 +6,7 @@ import {
   getOverUnderSec,
   getProgressRate,
   getRemainingSec,
+  loadAgenda,
   MIN_ALLOCATED_SEC,
   pause,
   redistribute,
@@ -27,6 +28,56 @@ const makeState = (overrides: Partial<TimerState> = {}): TimerState => ({
   totalPlannedSec: 480,
   reallocationMode: "proportional",
   ...overrides,
+});
+
+describe("loadAgenda によるアジェンダ読み込み", () => {
+  test("totalPlannedSec を plannedSec 合計で再計算する", () => {
+    // Arrange
+    const items = makeAgenda(); // 300 + 180
+
+    // Act
+    const next = loadAgenda(makeState(), items);
+
+    // Assert
+    expect(next.agenda).toBe(items);
+    expect(next.totalPlannedSec).toBe(480);
+  });
+
+  test("status・currentIndex・elapsedInItemSec を計測前の初期値にリセットする", () => {
+    // Arrange
+    const state = makeState({
+      status: "running",
+      currentIndex: 1,
+      elapsedInItemSec: 99,
+    });
+
+    // Act
+    const next = loadAgenda(state, makeAgenda());
+
+    // Assert
+    expect(next.status).toBe("idle");
+    expect(next.currentIndex).toBe(0);
+    expect(next.elapsedInItemSec).toBe(0);
+  });
+
+  test("空配列では totalPlannedSec が 0 になる", () => {
+    const next = loadAgenda(makeState(), []);
+    expect(next.agenda).toEqual([]);
+    expect(next.totalPlannedSec).toBe(0);
+  });
+
+  test("元の state を破壊しない（イミュータブル）", () => {
+    // Arrange
+    const state = makeState({ status: "running", elapsedInItemSec: 42 });
+
+    // Act
+    loadAgenda(state, []);
+
+    // Assert
+    expect(state.status).toBe("running");
+    expect(state.elapsedInItemSec).toBe(42);
+    expect(state.totalPlannedSec).toBe(480);
+  });
 });
 
 describe("制御系の状態遷移", () => {
