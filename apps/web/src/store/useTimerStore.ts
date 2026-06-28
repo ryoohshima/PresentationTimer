@@ -3,13 +3,7 @@
 
 import * as engine from "@agenda-timer/core-logic";
 import type { AgendaItem, TimerState } from "@agenda-timer/types";
-import {
-  type Dispatch,
-  createContext,
-  useCallback,
-  useContext,
-  useReducer,
-} from "react";
+import { createContext, type Dispatch, useCallback, useContext, useReducer } from "react";
 
 // --- アクション型 -----------------------------------------------------------
 
@@ -35,14 +29,7 @@ const DEFAULT_STATE: TimerState = {
 function timerReducer(state: TimerState, action: Action): TimerState {
   switch (action.type) {
     case "SET_AGENDA":
-      return {
-        ...state,
-        agenda: action.items,
-        totalPlannedSec: action.items.reduce((sum, item) => sum + item.plannedSec, 0),
-        status: "idle",
-        currentIndex: 0,
-        elapsedInItemSec: 0,
-      };
+      return engine.loadAgenda(state, action.items);
     case "START":
       return engine.start(state);
     case "PAUSE":
@@ -61,7 +48,7 @@ function timerReducer(state: TimerState, action: Action): TimerState {
 const StateContext = createContext<TimerState>(DEFAULT_STATE);
 const DispatchContext = createContext<Dispatch<Action>>(() => undefined);
 
-export { StateContext as TimerStateContext, DispatchContext as TimerDispatchContext };
+export { DispatchContext as TimerDispatchContext, StateContext as TimerStateContext };
 
 // --- Provider ---------------------------------------------------------------
 
@@ -107,10 +94,7 @@ export function useTimerStore(): TimerStore {
   const start = useCallback(() => dispatch({ type: "START" }), [dispatch]);
   const pause = useCallback(() => dispatch({ type: "PAUSE" }), [dispatch]);
   const resume = useCallback(() => dispatch({ type: "RESUME" }), [dispatch]);
-  const tick = useCallback(
-    (deltaSec: number) => dispatch({ type: "TICK", deltaSec }),
-    [dispatch],
-  );
+  const tick = useCallback((deltaSec: number) => dispatch({ type: "TICK", deltaSec }), [dispatch]);
   const advanceItem = useCallback(() => dispatch({ type: "ADVANCE_ITEM" }), [dispatch]);
 
   return { state, setAgenda, start, pause, resume, tick, advanceItem };

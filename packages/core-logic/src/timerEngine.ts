@@ -8,6 +8,21 @@ export const MIN_ALLOCATED_SEC = 30;
 
 // --- 制御系（状態遷移） ---------------------------------------------------
 
+/**
+ * 編集画面で確定したアジェンダを読み込み、計測前の初期状態にする。
+ * totalPlannedSec を plannedSec 合計で再計算し、idle・先頭項目・経過 0 にリセットする。
+ */
+export function loadAgenda(state: TimerState, items: AgendaItem[]): TimerState {
+  return {
+    ...state,
+    agenda: items,
+    totalPlannedSec: items.reduce((sum, item) => sum + item.plannedSec, 0),
+    status: "idle",
+    currentIndex: 0,
+    elapsedInItemSec: 0,
+  };
+}
+
 /** idle から計測を開始する。先頭項目・経過 0 にリセットする。 */
 export function start(state: TimerState): TimerState {
   return { ...state, status: "running", currentIndex: 0, elapsedInItemSec: 0 };
