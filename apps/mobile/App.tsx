@@ -1,26 +1,30 @@
-import { getRemainingSec } from "@agenda-timer/core-logic";
-import type { TimerState } from "@agenda-timer/types";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { AgendaEditScreen } from "./src/screens/AgendaEditScreen";
+import { SettingsScreen } from "./src/screens/SettingsScreen";
+import { TimerScreen } from "./src/screens/TimerScreen";
 
-const initialState: TimerState = {
-  agenda: [],
-  currentIndex: 0,
-  status: "idle",
-  elapsedInItemSec: 0,
-  totalPlannedSec: 0,
-  reallocationMode: "proportional",
-};
+type Screen = "agenda-edit" | "timer";
 
 export default function App() {
-  const remaining = getRemainingSec(initialState);
+  const [screen, setScreen] = useState<Screen>("agenda-edit");
+  const [settingsVisible, setSettingsVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AgendaTimer</Text>
-      <Text style={styles.status}>
-        Status: {initialState.status} / Remaining: {remaining ?? "—"}
-      </Text>
+      {screen === "agenda-edit" ? (
+        <AgendaEditScreen
+          onStart={() => setScreen("timer")}
+          onSettings={() => setSettingsVisible(true)}
+        />
+      ) : (
+        <TimerScreen
+          onBackToEdit={() => setScreen("agenda-edit")}
+          onSettings={() => setSettingsVisible(true)}
+        />
+      )}
+      {settingsVisible && <SettingsScreen onClose={() => setSettingsVisible(false)} />}
       <StatusBar style="auto" />
     </View>
   );
@@ -30,16 +34,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  status: {
-    fontSize: 16,
-    color: "#666",
   },
 });
