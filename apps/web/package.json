@@ -13,11 +13,11 @@
     "@agenda-timer/core-logic": "workspace:*",
     "@agenda-timer/store": "workspace:*",
     "@agenda-timer/types": "workspace:*",
-    "react": "^19.2.0",
+    "react": "^19.2.7",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.0",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.0",
     "vite": "^8.1.3"
