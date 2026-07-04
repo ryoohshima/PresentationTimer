@@ -1,33 +1,48 @@
 // タイマーエンジン: 副作用を持たない純粋関数の集合（docs/05-core-logic.md）。
 // 「現在の状態 + 入力 → 次の状態」を返すだけにし、時間計測や I/O は UI 層の責務とする。
 
-import type { AgendaItem, TimerState } from '@agenda-timer/types';
+import type { AgendaItem, TimerState } from "@agenda-timer/types";
 
 /** 再配分後の 1 項目あたりの割当下限（秒）。これ未満には圧縮しない。 */
 export const MIN_ALLOCATED_SEC = 30;
 
 // --- 制御系（状態遷移） ---------------------------------------------------
 
+/**
+ * 編集画面で確定したアジェンダを読み込み、計測前の初期状態にする。
+ * totalPlannedSec を plannedSec 合計で再計算し、idle・先頭項目・経過 0 にリセットする。
+ */
+export function loadAgenda(state: TimerState, items: AgendaItem[]): TimerState {
+  return {
+    ...state,
+    agenda: items,
+    totalPlannedSec: items.reduce((sum, item) => sum + item.plannedSec, 0),
+    status: "idle",
+    currentIndex: 0,
+    elapsedInItemSec: 0,
+  };
+}
+
 /** idle から計測を開始する。先頭項目・経過 0 にリセットする。 */
 export function start(state: TimerState): TimerState {
-  return { ...state, status: 'running', currentIndex: 0, elapsedInItemSec: 0 };
+  return { ...state, status: "running", currentIndex: 0, elapsedInItemSec: 0 };
 }
 
 /** 計測を一時停止する。running 以外では状態を変えない。 */
 export function pause(state: TimerState): TimerState {
-  if (state.status !== 'running') return state;
-  return { ...state, status: 'paused' };
+  if (state.status !== "running") return state;
+  return { ...state, status: "paused" };
 }
 
 /** 一時停止から再開する。paused 以外では状態を変えない。 */
 export function resume(state: TimerState): TimerState {
-  if (state.status !== 'paused') return state;
-  return { ...state, status: 'running' };
+  if (state.status !== "paused") return state;
+  return { ...state, status: "running" };
 }
 
 /** 経過時間を加算する（UI の tick から毎秒呼ぶ想定）。running 時のみ進む。 */
 export function tick(state: TimerState, deltaSec: number): TimerState {
-  if (state.status !== 'running') return state;
+  if (state.status !== "running") return state;
   return { ...state, elapsedInItemSec: state.elapsedInItemSec + deltaSec };
 }
 
@@ -43,7 +58,7 @@ export function advanceItem(state: TimerState): TimerState {
     ...redistributed,
     currentIndex: nextIndex,
     elapsedInItemSec: 0,
-    status: isLast ? 'finished' : redistributed.status,
+    status: isLast ? "finished" : redistributed.status,
   };
 }
 
@@ -55,7 +70,7 @@ export function advanceItem(state: TimerState): TimerState {
  * off モードおよびプールが空の場合は state をそのまま返す。
  */
 export function redistribute(state: TimerState): TimerState {
-  if (state.reallocationMode !== 'proportional') return state;
+  if (state.reallocationMode !== "proportional") return state;
 
   const currentItem = state.agenda[state.currentIndex];
   if (currentItem === undefined) return state;
@@ -87,13 +102,8 @@ export function redistribute(state: TimerState): TimerState {
       // 残差吸収: 前項目の丸め誤差をここで吸収して合計を目標値に合わせる
       newAllocatedSec = Math.max(MIN_ALLOCATED_SEC, targetTotal - sumAllocated);
     } else {
-      const share =
-        poolPlannedTotal === 0
-          ? 1 / pool.length
-          : item.plannedSec / poolPlannedTotal;
-      newAllocatedSec = Math.round(
-        Math.max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share)
-      );
+      const share = poolPlannedTotal === 0 ? 1 / pool.length : item.plannedSec / poolPlannedTotal;
+      newAllocatedSec = Math.round(Math.max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share));
     }
 
     sumAllocated += newAllocatedSec;

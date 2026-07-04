@@ -14,10 +14,10 @@ export interface AgendaItem {
 }
 
 /** タイマー全体の進行状態。 */
-export type TimerStatus = 'idle' | 'running' | 'paused' | 'finished';
+export type TimerStatus = "idle" | "running" | "paused" | "finished";
 
 /** 時間再配分のモード（詳細は docs/05-core-logic.md）。 */
-export type ReallocationMode = 'proportional' | 'fixed-end' | 'off';
+export type ReallocationMode = "proportional" | "fixed-end" | "off";
 
 /** タイマー全体の進行状態。派生値は保持せずセレクタで都度導出する。 */
 export interface TimerState {

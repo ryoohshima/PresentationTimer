@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "AgendaTimer",
+    "slug": "agenda-timer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "agendatimer",
+    "platforms": ["android", "ios", "web"],
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.agendatimer.app"
+    },
+    "ios": {
+      "bundleIdentifier": "com.agendatimer.app"
+    },
+    "newArchEnabled": true,
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router"]
+  }
+}
