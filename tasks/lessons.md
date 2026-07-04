@@ -15,3 +15,15 @@
 ### 3. shell 複合コマンドの `cd` は後続コマンドにも持続する
 - **何があったか**: `cd A && find ...` の後、改行して書いた 2 つ目の `find`（B を見るつもり）も cwd が A のまま実行され、ディレクトリ比較が「完全一致」と誤判定された。
 - **ルール**: 複数ディレクトリを比較・走査するときは、各操作をサブシェルで隔離する（`( cd X; ... )`）か、絶対パスを直接 `find <abs>` に渡す。1 コマンド内で `cd` を跨いだ相対パス操作をしない。
+
+## 2026-07-04 dependabot × Expo SDK バージョン整合
+
+### 4. CI 失敗は「落ちたステップ」ではなく「共通の前段」を疑う
+- **何があったか**: PR #45 で lint/typecheck/test が3つとも FAILURE だったが、真の失敗はどのジョブの本体でもなく、全ジョブ共通の `pnpm install --frozen-lockfile`（pnpm 11 の minimumReleaseAge 検証）だった。
+- **ルール**: 複数ジョブが同時に落ちたら、まず各ジョブの共通前段（依存インストール・セットアップ）を最初に確認する。個別ジョブの本体ログから読み始めない。
+
+### 5. Expo / React Native は SDK 単位で揃える。dependabot の個別 bump を鵜呑みにしない
+- **何があったか**: dependabot が `@expo/metro-runtime` を `~4.0.1`（SDK 52 用）→ `~57.0.3`（SDK 57 用）へ bump。だが `apps/mobile` は Expo SDK 52（`expo ~52.0.0` / `react-native 0.76.3` / `expo-router ~4.0.22`）であり、SDK を跨いだ単体 bump は破壊的非互換だった。同根で PR #48 の expo-status-bar 56 も既に develop へ混入済み。
+- **ルール**: Expo/RN 系パッケージのバージョン変更を見たら、まず `apps/mobile` の `expo` バージョン（= SDK）と整合するか照合する。dependabot の「最新」は SDK 整合を保証しない。SDK 更新は `expo install` / `expo-doctor` で一括手動実施し、dependabot では該当パッケージ群を `ignore` する。
+- **設定の在り処**: dependabot は**デフォルトブランチの `.github/dependabot.yml` のみ**を読む。ignore ルールは対象 PR のブランチではなく develop へ入れねば効かない。
+- **却下手順**: 不整合な dependabot PR は `@dependabot ignore this dependency` コメントでクローズ＋再提案抑止できる（本件は PR #45 で実施、#51 で ignore ルール恒久化）。

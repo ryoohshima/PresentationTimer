@@ -20,6 +20,16 @@ updates:
       include: scope
     labels:
       - dependencies
+    ignore:
+      # Expo / React Native は SDK 単位でバージョンを揃える必要があり、
+      # dependabot の個別 bump は SDK 不整合を招くため対象外にする（SDK は手動で更新する）。
+      # 参照: PR #45（@expo/metro-runtime を SDK52 環境へ SDK57 用へ誤 bump した事例）
+      - dependency-name: "expo"
+      - dependency-name: "expo-*"
+      - dependency-name: "@expo/*"
+      - dependency-name: "react-native"
+      - dependency-name: "react-native-*"
+      # react / react-dom は web(^19)/mobile(18.3.1) で要求が割れるため、あえて対象に含めない。
 
   - package-ecosystem: github-actions
     directory: "/"
