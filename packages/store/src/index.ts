@@ -1,10 +1,10 @@
 export { TimerProvider } from "./TimerProvider";
+export type { TimerAction, TimerStore } from "./useTimerStore";
 export {
-  useTimerStore,
-  useTimerReducer,
   DEFAULT_TIMER_STATE,
-  timerReducer,
-  TimerStateContext,
   TimerDispatchContext,
+  TimerStateContext,
+  timerReducer,
+  useTimerReducer,
+  useTimerStore,
 } from "./useTimerStore";
-export type { TimerStore, TimerAction } from "./useTimerStore";
