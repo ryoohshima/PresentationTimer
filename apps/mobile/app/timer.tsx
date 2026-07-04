@@ -1,32 +1,14 @@
 import { getRemainingSec } from "@agenda-timer/core-logic";
-import type { TimerState } from "@agenda-timer/types";
+import { useTimerStore } from "@agenda-timer/store";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
-// 骨組み段階のサンプル状態。共有エンジン（core-logic）の配線確認用に
-// 残り時間をセレクタ経由で算出して表示する（本実装は後続 Issue）。
-const sampleState: TimerState = {
-  agenda: [
-    {
-      id: "1",
-      title: "オープニング",
-      plannedSec: 300,
-      allocatedSec: 300,
-      isLocked: false,
-    },
-  ],
-  currentIndex: 0,
-  status: "running",
-  elapsedInItemSec: 60,
-  totalPlannedSec: 300,
-  reallocationMode: "proportional",
-};
 
 // ② タイマー実行画面。
 // 「一時停止 → 編集に戻る」で ① へ戻り、「設定」で ③ 設定モーダルへ遷移する。
 export default function TimerScreen() {
   const router = useRouter();
-  const remaining = getRemainingSec(sampleState);
+  const { state } = useTimerStore();
+  const remaining = getRemainingSec(state);
 
   // 戻れる履歴があれば back、無ければ起点 (/) へ置換して必ず編集に戻す。
   const handleBackToEdit = () => {

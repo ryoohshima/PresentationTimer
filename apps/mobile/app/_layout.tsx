@@ -1,3 +1,4 @@
+import { TimerProvider } from "@agenda-timer/store";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -7,11 +8,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <Stack>
-        <Stack.Screen name="index" options={{ title: "アジェンダ編集" }} />
-        <Stack.Screen name="timer" options={{ title: "タイマー実行" }} />
-        <Stack.Screen name="settings" options={{ title: "設定", presentation: "modal" }} />
-      </Stack>
+      <TimerProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ title: "アジェンダ編集" }} />
+          <Stack.Screen name="timer" options={{ title: "タイマー実行" }} />
+          <Stack.Screen name="settings" options={{ title: "設定", presentation: "modal" }} />
+        </Stack>
+      </TimerProvider>
     </SafeAreaProvider>
   );
 }
