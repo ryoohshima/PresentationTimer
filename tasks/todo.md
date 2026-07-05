@@ -55,3 +55,50 @@
   - `pnpm build` → `vite v8.1.0` で 17 modules 変換・bundle 生成成功
   - `pnpm --filter @agenda-timer/web dev` → `http://localhost:5173/` 起動、ブラウザで「現在の項目: オープニング / 残り時間: 300 秒」を描画（core-logic がブラウザ上で実行されていることを確認）
 - 未着手（意図的にスコープ外）: MVP のタイマー画面・アジェンダ編集画面（docs/06）、`redistribute` 本体、`apps/mobile`（Expo）。
+
+---
+
+# todo: 起票済み Issue の一括実装（スタック 4 PR）
+
+> 目標: claude-code ラベルの実装対象 Issue（#16〜#25, #29）をスタック 4 PR で実装し、実装済みの #26/#27 はクローズコメントで対応する。
+> needs-human（#28, #30, #31, #32）と Epic（#6〜#10）は対象外。
+
+## PR1: fix/expo-sdk52-deps — 依存を Expo SDK 52 に整合
+
+- [ ] ブランチ作成（develop から）
+- [ ] apps/mobile/package.json: react/react-dom→18.3.1, @types/react→~18.3.12, expo-status-bar→~2.0.1, @babel/core→^7.26.0
+- [ ] pnpm install で lockfile 更新 → biome ci / typecheck / test
+- [ ] コミット・push・ドラフト PR 作成
+
+## PR2: feature/agenda-edit-screen — 画面①（Closes #16 #17 #18 #19）
+
+- [ ] packages/store: 編集アクション（ADD/REMOVE/MOVE/UPDATE/TOGGLE_LOCK）+ テスト
+- [ ] packages/core-logic: timeFormat（formatMinSec/parseMinSec）+ テスト
+- [ ] apps/mobile: 依存追加（async-storage, gesture-handler, reanimated, draggable-flatlist）+ babel plugin
+- [ ] app/index.tsx: リスト表示・追加・削除・並べ替え・分:秒入力・空表示
+- [ ] hooks/useAgendaPersistence.ts: AsyncStorage 永続化・復元
+- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR1 ブランチ）
+
+## PR3: feature/timer-run-screen — 画面②（Closes #20 #21 #22 #23 #24 #25）
+
+- [ ] packages/core-logic: getNextItem / getPaceLevel セレクタ + テスト
+- [ ] apps/mobile: expo-keep-awake 追加、hooks/useTimerTick.ts
+- [ ] app/timer.tsx: 特大表示・進捗バー色変化・操作系・次項目プレビュー・finished 表示
+- [ ] app.json: orientation を default に（縦/横対応）
+- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR2 ブランチ）
+
+## PR4: chore/app-json-assets — メタ・アイコン（Closes #29）
+
+- [ ] プレースホルダ PNG 生成（icon / adaptive-icon / splash-icon、#2563eb）
+- [ ] app.json: icon / splash / adaptiveIcon 設定
+- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR3 ブランチ）
+
+## 後処理
+
+- [ ] #26 クローズ（Biome 導入済み PR #37 を根拠にコメント）
+- [ ] #27 クローズ（ci.yml 有効化済みを根拠にコメント）
+- [ ] レビューセクション追記
+
+## レビュー
+
+（完了後に記載）
