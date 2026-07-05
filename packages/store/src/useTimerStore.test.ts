@@ -56,6 +56,111 @@ describe("timerReducer の core-logic 委譲", () => {
   });
 });
 
+describe("アジェンダ編集アクション（Issue #16-#18）", () => {
+  const loadedState = () =>
+    timerReducer(DEFAULT_TIMER_STATE, { type: "SET_AGENDA", items: makeAgenda() });
+
+  test("ADD_ITEM は末尾に新規項目を追加し、totalPlannedSec を再計算する", () => {
+    const next = timerReducer(loadedState(), { type: "ADD_ITEM", title: "質疑応答" });
+
+    expect(next.agenda).toHaveLength(3);
+    const added = next.agenda[2];
+    expect(added?.title).toBe("質疑応答");
+    expect(added?.plannedSec).toBe(300);
+    expect(added?.allocatedSec).toBe(300);
+    expect(added?.isLocked).toBe(false);
+    expect(next.totalPlannedSec).toBe(1200);
+  });
+
+  test("ADD_ITEM が生成する id は既存項目と重複しない", () => {
+    let state = loadedState();
+    for (let i = 0; i < 10; i += 1) {
+      state = timerReducer(state, { type: "ADD_ITEM" });
+    }
+    const ids = state.agenda.map((item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  test("REMOVE_ITEM は該当項目を削除し、totalPlannedSec を再計算する", () => {
+    const next = timerReducer(loadedState(), { type: "REMOVE_ITEM", id: "1" });
+
+    expect(next.agenda.map((item) => item.id)).toEqual(["2"]);
+    expect(next.totalPlannedSec).toBe(600);
+  });
+
+  test("REMOVE_ITEM は存在しない id では state を変えない", () => {
+    const state = loadedState();
+    expect(timerReducer(state, { type: "REMOVE_ITEM", id: "nope" })).toBe(state);
+  });
+
+  test("MOVE_ITEM は項目を指定位置へ移動する", () => {
+    const next = timerReducer(loadedState(), { type: "MOVE_ITEM", id: "2", toIndex: 0 });
+    expect(next.agenda.map((item) => item.id)).toEqual(["2", "1"]);
+  });
+
+  test("MOVE_ITEM の範囲外 toIndex は端へクランプされる", () => {
+    const next = timerReducer(loadedState(), { type: "MOVE_ITEM", id: "1", toIndex: 99 });
+    expect(next.agenda.map((item) => item.id)).toEqual(["2", "1"]);
+  });
+
+  test("UPDATE_ITEM で plannedSec を変えると allocatedSec も同値になり合計が再計算される", () => {
+    const next = timerReducer(loadedState(), {
+      type: "UPDATE_ITEM",
+      id: "1",
+      patch: { plannedSec: 120 },
+    });
+
+    expect(next.agenda[0]?.plannedSec).toBe(120);
+    expect(next.agenda[0]?.allocatedSec).toBe(120);
+    expect(next.totalPlannedSec).toBe(720);
+  });
+
+  test("UPDATE_ITEM の負値・小数 plannedSec は 0 以上の整数へ正規化される", () => {
+    const state = loadedState();
+    const negative = timerReducer(state, {
+      type: "UPDATE_ITEM",
+      id: "1",
+      patch: { plannedSec: -10 },
+    });
+    expect(negative.agenda[0]?.plannedSec).toBe(0);
+
+    const fractional = timerReducer(state, {
+      type: "UPDATE_ITEM",
+      id: "1",
+      patch: { plannedSec: 90.9 },
+    });
+    expect(fractional.agenda[0]?.plannedSec).toBe(90);
+  });
+
+  test("UPDATE_ITEM でタイトルのみ変更しても時間は変わらない", () => {
+    const next = timerReducer(loadedState(), {
+      type: "UPDATE_ITEM",
+      id: "2",
+      patch: { title: "本編（改）" },
+    });
+
+    expect(next.agenda[1]?.title).toBe("本編（改）");
+    expect(next.agenda[1]?.plannedSec).toBe(600);
+    expect(next.totalPlannedSec).toBe(900);
+  });
+
+  test("TOGGLE_LOCK は isLocked を反転する", () => {
+    const once = timerReducer(loadedState(), { type: "TOGGLE_LOCK", id: "1" });
+    expect(once.agenda[0]?.isLocked).toBe(true);
+
+    const twice = timerReducer(once, { type: "TOGGLE_LOCK", id: "1" });
+    expect(twice.agenda[0]?.isLocked).toBe(false);
+  });
+
+  test("編集アクションは running 状態を idle に戻す（loadAgenda 委譲のため）", () => {
+    const running = runningState();
+    const next = timerReducer(running, { type: "ADD_ITEM" });
+    expect(next.status).toBe("idle");
+    expect(next.currentIndex).toBe(0);
+    expect(next.elapsedInItemSec).toBe(0);
+  });
+});
+
 describe("受け入れ基準: 編集で組んだ agenda が実行画面に反映される", () => {
   test("SET_AGENDA 後、実行画面が参照する getCurrentItem に先頭項目が現れる", () => {
     // Arrange: 編集画面でアジェンダを確定する
