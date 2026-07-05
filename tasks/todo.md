@@ -65,40 +65,47 @@
 
 ## PR1: fix/expo-sdk52-deps — 依存を Expo SDK 52 に整合
 
-- [ ] ブランチ作成（develop から）
-- [ ] apps/mobile/package.json: react/react-dom→18.3.1, @types/react→~18.3.12, expo-status-bar→~2.0.1, @babel/core→^7.26.0
-- [ ] pnpm install で lockfile 更新 → biome ci / typecheck / test
-- [ ] コミット・push・ドラフト PR 作成
+- [x] ブランチ作成（develop から）
+- [x] apps/mobile/package.json: react/react-dom→18.3.1, @types/react→~18.3.12, expo-status-bar→~2.0.1, @babel/core→^7.26.0
+- [x] pnpm install で lockfile 更新 → biome ci / typecheck / test
+- [x] コミット・push・ドラフト PR 作成
 
 ## PR2: feature/agenda-edit-screen — 画面①（Closes #16 #17 #18 #19）
 
-- [ ] packages/store: 編集アクション（ADD/REMOVE/MOVE/UPDATE/TOGGLE_LOCK）+ テスト
-- [ ] packages/core-logic: timeFormat（formatMinSec/parseMinSec）+ テスト
-- [ ] apps/mobile: 依存追加（async-storage, gesture-handler, reanimated, draggable-flatlist）+ babel plugin
-- [ ] app/index.tsx: リスト表示・追加・削除・並べ替え・分:秒入力・空表示
-- [ ] hooks/useAgendaPersistence.ts: AsyncStorage 永続化・復元
-- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR1 ブランチ）
+- [x] packages/store: 編集アクション（ADD/REMOVE/MOVE/UPDATE/TOGGLE_LOCK）+ テスト
+- [x] packages/core-logic: timeFormat（formatMinSec）+ テスト（parseMinSec は分/秒を個別入力にしたため不要と判断し見送り）
+- [x] apps/mobile: 依存追加（async-storage, gesture-handler, reanimated, draggable-flatlist）+ babel plugin
+- [x] app/index.tsx: リスト表示・追加・削除・並べ替え・分:秒入力・空表示
+- [x] hooks/useAgendaPersistence.ts: AsyncStorage 永続化・復元
+- [x] 検証 → コミット・push・ドラフト PR 作成（ベース: PR1 ブランチ）
 
 ## PR3: feature/timer-run-screen — 画面②（Closes #20 #21 #22 #23 #24 #25）
 
-- [ ] packages/core-logic: getNextItem / getPaceLevel セレクタ + テスト
-- [ ] apps/mobile: expo-keep-awake 追加、hooks/useTimerTick.ts
-- [ ] app/timer.tsx: 特大表示・進捗バー色変化・操作系・次項目プレビュー・finished 表示
-- [ ] app.json: orientation を default に（縦/横対応）
-- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR2 ブランチ）
+- [x] packages/core-logic: getNextItem / getPaceLevel セレクタ + テスト
+- [x] apps/mobile: expo-keep-awake 追加、hooks/useTimerTick.ts
+- [x] app/timer.tsx: 特大表示・進捗バー色変化・操作系・次項目プレビュー・finished 表示
+- [x] app.json: orientation を default に（縦/横対応）
+- [x] 検証 → コミット・push・ドラフト PR 作成（ベース: PR2 ブランチ）
 
 ## PR4: chore/app-json-assets — メタ・アイコン（Closes #29）
 
-- [ ] プレースホルダ PNG 生成（icon / adaptive-icon / splash-icon、#2563eb）
-- [ ] app.json: icon / splash / adaptiveIcon 設定
-- [ ] 検証 → コミット・push・ドラフト PR 作成（ベース: PR3 ブランチ）
+- [x] プレースホルダ PNG 生成（icon / adaptive-icon / splash-icon、#2563eb）
+- [x] app.json: icon / splash / adaptiveIcon 設定
+- [x] 検証 → コミット・push・ドラフト PR 作成（ベース: PR3 ブランチ）
 
 ## 後処理
 
-- [ ] #26 クローズ（Biome 導入済み PR #37 を根拠にコメント）
-- [ ] #27 クローズ（ci.yml 有効化済みを根拠にコメント）
-- [ ] レビューセクション追記
+- [x] #26 クローズ（Biome 導入済み PR #37 を根拠にコメント）
+- [x] #27 クローズ（ci.yml 有効化済みを根拠にコメント）
+- [x] レビューセクション追記
 
 ## レビュー
 
-（完了後に記載）
+- 成果物（スタック 4 ドラフト PR、ベース: develop → 順に積む）:
+  - PR #60 `fix/expo-sdk52-deps`: react 18.3.1 / react-dom 18.3.1 / @types/react ~18.3.12 / expo-status-bar ~2.0.1 / @babel/core ^7.26.0 へ復元（typescript 6 は tsconfig の ignoreDeprecations で対応済みのため据え置き）
+  - PR #61 `feature/agenda-edit-screen`: 画面①（#16 #17 #18 #19）。編集アクションは packages/store の reducer に追加し「新 items → loadAgenda 委譲」で totalPlannedSec 再計算を一元化。ドラッグは draggable-flatlist + gesture-handler ~2.20.2 + reanimated ~3.16.1（babel plugin 追加）。永続化は mobile 側 hook（AsyncStorage 1.23.1）
+  - PR #62 `feature/timer-run-screen`: 画面②（#20〜#25）。tick は useTimerTick（running 中のみ setInterval）、色は core-logic の getPaceLevel（warning しきい値 0.8 を PACE_WARNING_RATE で一元定義）、keep awake は running 中のみマウントする子コンポーネント。orientation を default に変更（縦/横対応）
+  - PR #63 `chore/app-json-assets`: #29。icon/splash/adaptiveIcon を配線し、Node zlib のみで生成した単色プレースホルダ PNG を配置（正式アセット差し替えは人手フォロー）
+- Issue クローズ: #26（Biome 導入済み PR #37）、#27（ci.yml 有効化済み）をコメント付きクローズ
+- 検証: 各 PR で biome ci / typecheck（5 workspace）/ test（最終 51 tests、新規 20 件）緑。PR2/PR3 は `expo export` で web/ios/android 3 バンドル生成成功を確認
+- 対象外: needs-human（#28 #30 #31 #32）と Epic（#6〜#10）。実機挙動（ドラッグ・keep awake・視認性）は #28 でフォロー想定
