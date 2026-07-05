@@ -140,3 +140,26 @@ export function getProgressRate(state: TimerState): number | undefined {
   if (item === undefined || item.allocatedSec <= 0) return undefined;
   return state.elapsedInItemSec / item.allocatedSec;
 }
+
+/** 次の項目。現項目が最後（または範囲外）なら undefined。 */
+export function getNextItem(state: TimerState): AgendaItem | undefined {
+  return state.agenda[state.currentIndex + 1];
+}
+
+/** 押し/巻きの度合い。safe=余裕 / warning=残りわずか / over=超過。 */
+export type PaceLevel = "safe" | "warning" | "over";
+
+/** warning 判定のしきい値（進捗率）。docs/06 に数値既定が無いためここで一元定義する。 */
+export const PACE_WARNING_RATE = 0.8;
+
+/**
+ * 進捗率から押し/巻きレベルを導出する（docs/06: 緑/黄/赤 の 3 段階）。
+ * 進捗率が導出できない状態（現項目無し・割当 0）では undefined。
+ */
+export function getPaceLevel(state: TimerState): PaceLevel | undefined {
+  const rate = getProgressRate(state);
+  if (rate === undefined) return undefined;
+  if (rate >= 1) return "over";
+  if (rate >= PACE_WARNING_RATE) return "warning";
+  return "safe";
+}
