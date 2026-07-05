@@ -3,7 +3,9 @@ import { describe, expect, test } from "vitest";
 import {
   advanceItem,
   getCurrentItem,
+  getNextItem,
   getOverUnderSec,
+  getPaceLevel,
   getProgressRate,
   getRemainingSec,
   loadAgenda,
@@ -338,5 +340,30 @@ describe("redistribute による比例再配分", () => {
     // プール合計が poolAllocatedTotal - delta = 300 - 1 = 299 に一致する
     const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]!.allocatedSec, 0);
     expect(poolTotal).toBe(299);
+  });
+});
+
+describe("getNextItem / getPaceLevel（画面②用セレクタ, Issue #22 #24）", () => {
+  test("getNextItem は currentIndex+1 の項目を返す", () => {
+    const state = makeState({ currentIndex: 0 });
+    expect(getNextItem(state)?.id).toBe("b");
+  });
+
+  test("getNextItem は最終項目では undefined を返す", () => {
+    const state = makeState({ currentIndex: 1 });
+    expect(getNextItem(state)).toBeUndefined();
+  });
+
+  test("getPaceLevel は進捗率に応じて safe / warning / over を返す", () => {
+    // 割当 300 秒: 210 秒 (70%) = safe, 240 秒 (80%) = warning, 300 秒 (100%) = over
+    expect(getPaceLevel(makeState({ elapsedInItemSec: 210, status: "running" }))).toBe("safe");
+    expect(getPaceLevel(makeState({ elapsedInItemSec: 240, status: "running" }))).toBe("warning");
+    expect(getPaceLevel(makeState({ elapsedInItemSec: 300, status: "running" }))).toBe("over");
+    expect(getPaceLevel(makeState({ elapsedInItemSec: 330, status: "running" }))).toBe("over");
+  });
+
+  test("getPaceLevel は現項目が無い（finished 等）と undefined を返す", () => {
+    const state = makeState({ currentIndex: 2, status: "finished" });
+    expect(getPaceLevel(state)).toBeUndefined();
   });
 });
