@@ -27,3 +27,10 @@
 - **ルール**: Expo/RN 系パッケージのバージョン変更を見たら、まず `apps/mobile` の `expo` バージョン（= SDK）と整合するか照合する。dependabot の「最新」は SDK 整合を保証しない。SDK 更新は `expo install` / `expo-doctor` で一括手動実施し、dependabot では該当パッケージ群を `ignore` する。
 - **設定の在り処**: dependabot は**デフォルトブランチの `.github/dependabot.yml` のみ**を読む。ignore ルールは対象 PR のブランチではなく develop へ入れねば効かない。
 - **却下手順**: 不整合な dependabot PR は `@dependabot ignore this dependency` コメントでクローズ＋再提案抑止できる（本件は PR #45 で実施、#51 で ignore ルール恒久化）。
+
+## 2026-07-05 minimumReleaseAge 違反は時間経過で自己解消する
+
+### 6. MINIMUM_RELEASE_AGE 違反はコード修正ではなく「時刻」を確認して再実行で直す
+- **何があったか**: PR #56（turbo 2.10.3）の CI が `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` で失敗。パッケージ公開が 2026-07-03T16:49Z、CI 実行が 2026-07-04T13:38Z で、24 時間の閾値に約 3 時間届かなかっただけだった。調査時点（07-05）には閾値を超えており、`gh run rerun <run-id> --failed` の再実行のみで全ジョブ成功した。
+- **ルール**: このエラーを見たら、まずログの「published at」と「cutoff」の時刻差を計算する。既に閾値を超えていれば lockfile 再生成やポリシー緩和は行わず、失敗 run の再実行だけで解消する。閾値未達なら経過を待ってから再実行する。ポリシー自体は供給網防御として妥当なので緩めない。
+- **構造的背景**: dependabot はリリース直後に PR を作るため、pnpm 11 の minimumReleaseAge（既定 24h）と常に競合し得る。恒久対策は `.github/dependabot.yml` の `cooldown` 設定（別イシュー候補）。
