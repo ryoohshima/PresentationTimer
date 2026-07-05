@@ -73,7 +73,7 @@
 ## PR2: feature/agenda-edit-screen — 画面①（Closes #16 #17 #18 #19）
 
 - [x] packages/store: 編集アクション（ADD/REMOVE/MOVE/UPDATE/TOGGLE_LOCK）+ テスト
-- [x] packages/core-logic: timeFormat（formatMinSec/parseMinSec）+ テスト
+- [x] packages/core-logic: timeFormat（formatMinSec）+ テスト（parseMinSec は分/秒を個別入力にしたため不要と判断し見送り）
 - [x] apps/mobile: 依存追加（async-storage, gesture-handler, reanimated, draggable-flatlist）+ babel plugin
 - [x] app/index.tsx: リスト表示・追加・削除・並べ替え・分:秒入力・空表示
 - [x] hooks/useAgendaPersistence.ts: AsyncStorage 永続化・復元
