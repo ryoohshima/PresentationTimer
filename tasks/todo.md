@@ -124,7 +124,7 @@
 - [x] app.json の edge-to-edge 等の追随確認 → doctor 指摘なし、変更不要
 - [x] pnpm lint / typecheck / test → 全緑（typecheck は --force で再確認）
 - [x] 動作確認 → expo export（web/android/ios 3 バンドル生成成功）＋ dev サーバーのバンドル配信 200 を確認。実機 Expo Go での並べ替え・タイマー操作は人手確認待ち
-- [ ] PR 作成（base: develop）
+- [x] PR 作成（base: develop）→ PR #69（ドラフト）。CI（lint / typecheck / test / claude-review）全緑を確認済み（lint は Expo CLI の tsconfig 自動書き換えが整形不一致となり 1 回失敗 → biome format で修正）
 
 ## レビュー
 
