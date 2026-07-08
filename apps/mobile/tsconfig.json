@@ -1,10 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
-    // expo/tsconfig.base(SDK 52) の moduleResolution=node10 が TS6 で非推奨エラー(TS5107)になるため、
-    // SDK 更新までの移行措置として明示的に許容する
-    "ignoreDeprecations": "6.0"
+    "strict": true
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.d.ts", "expo-env.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.d.ts"]
 }

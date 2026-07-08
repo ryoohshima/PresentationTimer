@@ -109,3 +109,27 @@
 - Issue クローズ: #26（Biome 導入済み PR #37）、#27（ci.yml 有効化済み）をコメント付きクローズ
 - 検証: 各 PR で biome ci / typecheck（5 workspace）/ test（最終 51 tests、新規 20 件）緑。PR2/PR3 は `expo export` で web/ios/android 3 バンドル生成成功を確認
 - 対象外: needs-human（#28 #30 #31 #32）と Epic（#6〜#10）。実機挙動（ドラッグ・keep awake・視認性）は #28 でフォロー想定
+
+---
+
+# todo: Expo SDK 52 → 54 アップグレード
+
+> 背景: Expo Go（実機）が自動更新で SDK 54 専用となり、SDK 52 の本プロジェクトを開けなくなった。
+> 計画: ~/.claude/plans/expo-go-sdk-zany-bunny.md
+
+- [x] ブランチ作成（chore/expo-sdk54、develop 起点）
+- [x] expo install expo@^54.0.0 + expo install --fix で SDK 54 へ一括更新
+- [x] react-native-worklets の追加確認（reanimated 4 要件）→ 手動追加（0.5.1）＋ babel plugin は babel-preset-expo の自動適用に切替
+- [x] expo-doctor で整合チェック → 18/18 パス（metro watchFolders 修正・store の react 重複解消で対応）
+- [x] app.json の edge-to-edge 等の追随確認 → doctor 指摘なし、変更不要
+- [x] pnpm lint / typecheck / test → 全緑（typecheck は --force で再確認）
+- [x] 動作確認 → expo export（web/android/ios 3 バンドル生成成功）＋ dev サーバーのバンドル配信 200 を確認。実機 Expo Go での並べ替え・タイマー操作は人手確認待ち
+- [x] PR 作成（base: develop）→ PR #69（ドラフト）。CI（lint / typecheck / test / claude-review）全緑を確認済み（lint は Expo CLI の tsconfig 自動書き換えが整形不一致となり 1 回失敗 → biome format で修正）
+
+## レビュー
+
+- SDK 54 更新: expo ~54.0.35 / react-native 0.81.5 / react 19.1.0 / expo-router ~6.0.24 / reanimated ~4.1.7 / typescript ~5.9（expo install --fix の解決に従う）
+- reanimated 4 対応: react-native-worklets 0.5.1 追加。babel.config.js の手動 plugin 指定は削除（babel-preset-expo が worklets plugin を自動適用、二重適用防止）
+- react 重複解消: packages/store の peer 自動解決が react 19.2.7 をネスト配置し mobile(19.1.0) と二重化 → store の devDependencies に 19.1.0 を明示して dedupe（web の ^19.2.7 は不変）
+- tsconfig: SDK 54 base が moduleResolution=bundler になったため ignoreDeprecations "6.0" を撤去。expo-env.d.ts は CLI 自動管理化で削除
+- 残リスク: react-native-draggable-flatlist ^4.0.3 × reanimated 4 の実機ドラッグ挙動は未確認（Expo Go 実機での確認が必要。壊れていれば別イシューで代替検討）
