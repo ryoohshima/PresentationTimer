@@ -7,7 +7,8 @@ const workspaceRoot = path.resolve(projectRoot, "../..");
 const config = getDefaultConfig(projectRoot);
 
 // Watch all files within the monorepo so Metro picks up changes in workspace packages
-config.watchFolders = [workspaceRoot];
+// (Expo デフォルトの watchFolders を保持したまま追記する。上書きすると expo-doctor が警告する)
+config.watchFolders = [...config.watchFolders, workspaceRoot];
 
 // Let Metro resolve packages from both the app's and the workspace root's node_modules
 config.resolver.nodeModulesPaths = [
