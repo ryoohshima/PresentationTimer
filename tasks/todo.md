@@ -133,3 +133,25 @@
 - react 重複解消: packages/store の peer 自動解決が react 19.2.7 をネスト配置し mobile(19.1.0) と二重化 → store の devDependencies に 19.1.0 を明示して dedupe（web の ^19.2.7 は不変）
 - tsconfig: SDK 54 base が moduleResolution=bundler になったため ignoreDeprecations "6.0" を撤去。expo-env.d.ts は CLI 自動管理化で削除
 - 残リスク: react-native-draggable-flatlist ^4.0.3 × reanimated 4 の実機ドラッグ挙動は未確認（Expo Go 実機での確認が必要。壊れていれば別イシューで代替検討）
+
+---
+
+# todo: アプリ全画面を design.pen へ書き起こし（2026-07-09）
+
+## 計画
+
+- [x] アプリ3画面（アジェンダ編集 / タイマー実行 / 設定）の実装・docs 調査
+- [x] 方針確認（TEMPO トーン / タイマーは 1b ミニマル・ライト基準 / 状態バリエーション込み / 設定は docs 完成形）
+- [x] 再利用コンポーネント作成（Toggle / LabelPill / PillButton / AppAgendaRow / AppTimerContent）
+- [x] ① アジェンダ編集: 通常＋空状態（2フレーム）
+- [x] ② タイマー実行: 余裕あり / 残りわずか / 超過 / 一時停止 / 終了（5フレーム）
+- [x] ③ 設定: 再配分モード・終了時刻・通知/アラートの完成形（1フレーム）
+- [x] export_html + Chrome で全セクションの視覚検証
+- [x] Pencil で Cmd+S 保存後、worktree の design.pen へ再同期（2026-07-09 14:16 完了）
+
+## レビュー
+
+- 信号色は LP 凡例（#22C55E / #EAB308 / #EF4444）をバーに、可読性の高い濃色（#CA8A04 / #DC2626）を大型数字に使用。変数 accent-yellow / accent-red（+ -deep）として登録。
+- タイマー5状態は AppTimerContent コンポーネント1つ＋ref の descendants 上書きで表現（LP の TimerMockContent と同型のパターン）。
+- 既知の問題: Pencil MCP のスクリーンショット経路が新規サブツリーを描画しない（ライブエディタ表示・データは正常）。検証は export_html 経由で実施。
+- 注意: Pencil アプリは main リポジトリ側 design.pen（feature/lp-design ブランチ）に保存する。worktree へは保存後にバイトコピーで同期する運用。
