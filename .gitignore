@@ -53,3 +53,9 @@ coverage/
 *.tmp
 .tmp/
 tmp/
+
+# CodeGraph
+.codegraph/
+
+# Superset
+/goal.superset
