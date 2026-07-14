@@ -1,10 +1,14 @@
 import type { AgendaItem } from "@agenda-timer/types";
+import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { colors } from "../constants/theme";
+import { GlassCard } from "./GlassCard";
 
 // 画面① アジェンダ編集の 1 行。タイトル・分:秒入力・ロックトグル・削除・ドラッグハンドル。
 // 分:秒はテキスト入力中の中間状態（空文字等）を許すため行ローカル state に持ち、
 // 確定値のみ onUpdate で store へ流す（docs/06-screens.md 画面①）。
+// 見た目は design.pen の AppAgendaRow（ガラスカード + アイコン式ロック/削除）に準拠する。
 
 interface AgendaItemRowProps {
   item: AgendaItem;
@@ -40,7 +44,10 @@ export function AgendaItemRow({
   };
 
   return (
-    <View style={[styles.row, isActive && styles.rowActive]}>
+    <GlassCard
+      strong
+      style={[styles.row, isActive && styles.rowActive, item.isLocked && styles.rowLocked]}
+    >
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="ドラッグして並べ替え"
@@ -55,6 +62,7 @@ export function AgendaItemRow({
           value={item.title}
           onChangeText={(text) => onUpdate({ title: text })}
           placeholder="項目名"
+          placeholderTextColor="#14171A66"
           style={styles.titleInput}
           accessibilityLabel="項目名"
         />
@@ -82,27 +90,32 @@ export function AgendaItemRow({
             accessibilityLabel="予定時間（秒）"
           />
           <Text style={styles.timeSeparator}>秒</Text>
-
-          <View style={styles.lockRow}>
-            <Text style={styles.lockLabel}>固定</Text>
-            <Switch
-              value={item.isLocked}
-              onValueChange={onToggleLock}
-              accessibilityLabel="再配分の対象外にする"
-            />
-          </View>
+          {item.isLocked && <Text style={styles.lockedSuffix}>・固定</Text>}
         </View>
       </View>
 
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel={item.isLocked ? "再配分の対象にする" : "再配分の対象外にする"}
+        onPress={onToggleLock}
+        style={styles.iconButton}
+      >
+        <Feather
+          name={item.isLocked ? "lock" : "unlock"}
+          size={20}
+          color={item.isLocked ? colors.accentGreen : "#9CA3AF"}
+        />
+      </Pressable>
+
+      <Pressable
+        accessibilityRole="button"
         accessibilityLabel="項目を削除"
         onPress={onRemove}
-        style={styles.removeButton}
+        style={styles.iconButton}
       >
-        <Text style={styles.removeLabel}>削除</Text>
+        <Feather name="trash-2" size={20} color="#9CA3AF" />
       </Pressable>
-    </View>
+    </GlassCard>
   );
 }
 
@@ -110,73 +123,56 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
+    gap: 12,
     marginBottom: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 4,
+    padding: 16,
   },
   rowActive: {
-    borderColor: "#2563eb",
-    backgroundColor: "#eff6ff",
+    borderColor: colors.accentGreen,
+    borderWidth: 1.5,
+  },
+  rowLocked: {
+    borderColor: colors.accentGreen,
+    borderWidth: 1.5,
   },
   dragHandle: {
-    paddingHorizontal: 10,
-    paddingVertical: 12,
+    paddingHorizontal: 4,
+    paddingVertical: 4,
   },
   dragHandleLabel: {
-    fontSize: 20,
-    color: "#9ca3af",
+    fontSize: 18,
+    color: "#9CA3AF",
   },
   body: {
     flex: 1,
-    gap: 6,
+    gap: 2,
   },
   titleInput: {
     fontSize: 16,
-    fontWeight: "600",
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-    backgroundColor: "#f9fafb",
+    fontWeight: "700",
+    color: colors.ink,
+    padding: 0,
   },
   timeRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
   },
   timeInput: {
-    minWidth: 48,
-    textAlign: "center",
-    fontSize: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-    backgroundColor: "#f9fafb",
+    minWidth: 20,
+    fontSize: 13,
+    color: "#6B7280",
+    padding: 0,
   },
   timeSeparator: {
-    fontSize: 14,
-    color: "#6b7280",
+    fontSize: 13,
+    color: "#6B7280",
   },
-  lockRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: "auto",
-    gap: 4,
-  },
-  lockLabel: {
-    fontSize: 14,
-    color: "#6b7280",
-  },
-  removeButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 12,
-  },
-  removeLabel: {
-    color: "#dc2626",
-    fontSize: 14,
+  lockedSuffix: {
+    fontSize: 13,
+    color: colors.accentGreen,
     fontWeight: "600",
+  },
+  iconButton: {
+    padding: 4,
   },
 });

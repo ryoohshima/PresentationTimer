@@ -1,9 +1,11 @@
 import { formatMinSec } from "@agenda-timer/core-logic";
 import type { AgendaItem } from "@agenda-timer/types";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { GlassCard } from "./GlassCard";
 
 // 次項目のタイトルと割当時間を控えめに表示する（Issue #24, docs/06 画面②）。
 // 次が無い（現項目が最後）場合は終端表示を出す。
+// 見た目は design.pen の NextBox（ガラスカード + NEXT ラベル）に準拠する。
 
 interface NextItemPreviewProps {
   item: AgendaItem | undefined;
@@ -11,7 +13,8 @@ interface NextItemPreviewProps {
 
 export function NextItemPreview({ item }: NextItemPreviewProps) {
   return (
-    <View style={styles.container}>
+    <GlassCard style={styles.container}>
+      <Text style={styles.label}>NEXT</Text>
       {item === undefined ? (
         <Text style={styles.text}>最後の項目です</Text>
       ) : (
@@ -19,19 +22,24 @@ export function NextItemPreview({ item }: NextItemPreviewProps) {
           次: {item.title || "（無題）"}（{formatMinSec(item.allocatedSec)}）
         </Text>
       )}
-    </View>
+    </GlassCard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: "#f3f4f6",
+    gap: 4,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+    color: "#14171A66",
   },
   text: {
-    fontSize: 16,
-    color: "#6b7280",
+    fontSize: 15,
+    color: "#14171ABF",
   },
 });

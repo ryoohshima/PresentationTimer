@@ -1,12 +1,14 @@
 import type { PaceLevel } from "@agenda-timer/core-logic";
+import { colors } from "./theme";
 
 // 押し/巻きレベルの配色（docs/06: 緑=余裕 / 黄=残りわずか / 赤=超過）。
 // レベル判定は core-logic の getPaceLevel が担い、UI は色への写像のみ持つ。
+// 色は design.pen のデザイントークン（accent-green / accent-yellow-deep / accent-red-deep）と一致させる。
 
 export const PACE_COLORS: Record<PaceLevel, string> = {
-  safe: "#16a34a",
-  warning: "#ca8a04",
-  over: "#dc2626",
+  safe: colors.accentGreen,
+  warning: colors.accentYellowDeep,
+  over: colors.accentRedDeep,
 };
 
 /** レベル未定（現項目無し等）のときのフォールバック色。 */

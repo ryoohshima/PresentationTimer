@@ -2,7 +2,7 @@
 // React Context + useReducer で実装し、状態更新はすべて @agenda-timer/core-logic 経由で行う。
 
 import * as engine from "@agenda-timer/core-logic";
-import type { AgendaItem, TimerState } from "@agenda-timer/types";
+import type { AgendaItem, ReallocationMode, TimerState } from "@agenda-timer/types";
 import { createContext, type Dispatch, useCallback, useContext, useReducer } from "react";
 
 // --- アクション型 -----------------------------------------------------------
@@ -14,6 +14,7 @@ type Action =
   | { type: "MOVE_ITEM"; id: string; toIndex: number }
   | { type: "UPDATE_ITEM"; id: string; patch: { title?: string; plannedSec?: number } }
   | { type: "TOGGLE_LOCK"; id: string }
+  | { type: "SET_REALLOCATION_MODE"; mode: ReallocationMode }
   | { type: "START" }
   | { type: "PAUSE" }
   | { type: "RESUME" }
@@ -115,6 +116,8 @@ function timerReducer(state: TimerState, action: Action): TimerState {
           item.id === action.id ? { ...item, isLocked: !item.isLocked } : item,
         ),
       );
+    case "SET_REALLOCATION_MODE":
+      return { ...state, reallocationMode: action.mode };
     case "START":
       return engine.start(state);
     case "PAUSE":
@@ -162,6 +165,8 @@ export interface TimerStore {
   updateItem: (id: string, patch: { title?: string; plannedSec?: number }) => void;
   /** 再配分ロック（isLocked）を反転する。 */
   toggleLock: (id: string) => void;
+  /** 再配分モードを設定する（設定画面）。 */
+  setReallocationMode: (mode: ReallocationMode) => void;
   /** idle → running。先頭項目・経過 0 にリセット。 */
   start: () => void;
   /** running → paused。 */
@@ -201,6 +206,10 @@ export function useTimerStore(): TimerStore {
     [dispatch],
   );
   const toggleLock = useCallback((id: string) => dispatch({ type: "TOGGLE_LOCK", id }), [dispatch]);
+  const setReallocationMode = useCallback(
+    (mode: ReallocationMode) => dispatch({ type: "SET_REALLOCATION_MODE", mode }),
+    [dispatch],
+  );
   const start = useCallback(() => dispatch({ type: "START" }), [dispatch]);
   const pause = useCallback(() => dispatch({ type: "PAUSE" }), [dispatch]);
   const resume = useCallback(() => dispatch({ type: "RESUME" }), [dispatch]);
@@ -215,6 +224,7 @@ export function useTimerStore(): TimerStore {
     moveItem: moveItemAction,
     updateItem,
     toggleLock,
+    setReallocationMode,
     start,
     pause,
     resume,
