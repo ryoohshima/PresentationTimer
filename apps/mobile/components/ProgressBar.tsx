@@ -1,6 +1,6 @@
 import type { PaceLevel } from "@agenda-timer/core-logic";
 import { StyleSheet, View } from "react-native";
-import { paceColor } from "../constants/paceColors";
+import { paceBarColor } from "../constants/paceColors";
 import { colors } from "../constants/theme";
 
 // 現項目の 経過/割当 を可視化する進捗バー（Issue #22）。
@@ -19,7 +19,7 @@ export function ProgressBar({ rate, level }: ProgressBarProps) {
   return (
     <View style={styles.track} accessibilityRole="progressbar">
       <View
-        style={[styles.fill, { width: `${widthPercent}%`, backgroundColor: paceColor(level) }]}
+        style={[styles.fill, { width: `${widthPercent}%`, backgroundColor: paceBarColor(level) }]}
       />
     </View>
   );

@@ -1,7 +1,7 @@
 import { formatMinSec } from "@agenda-timer/core-logic";
 import { useTimerStore } from "@agenda-timer/store";
 import type { AgendaItem } from "@agenda-timer/types";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import DraggableFlatList, { type RenderItemParams } from "react-native-draggable-flatlist";
@@ -52,12 +52,12 @@ export default function AgendaEditScreen() {
 
       {agenda.length === 0 ? (
         <View style={styles.empty}>
-          <Feather name="clipboard" size={40} color="#14171A33" />
+          <MaterialCommunityIcons name="clipboard-list-outline" size={40} color="#14171A33" />
           <Text style={styles.emptyTitle}>アジェンダがありません</Text>
           <Text style={styles.emptyDesc}>
             「＋ 項目を追加」から発表の流れを組み立ててください。
           </Text>
-          <GlassCard style={styles.emptyAddButton}>
+          <GlassCard style={[styles.emptyAddButton, styles.addCard]}>
             <Pressable
               accessibilityRole="button"
               style={styles.addButtonInner}
@@ -82,7 +82,7 @@ export default function AgendaEditScreen() {
             containerStyle={styles.list}
           />
 
-          <GlassCard>
+          <GlassCard style={styles.addCard}>
             <Pressable
               accessibilityRole="button"
               style={styles.addButtonInner}
@@ -145,6 +145,10 @@ const styles = StyleSheet.create({
   emptyAddButton: {
     marginTop: 4,
     alignSelf: "stretch",
+  },
+  // design.pen の AddItemRow は他カード（strokeWidth 1）より太い 1.5。
+  addCard: {
+    borderWidth: 1.5,
   },
   addButtonInner: {
     paddingVertical: 16,
