@@ -9,15 +9,80 @@
       "name": "Agenda Timer LP",
       "clip": true,
       "width": 1440,
-      "height": 3660,
       "fill": "$bg",
       "layout": "vertical",
       "children": [
+        {
+          "type": "ellipse",
+          "id": "RAtZL",
+          "layoutPosition": "absolute",
+          "x": -220,
+          "y": -160,
+          "name": "BlobGreen",
+          "fill": "#22C55E2E",
+          "width": 720,
+          "height": 720,
+          "effect": {
+            "type": "blur",
+            "radius": 160
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "K7OHUV",
+          "layoutPosition": "absolute",
+          "x": 920,
+          "y": 240,
+          "name": "BlobYellow",
+          "fill": "#EAB30829",
+          "width": 640,
+          "height": 640,
+          "effect": {
+            "type": "blur",
+            "radius": 160
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "eYa6A",
+          "layoutPosition": "absolute",
+          "x": -260,
+          "y": 1480,
+          "name": "BlobBlue",
+          "fill": "#93C5FD3D",
+          "width": 800,
+          "height": 800,
+          "effect": {
+            "type": "blur",
+            "radius": 180
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "xLSnN",
+          "layoutPosition": "absolute",
+          "x": 880,
+          "y": 2760,
+          "name": "BlobGreen2",
+          "fill": "#22C55E24",
+          "width": 700,
+          "height": 700,
+          "effect": {
+            "type": "blur",
+            "radius": 170
+          }
+        },
         {
           "type": "frame",
           "id": "QcEq9",
           "name": "Nav",
           "width": "fill_container",
+          "padding": [
+            20,
+            32,
+            8,
+            32
+          ],
           "justifyContent": "center",
           "children": [
             {
@@ -25,9 +90,29 @@
               "id": "ddNQX",
               "name": "NavInner",
               "width": 1180,
+              "fill": "$glass-fill",
+              "cornerRadius": 100,
+              "stroke": "$glass-stroke",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": "$glass-blur"
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "$glass-shadow",
+                  "offset": {
+                    "x": 0,
+                    "y": 8
+                  },
+                  "blur": 24
+                }
+              ],
               "padding": [
-                28,
-                32
+                16,
+                28
               ],
               "justifyContent": "space_between",
               "alignItems": "center",
@@ -37,7 +122,7 @@
                   "id": "iKpti",
                   "name": "Logo",
                   "fill": "$ink",
-                  "content": "TEMPO",
+                  "content": "agenda keeper",
                   "fontFamily": "Space Grotesk",
                   "fontSize": 22,
                   "fontWeight": "700",
@@ -47,11 +132,17 @@
                   "type": "frame",
                   "id": "HkeOc",
                   "name": "NavCta",
-                  "fill": "$ink",
+                  "fill": "$glass-dark-fill",
                   "cornerRadius": 100,
+                  "stroke": "$glass-dark-stroke",
+                  "strokeWidth": 1,
+                  "effect": {
+                    "type": "background_blur",
+                    "radius": "$glass-blur"
+                  },
                   "padding": [
-                    11,
-                    22
+                    12,
+                    24
                   ],
                   "children": [
                     {
@@ -103,11 +194,17 @@
                       "type": "frame",
                       "id": "yDOHa",
                       "name": "Badge",
-                      "fill": "#16803D1A",
+                      "fill": "$glass-fill-strong",
                       "cornerRadius": 100,
+                      "stroke": "$glass-stroke",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "background_blur",
+                        "radius": "$glass-blur"
+                      },
                       "padding": [
-                        6,
-                        14
+                        8,
+                        16
                       ],
                       "children": [
                         {
@@ -160,8 +257,26 @@
                           "type": "frame",
                           "id": "y7o36K",
                           "name": "HeroCta",
-                          "fill": "$accent-green",
+                          "fill": "#16803DE6",
                           "cornerRadius": 100,
+                          "stroke": "#FFFFFF66",
+                          "strokeWidth": 1,
+                          "effect": [
+                            {
+                              "type": "background_blur",
+                              "radius": "$glass-blur"
+                            },
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#16803D4D",
+                              "offset": {
+                                "x": 0,
+                                "y": 10
+                              },
+                              "blur": 28
+                            }
+                          ],
                           "padding": [
                             16,
                             32
@@ -178,16 +293,6 @@
                               "fontWeight": "700"
                             }
                           ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "K4olgN",
-                          "name": "HeroSecondaryLink",
-                          "fill": "$ink",
-                          "content": "3つの画面案を見る ↓",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 15,
-                          "fontWeight": "700"
                         }
                       ]
                     }
@@ -199,133 +304,27 @@
                   "name": "HeroRight",
                   "children": [
                     {
-                      "id": "VqSnM",
+                      "id": "a88nP",
                       "type": "ref",
                       "ref": "eHuov",
                       "name": "HeroPhoneMock",
                       "width": 300,
-                      "height": 649,
-                      "fill": "#000000",
+                      "height": 648,
                       "descendants": {
-                        "EGHJe": {
-                          "fill": "#FFFFFF"
-                        },
                         "E7RKbY": {
-                          "id": "nSd3E",
+                          "id": "d1YPFz",
                           "type": "ref",
-                          "ref": "dZryp",
-                          "name": "HeroTimerContent"
-                        },
-                        "s7m9s": {
-                          "fill": "#FFFFFF"
+                          "ref": "WGRYW",
+                          "name": "HeroTimerContent",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "descendants": {
+                            "wrc38": {
+                              "fontSize": 90
+                            }
+                          }
                         }
                       }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "p5oi8L",
-          "name": "LegendStrip",
-          "width": "fill_container",
-          "fill": "$surface",
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "e6SZ1",
-              "name": "LegendInner",
-              "width": 1180,
-              "gap": 36,
-              "padding": [
-                20,
-                32
-              ],
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "grWa0",
-                  "name": "LegendItem",
-                  "gap": 10,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "ellipse",
-                      "id": "JxqiS",
-                      "name": "Dot",
-                      "fill": "#22C55E",
-                      "width": 12,
-                      "height": 12
-                    },
-                    {
-                      "type": "text",
-                      "id": "CxOpb",
-                      "name": "LegendLabel",
-                      "fill": "#14171AB3",
-                      "content": "余裕あり",
-                      "fontFamily": "Noto Sans JP",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "ZeZhV",
-                  "name": "LegendItem",
-                  "gap": 10,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "ellipse",
-                      "id": "x8SWIX",
-                      "name": "Dot",
-                      "fill": "#EAB308",
-                      "width": 12,
-                      "height": 12
-                    },
-                    {
-                      "type": "text",
-                      "id": "SfxNb",
-                      "name": "LegendLabel",
-                      "fill": "#14171AB3",
-                      "content": "残りわずか",
-                      "fontFamily": "Noto Sans JP",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "pIM4M",
-                  "name": "LegendItem",
-                  "gap": 10,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "ellipse",
-                      "id": "VunpX",
-                      "name": "Dot",
-                      "fill": "#EF4444",
-                      "width": 12,
-                      "height": 12
-                    },
-                    {
-                      "type": "text",
-                      "id": "n73GC",
-                      "name": "LegendLabel",
-                      "fill": "#14171AB3",
-                      "content": "超過（押し）",
-                      "fontFamily": "Noto Sans JP",
-                      "fontSize": 14,
-                      "fontWeight": "600"
                     }
                   ]
                 }
@@ -366,19 +365,6 @@
                   "fontWeight": "900"
                 },
                 {
-                  "type": "text",
-                  "id": "PQlZO",
-                  "name": "FeaturesSubtitle",
-                  "fill": "#14171A8C",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "複雑な設定はいりません。",
-                  "textAlign": "center",
-                  "fontFamily": "Noto Sans JP",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
-                },
-                {
                   "type": "frame",
                   "id": "q3e41",
                   "name": "FeaturesGrid",
@@ -390,25 +376,57 @@
                       "id": "xm7hH",
                       "name": "FeatureCard",
                       "width": "fill_container",
-                      "fill": "#FFFFFF",
-                      "cornerRadius": 20,
-                      "stroke": "#14171A14",
+                      "fill": "$glass-fill",
+                      "cornerRadius": 24,
+                      "stroke": "$glass-stroke",
                       "strokeWidth": 1,
+                      "effect": [
+                        {
+                          "type": "background_blur",
+                          "radius": "$glass-blur"
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "$glass-shadow",
+                          "offset": {
+                            "x": 0,
+                            "y": 12
+                          },
+                          "blur": 32
+                        }
+                      ],
                       "layout": "vertical",
-                      "gap": 14,
+                      "gap": 16,
                       "padding": [
                         36,
                         28
                       ],
                       "children": [
                         {
-                          "type": "rectangle",
-                          "cornerRadius": 12,
-                          "id": "QqykW",
-                          "name": "FeatureIcon",
-                          "fill": "#16803D",
+                          "type": "frame",
+                          "id": "XpmrG",
+                          "name": "FeatureIconTile",
                           "width": 44,
-                          "height": 44
+                          "height": 44,
+                          "fill": "$glass-fill-strong",
+                          "cornerRadius": 12,
+                          "stroke": "$glass-stroke",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "OdPxp",
+                              "name": "FeatureIcon",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "list-todo",
+                              "library": "lucide",
+                              "fill": "$accent-green"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -440,25 +458,57 @@
                       "id": "dbpzF",
                       "name": "FeatureCard",
                       "width": "fill_container",
-                      "fill": "#FFFFFF",
-                      "cornerRadius": 20,
-                      "stroke": "#14171A14",
+                      "fill": "$glass-fill",
+                      "cornerRadius": 24,
+                      "stroke": "$glass-stroke",
                       "strokeWidth": 1,
+                      "effect": [
+                        {
+                          "type": "background_blur",
+                          "radius": "$glass-blur"
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "$glass-shadow",
+                          "offset": {
+                            "x": 0,
+                            "y": 12
+                          },
+                          "blur": 32
+                        }
+                      ],
                       "layout": "vertical",
-                      "gap": 14,
+                      "gap": 16,
                       "padding": [
                         36,
                         28
                       ],
                       "children": [
                         {
-                          "type": "rectangle",
-                          "cornerRadius": 12,
-                          "id": "fElJt",
-                          "name": "FeatureIcon",
-                          "fill": "#EAB308",
+                          "type": "frame",
+                          "id": "ujqfy",
+                          "name": "FeatureIconTile",
                           "width": 44,
-                          "height": 44
+                          "height": 44,
+                          "fill": "$glass-fill-strong",
+                          "cornerRadius": 12,
+                          "stroke": "$glass-stroke",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "jb5Hn",
+                              "name": "FeatureIcon",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "refresh-cw",
+                              "library": "lucide",
+                              "fill": "$accent-green"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -490,25 +540,57 @@
                       "id": "Z2buMX",
                       "name": "FeatureCard",
                       "width": "fill_container",
-                      "fill": "#FFFFFF",
-                      "cornerRadius": 20,
-                      "stroke": "#14171A14",
+                      "fill": "$glass-fill",
+                      "cornerRadius": 24,
+                      "stroke": "$glass-stroke",
                       "strokeWidth": 1,
+                      "effect": [
+                        {
+                          "type": "background_blur",
+                          "radius": "$glass-blur"
+                        },
+                        {
+                          "type": "shadow",
+                          "shadowType": "outer",
+                          "color": "$glass-shadow",
+                          "offset": {
+                            "x": 0,
+                            "y": 12
+                          },
+                          "blur": 32
+                        }
+                      ],
                       "layout": "vertical",
-                      "gap": 14,
+                      "gap": 16,
                       "padding": [
                         36,
                         28
                       ],
                       "children": [
                         {
-                          "type": "rectangle",
-                          "cornerRadius": 12,
-                          "id": "wamAJ",
-                          "name": "FeatureIcon",
-                          "fill": "#EF4444",
+                          "type": "frame",
+                          "id": "WxQW2",
+                          "name": "FeatureIconTile",
                           "width": 44,
-                          "height": 44
+                          "height": 44,
+                          "fill": "$glass-fill-strong",
+                          "cornerRadius": 12,
+                          "stroke": "$glass-stroke",
+                          "strokeWidth": 1,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "G6UCwY",
+                              "name": "FeatureIcon",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "eye",
+                              "library": "lucide",
+                              "fill": "$accent-green"
+                            }
+                          ]
                         },
                         {
                           "type": "text",
@@ -546,7 +628,17 @@
           "id": "ZVFIw",
           "name": "AgendaShowcase",
           "width": "fill_container",
-          "fill": "$surface",
+          "fill": "$glass-fill",
+          "stroke": "$glass-stroke",
+          "strokeWidth": {
+            "top": 1,
+            "bottom": 1
+          },
+          "strokeAlignment": "inner",
+          "effect": {
+            "type": "background_blur",
+            "radius": "$glass-blur"
+          },
           "justifyContent": "center",
           "children": [
             {
@@ -572,7 +664,7 @@
                       "ref": "eHuov",
                       "name": "AgendaPhoneMock",
                       "width": 280,
-                      "height": 606,
+                      "height": 608,
                       "descendants": {
                         "E7RKbY": {
                           "type": "frame",
@@ -581,7 +673,7 @@
                           "width": "fill_container",
                           "height": "fill_container",
                           "layout": "vertical",
-                          "gap": 10,
+                          "gap": 12,
                           "padding": [
                             8,
                             16,
@@ -604,13 +696,28 @@
                               "id": "nlouH",
                               "name": "AgendaRow",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
-                              "gap": 12,
-                              "padding": [
-                                14,
-                                16
+                              "stroke": "$glass-stroke",
+                              "strokeWidth": 1,
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
                               ],
+                              "gap": 12,
+                              "padding": 16,
                               "alignItems": "center",
                               "children": [
                                 {
@@ -659,15 +766,28 @@
                               "id": "zifwy",
                               "name": "AgendaRow",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
                               "stroke": "$accent-green",
                               "strokeWidth": 1.5,
-                              "gap": 12,
-                              "padding": [
-                                14,
-                                16
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
                               ],
+                              "gap": 12,
+                              "padding": 16,
                               "alignItems": "center",
                               "children": [
                                 {
@@ -717,7 +837,7 @@
                                   "cornerRadius": 100,
                                   "padding": [
                                     4,
-                                    10
+                                    12
                                   ],
                                   "children": [
                                     {
@@ -739,13 +859,28 @@
                               "id": "BOCOZ",
                               "name": "AgendaRow",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
-                              "gap": 12,
-                              "padding": [
-                                14,
-                                16
+                              "stroke": "$glass-stroke",
+                              "strokeWidth": 1,
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
                               ],
+                              "gap": 12,
+                              "padding": 16,
                               "alignItems": "center",
                               "children": [
                                 {
@@ -797,7 +932,7 @@
                               "cornerRadius": 16,
                               "stroke": "#14171A33",
                               "strokeWidth": 1.5,
-                              "padding": 14,
+                              "padding": 16,
                               "justifyContent": "center",
                               "children": [
                                 {
@@ -881,7 +1016,7 @@
                   "fill": "$ink",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "本番画面、3つの方向性",
+                  "content": "本番画面、3つの状態",
                   "textAlign": "center",
                   "fontFamily": "Noto Sans JP",
                   "fontSize": 36,
@@ -894,7 +1029,7 @@
                   "fill": "#14171A8C",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "どれが会場に合いそうか、ぜひご意見ください。",
+                  "content": "残り時間に応じて色が変わり、数字を読まなくても状況が伝わります。",
                   "textAlign": "center",
                   "fontFamily": "Noto Sans JP",
                   "fontSize": 16,
@@ -920,8 +1055,14 @@
                           "type": "frame",
                           "id": "UuOfw",
                           "name": "VariantPill",
-                          "fill": "$ink",
+                          "fill": "$glass-dark-fill",
                           "cornerRadius": 100,
+                          "stroke": "$glass-dark-stroke",
+                          "strokeWidth": 1,
+                          "effect": {
+                            "type": "background_blur",
+                            "radius": "$glass-blur"
+                          },
                           "padding": [
                             4,
                             12
@@ -932,7 +1073,7 @@
                               "id": "Hk74z",
                               "name": "VariantPillText",
                               "fill": "#FFFFFF",
-                              "content": "1a — ステージ・ダーク",
+                              "content": "余裕あり",
                               "fontFamily": "Space Grotesk",
                               "fontSize": 12,
                               "fontWeight": "700"
@@ -940,36 +1081,101 @@
                           ]
                         },
                         {
-                          "id": "P2bxfi",
+                          "id": "xpXB6",
                           "type": "ref",
                           "ref": "eHuov",
-                          "name": "VariantPhone",
-                          "width": 260,
-                          "height": 562,
-                          "fill": "#000000",
-                          "descendants": {
-                            "EGHJe": {
-                              "fill": "#FFFFFF"
-                            },
-                            "E7RKbY": {
-                              "id": "k2TCt2",
-                              "type": "ref",
-                              "ref": "dZryp",
-                              "name": "VariantTimerContent",
-                              "fill": "#0B0D10",
-                              "descendants": {
-                                "e32j0": {
-                                  "content": "02:14",
-                                  "fill": "#EAB308"
+                          "name": "VariantPhoneGreen",
+                          "width": 300,
+                          "height": 648,
+                          "fill": [
+                            "#ECF2E9",
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.3,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9EDDBB",
+                                  "position": 0
                                 },
-                                "zS7oB": {
-                                  "width": 170,
-                                  "fill": "#EAB308"
+                                {
+                                  "color": "#9EDDBB00",
+                                  "position": 1
                                 }
+                              ],
+                              "center": {
+                                "x": 0.15,
+                                "y": 0.12
                               }
                             },
-                            "s7m9s": {
-                              "fill": "#FFFFFF"
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.2,
+                                "height": 0.85
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9CC9E8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#9CC9E800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.9,
+                                "y": 0.42
+                              }
+                            },
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.5,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#EFDFA8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#EFDFA800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.4,
+                                "y": 0.95
+                              }
+                            }
+                          ],
+                          "descendants": {
+                            "E7RKbY": {
+                              "id": "ER8E9",
+                              "type": "ref",
+                              "ref": "WGRYW",
+                              "name": "VariantTimerGreen",
+                              "width": "fill_container",
+                              "height": "fill_container",
+                              "descendants": {
+                                "wrc38": {
+                                  "fontSize": 64,
+                                  "letterSpacing": -1
+                                }
+                              }
                             }
                           }
                         },
@@ -980,7 +1186,7 @@
                           "fill": "#14171A8C",
                           "textGrowth": "fixed-width",
                           "width": 280,
-                          "content": "暗い会場でも眩しくない。数字だけが浮かび上がる、集中特化のステージモード。",
+                          "content": "時間に余裕がある間は落ち着いたグリーン。進捗バーで進行も一目瞭然です。",
                           "lineHeight": 1.7,
                           "textAlign": "center",
                           "fontFamily": "Noto Sans JP",
@@ -1001,8 +1207,14 @@
                           "type": "frame",
                           "id": "K5WjX",
                           "name": "VariantPill",
-                          "fill": "$ink",
+                          "fill": "$glass-dark-fill",
                           "cornerRadius": 100,
+                          "stroke": "$glass-dark-stroke",
+                          "strokeWidth": 1,
+                          "effect": {
+                            "type": "background_blur",
+                            "radius": "$glass-blur"
+                          },
                           "padding": [
                             4,
                             12
@@ -1013,7 +1225,7 @@
                               "id": "ZLbhj",
                               "name": "VariantPillText",
                               "fill": "#FFFFFF",
-                              "content": "1b — ミニマル・ライト",
+                              "content": "残りわずか",
                               "fontFamily": "Space Grotesk",
                               "fontSize": 12,
                               "fontWeight": "700"
@@ -1021,46 +1233,109 @@
                           ]
                         },
                         {
-                          "id": "APp0d",
+                          "id": "QNe4G",
                           "type": "ref",
                           "ref": "eHuov",
-                          "name": "VariantPhone",
-                          "width": 260,
-                          "height": 562,
-                          "fill": "#F2F2F7",
+                          "name": "VariantPhoneYellow",
+                          "width": 300,
+                          "height": 648,
+                          "fill": [
+                            "#ECF2E9",
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.3,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9EDDBB",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#9EDDBB00",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.15,
+                                "y": 0.12
+                              }
+                            },
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.2,
+                                "height": 0.85
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9CC9E8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#9CC9E800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.9,
+                                "y": 0.42
+                              }
+                            },
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.5,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#EFDFA8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#EFDFA800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.4,
+                                "y": 0.95
+                              }
+                            }
+                          ],
                           "descendants": {
                             "E7RKbY": {
-                              "id": "p3MatG",
+                              "id": "Xhsru",
                               "type": "ref",
-                              "ref": "dZryp",
-                              "name": "VariantTimerContent",
-                              "fill": "#FAFAF8",
+                              "ref": "WGRYW",
+                              "name": "VariantTimerYellow",
+                              "width": "fill_container",
+                              "height": "fill_container",
                               "descendants": {
-                                "XWe2R": {
-                                  "fill": "#14171A66"
+                                "wrc38": {
+                                  "content": "02:14",
+                                  "fill": "$accent-yellow-deep",
+                                  "fontSize": 64,
+                                  "letterSpacing": -1
                                 },
-                                "VoyfL": {
-                                  "fill": "#14171A"
+                                "EkgLe": {
+                                  "width": 200,
+                                  "fill": "$accent-yellow"
                                 },
-                                "e32j0": {
-                                  "content": "08:42",
-                                  "fill": "#14171A"
-                                },
-                                "g5dqjF": {
-                                  "fill": "#14171A14"
-                                },
-                                "zS7oB": {
-                                  "width": 80,
-                                  "fill": "#22C55E"
-                                },
-                                "E7DcQB": {
-                                  "fill": "#F1F0EC"
-                                },
-                                "K1ET5Y": {
-                                  "fill": "#14171A66"
-                                },
-                                "N7f8l": {
-                                  "fill": "#14171ABF"
+                                "z6QeUG": {
+                                  "content": "定刻",
+                                  "fill": "$accent-yellow-deep"
                                 }
                               }
                             }
@@ -1073,7 +1348,7 @@
                           "fill": "#14171A8C",
                           "textGrowth": "fixed-width",
                           "width": 280,
-                          "content": "LP全体と同じ清潔なトーン。明るい会場やモニター共有に馴染む定番スタイル。",
+                          "content": "残りわずかになると黄色に切り替わり、まとめに入る合図を送ります。",
                           "lineHeight": 1.7,
                           "textAlign": "center",
                           "fontFamily": "Noto Sans JP",
@@ -1094,8 +1369,14 @@
                           "type": "frame",
                           "id": "DKn4p",
                           "name": "VariantPill",
-                          "fill": "$ink",
+                          "fill": "$glass-dark-fill",
                           "cornerRadius": 100,
+                          "stroke": "$glass-dark-stroke",
+                          "strokeWidth": 1,
+                          "effect": {
+                            "type": "background_blur",
+                            "radius": "$glass-blur"
+                          },
                           "padding": [
                             4,
                             12
@@ -1106,7 +1387,7 @@
                               "id": "Bkqy8",
                               "name": "VariantPillText",
                               "fill": "#FFFFFF",
-                              "content": "1c — カラーウォッシュ",
+                              "content": "超過（押し）",
                               "fontFamily": "Space Grotesk",
                               "fontSize": 12,
                               "fontWeight": "700"
@@ -1114,46 +1395,115 @@
                           ]
                         },
                         {
-                          "id": "w6nCA",
+                          "id": "i0mn2",
                           "type": "ref",
                           "ref": "eHuov",
-                          "name": "VariantPhone",
-                          "width": 260,
-                          "height": 562,
-                          "fill": "#F2F2F7",
+                          "name": "VariantPhoneRed",
+                          "width": 300,
+                          "height": 648,
+                          "fill": [
+                            "#ECF2E9",
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.3,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9EDDBB",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#9EDDBB00",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.15,
+                                "y": 0.12
+                              }
+                            },
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.2,
+                                "height": 0.85
+                              },
+                              "colors": [
+                                {
+                                  "color": "#9CC9E8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#9CC9E800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.9,
+                                "y": 0.42
+                              }
+                            },
+                            {
+                              "type": "gradient",
+                              "gradientType": "radial",
+                              "enabled": true,
+                              "rotation": 0,
+                              "size": {
+                                "width": 1.5,
+                                "height": 0.9
+                              },
+                              "colors": [
+                                {
+                                  "color": "#EFDFA8",
+                                  "position": 0
+                                },
+                                {
+                                  "color": "#EFDFA800",
+                                  "position": 1
+                                }
+                              ],
+                              "center": {
+                                "x": 0.4,
+                                "y": 0.95
+                              }
+                            }
+                          ],
                           "descendants": {
                             "E7RKbY": {
-                              "id": "H4m9o",
+                              "id": "UKrsx",
                               "type": "ref",
-                              "ref": "dZryp",
-                              "name": "VariantTimerContent",
-                              "fill": "#FEF3C7",
+                              "ref": "WGRYW",
+                              "name": "VariantTimerRed",
+                              "width": "fill_container",
+                              "height": "fill_container",
                               "descendants": {
-                                "XWe2R": {
-                                  "fill": "#78350F8C"
+                                "p1PWs": {
+                                  "content": "質疑応答"
                                 },
-                                "VoyfL": {
-                                  "fill": "#78350F"
+                                "wrc38": {
+                                  "content": "-01:30",
+                                  "fill": "$accent-red-deep",
+                                  "fontSize": 64,
+                                  "letterSpacing": -1
                                 },
-                                "e32j0": {
-                                  "content": "02:14",
-                                  "fill": "#78350F"
+                                "EkgLe": {
+                                  "width": 252,
+                                  "fill": "$accent-red"
                                 },
-                                "g5dqjF": {
-                                  "fill": "#78350F26"
+                                "z6QeUG": {
+                                  "content": "押し 01:30",
+                                  "fill": "$accent-red-deep"
                                 },
-                                "zS7oB": {
-                                  "width": 170,
-                                  "fill": "#78350F"
-                                },
-                                "E7DcQB": {
-                                  "fill": "#78350F14"
-                                },
-                                "K1ET5Y": {
-                                  "fill": "#78350F8C"
-                                },
-                                "N7f8l": {
-                                  "fill": "#78350FD9"
+                                "ObYqU": {
+                                  "content": "最後の項目です"
                                 }
                               }
                             }
@@ -1166,7 +1516,7 @@
                           "fill": "#14171A8C",
                           "textGrowth": "fixed-width",
                           "width": 280,
-                          "content": "背景そのものが信号色に染まる。数字を読まなくても、色だけで状況が伝わります。",
+                          "content": "超過すると赤に反転。押している時間も数字で正確に把握できます。",
                           "lineHeight": 1.7,
                           "textAlign": "center",
                           "fontFamily": "Noto Sans JP",
@@ -1186,56 +1536,104 @@
           "id": "n83I8",
           "name": "Cta",
           "width": "fill_container",
-          "fill": "$ink",
+          "fill": "#FFFFFF00",
           "layout": "vertical",
           "padding": [
-            100,
+            72,
+            32,
+            96,
             32
           ],
           "alignItems": "center",
           "children": [
             {
-              "type": "text",
-              "id": "gNwWx",
-              "name": "CtaTitle",
-              "fill": "#FFFFFF",
-              "content": "次のプレゼンから、時間に追われない。",
-              "textAlign": "center",
-              "fontFamily": "Noto Sans JP",
-              "fontSize": 38,
-              "fontWeight": "900"
-            },
-            {
-              "type": "text",
-              "id": "kC5Oc",
-              "name": "CtaSubtitle",
-              "fill": "#FFFFFF8C",
-              "content": "アジェンダを組んで、あとはスマホを置くだけ。",
-              "textAlign": "center",
-              "fontFamily": "Noto Sans JP",
-              "fontSize": 16,
-              "fontWeight": "normal"
-            },
-            {
               "type": "frame",
-              "id": "t1r9VF",
-              "name": "CtaButton",
-              "fill": "$accent-green-bright",
-              "cornerRadius": 100,
-              "padding": [
-                16,
-                36
+              "id": "LPdpB",
+              "name": "CtaCard",
+              "fill": "$glass-fill-strong",
+              "cornerRadius": 36,
+              "stroke": "$glass-stroke",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": "$glass-blur"
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "$glass-shadow",
+                  "offset": {
+                    "x": 0,
+                    "y": 16
+                  },
+                  "blur": 40
+                }
               ],
+              "layout": "vertical",
+              "gap": 16,
+              "padding": [
+                72,
+                112
+              ],
+              "alignItems": "center",
               "children": [
                 {
                   "type": "text",
-                  "id": "DIOaE",
-                  "name": "CtaButtonText",
-                  "fill": "#0B0D10",
-                  "content": "無料ではじめる",
+                  "id": "gNwWx",
+                  "name": "CtaTitle",
+                  "fill": "$ink",
+                  "content": "次のプレゼンから、時間に追われない。",
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans JP",
+                  "fontSize": 38,
+                  "fontWeight": "900"
+                },
+                {
+                  "type": "text",
+                  "id": "kC5Oc",
+                  "name": "CtaSubtitle",
+                  "fill": "#14171A8C",
+                  "content": "アジェンダを組んで、あとはスマホを置くだけ。",
+                  "textAlign": "center",
                   "fontFamily": "Noto Sans JP",
                   "fontSize": 16,
-                  "fontWeight": "700"
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "t1r9VF",
+                  "name": "CtaButton",
+                  "fill": "$accent-green-bright",
+                  "cornerRadius": 100,
+                  "stroke": "#FFFFFF4D",
+                  "strokeWidth": 1,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#22C55E59",
+                    "offset": {
+                      "x": 0,
+                      "y": 8
+                    },
+                    "blur": 24
+                  },
+                  "padding": [
+                    16,
+                    36
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DIOaE",
+                      "name": "CtaButtonText",
+                      "fill": "#0B0D10",
+                      "content": "無料ではじめる",
+                      "fontFamily": "Noto Sans JP",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    }
+                  ]
                 }
               ]
             }
@@ -1255,7 +1653,7 @@
               "id": "wyGNr",
               "name": "FooterLogo",
               "fill": "#14171A80",
-              "content": "TEMPO",
+              "content": "agenda keeper",
               "fontFamily": "Space Grotesk",
               "fontSize": 15,
               "fontWeight": "700"
@@ -1265,7 +1663,7 @@
               "id": "OBU1E",
               "name": "FooterCopy",
               "fill": "#14171A66",
-              "content": "© 2026 TEMPO",
+              "content": "© 2026 agenda keeper",
               "fontFamily": "Noto Sans JP",
               "fontSize": 13,
               "fontWeight": "normal"
@@ -1283,59 +1681,92 @@
       "reusable": true,
       "clip": true,
       "width": 300,
-      "height": 649,
-      "fill": "#F2F2F7",
+      "height": 648,
+      "fill": [
+        "#ECF2E9",
+        {
+          "type": "gradient",
+          "gradientType": "radial",
+          "enabled": true,
+          "rotation": 0,
+          "size": {
+            "width": 1.3,
+            "height": 0.9
+          },
+          "colors": [
+            {
+              "color": "#9EDDBB",
+              "position": 0
+            },
+            {
+              "color": "#9EDDBB00",
+              "position": 1
+            }
+          ],
+          "center": {
+            "x": 0.15,
+            "y": 0.12
+          }
+        },
+        {
+          "type": "gradient",
+          "gradientType": "radial",
+          "enabled": true,
+          "rotation": 0,
+          "size": {
+            "width": 1.2,
+            "height": 0.85
+          },
+          "colors": [
+            {
+              "color": "#9CC9E8",
+              "position": 0
+            },
+            {
+              "color": "#9CC9E800",
+              "position": 1
+            }
+          ],
+          "center": {
+            "x": 0.9,
+            "y": 0.42
+          }
+        },
+        {
+          "type": "gradient",
+          "gradientType": "radial",
+          "enabled": true,
+          "rotation": 0,
+          "size": {
+            "width": 1.5,
+            "height": 0.9
+          },
+          "colors": [
+            {
+              "color": "#EFDFA8",
+              "position": 0
+            },
+            {
+              "color": "#EFDFA800",
+              "position": 1
+            }
+          ],
+          "center": {
+            "x": 0.4,
+            "y": 0.95
+          }
+        }
+      ],
       "cornerRadius": 48,
       "layout": "vertical",
       "children": [
         {
           "type": "frame",
-          "id": "cmtCD",
-          "name": "IslandRow",
-          "width": "fill_container",
-          "padding": [
-            12,
-            0,
-            0,
-            0
-          ],
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "rectangle",
-              "cornerRadius": 24,
-              "id": "l27U6C",
-              "name": "Island",
-              "fill": "#000000",
-              "width": 126,
-              "height": 37
-            }
-          ]
-        },
-        {
-          "type": "frame",
           "id": "FCiCL",
-          "name": "StatusBar",
+          "name": "SafeAreaTop",
           "width": "fill_container",
-          "padding": [
-            8,
-            0,
-            16,
-            0
-          ],
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "EGHJe",
-              "name": "TimeText",
-              "fill": "#000000",
-              "content": "9:41",
-              "fontFamily": "Inter",
-              "fontSize": 15,
-              "fontWeight": "600"
-            }
-          ]
+          "height": 60,
+          "justifyContent": "center"
         },
         {
           "type": "frame",
@@ -1366,129 +1797,8 @@
               "id": "s7m9s",
               "name": "HomeIndicator",
               "fill": "#00000040",
-              "width": 139,
-              "height": 5
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "dZryp",
-      "x": 360,
-      "y": -729,
-      "name": "TimerMockContent",
-      "reusable": true,
-      "width": 300,
-      "height": 500,
-      "fill": "#0B0D10",
-      "layout": "vertical",
-      "padding": [
-        54,
-        28,
-        40,
-        28
-      ],
-      "justifyContent": "space_between",
-      "children": [
-        {
-          "type": "frame",
-          "id": "pRUO4",
-          "name": "TopGroup",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "children": [
-            {
-              "type": "text",
-              "id": "XWe2R",
-              "name": "NowLabel",
-              "fill": "#FFFFFF66",
-              "content": "NOW",
-              "fontFamily": "Inter",
-              "fontSize": 13,
-              "fontWeight": "700",
-              "letterSpacing": 1
-            },
-            {
-              "type": "text",
-              "id": "VoyfL",
-              "name": "TitleText",
-              "fill": "#FFFFFF",
-              "content": "本編",
-              "fontFamily": "Noto Sans JP",
-              "fontSize": 24,
-              "fontWeight": "700"
-            },
-            {
-              "type": "text",
-              "id": "e32j0",
-              "name": "TimeText",
-              "fill": "#22C55E",
-              "content": "08:42",
-              "fontFamily": "Space Grotesk",
-              "fontSize": 88,
-              "fontWeight": "700",
-              "letterSpacing": -2
-            },
-            {
-              "type": "frame",
-              "id": "g5dqjF",
-              "name": "ProgressTrack",
-              "clip": true,
-              "width": "fill_container",
-              "height": 10,
-              "fill": "#FFFFFF1F",
-              "cornerRadius": 6,
-              "children": [
-                {
-                  "type": "rectangle",
-                  "cornerRadius": 6,
-                  "id": "zS7oB",
-                  "name": "ProgressFill",
-                  "fill": "#22C55E",
-                  "width": 90,
-                  "height": "fill_container"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "E7DcQB",
-          "name": "NextBox",
-          "width": "fill_container",
-          "fill": "#FFFFFF0F",
-          "cornerRadius": 14,
-          "layout": "vertical",
-          "gap": 4,
-          "padding": [
-            16,
-            18
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "K1ET5Y",
-              "name": "NextLabel",
-              "fill": "#FFFFFF73",
-              "content": "NEXT",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "700",
-              "letterSpacing": 0.5
-            },
-            {
-              "type": "text",
-              "id": "N7f8l",
-              "name": "NextText",
-              "fill": "#FFFFFFD9",
-              "content": "質疑応答（5:00）",
-              "fontFamily": "Noto Sans JP",
-              "fontSize": 15,
-              "fontWeight": "normal"
+              "width": 140,
+              "height": 4
             }
           ]
         }
@@ -1501,11 +1811,23 @@
       "y": -949,
       "name": "Toggle",
       "reusable": true,
-      "width": 50,
-      "height": 30,
-      "fill": "$accent-green-bright",
+      "width": 52,
+      "height": 32,
+      "fill": "#22C55ED9",
       "cornerRadius": 100,
-      "padding": 3,
+      "stroke": "#FFFFFF80",
+      "strokeWidth": 1,
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#16803D40",
+        "offset": {
+          "x": 0,
+          "y": 4
+        },
+        "blur": 12
+      },
+      "padding": 4,
       "justifyContent": "end",
       "alignItems": "center",
       "children": [
@@ -1515,7 +1837,17 @@
           "name": "Knob",
           "fill": "#FFFFFF",
           "width": 24,
-          "height": 24
+          "height": 24,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#14171A33",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 6
+          }
         }
       ]
     },
@@ -1526,11 +1858,17 @@
       "y": -949,
       "name": "LabelPill",
       "reusable": true,
-      "fill": "$ink",
+      "fill": "$glass-dark-fill",
       "cornerRadius": 100,
+      "stroke": "$glass-dark-stroke",
+      "strokeWidth": 1,
+      "effect": {
+        "type": "background_blur",
+        "radius": "$glass-blur"
+      },
       "padding": [
-        5,
-        14
+        4,
+        16
       ],
       "children": [
         {
@@ -1553,8 +1891,26 @@
       "y": -949,
       "name": "PillButton",
       "reusable": true,
-      "fill": "$accent-green",
+      "fill": "#16803DCC",
       "cornerRadius": 100,
+      "stroke": "#FFFFFF59",
+      "strokeWidth": 1,
+      "effect": [
+        {
+          "type": "background_blur",
+          "radius": "$glass-blur"
+        },
+        {
+          "type": "shadow",
+          "shadowType": "outer",
+          "color": "#16803D40",
+          "offset": {
+            "x": 0,
+            "y": 8
+          },
+          "blur": 24
+        }
+      ],
       "padding": [
         16,
         32
@@ -1582,13 +1938,28 @@
       "name": "AppAgendaRow",
       "reusable": true,
       "width": 342,
-      "fill": "#FFFFFF",
+      "fill": "$glass-fill-strong",
       "cornerRadius": 16,
-      "gap": 12,
-      "padding": [
-        14,
-        16
+      "stroke": "$glass-stroke",
+      "strokeWidth": 1,
+      "effect": [
+        {
+          "type": "background_blur",
+          "radius": "$glass-blur"
+        },
+        {
+          "type": "shadow",
+          "shadowType": "outer",
+          "color": "$glass-shadow",
+          "offset": {
+            "x": 0,
+            "y": 8
+          },
+          "blur": 24
+        }
       ],
+      "gap": 12,
+      "padding": 16,
       "alignItems": "center",
       "children": [
         {
@@ -1635,8 +2006,8 @@
           "type": "icon",
           "id": "sPwGu",
           "name": "RowLockIcon",
-          "width": 18,
-          "height": 18,
+          "width": 20,
+          "height": 20,
           "icon": "lock-open",
           "library": "lucide",
           "fill": "#9CA3AF"
@@ -1645,8 +2016,8 @@
           "type": "icon",
           "id": "aWMVC",
           "name": "RowTrashIcon",
-          "width": 18,
-          "height": 18,
+          "width": 20,
+          "height": 20,
           "icon": "trash-2",
           "library": "lucide",
           "fill": "#9CA3AF"
@@ -1662,7 +2033,7 @@
       "reusable": true,
       "width": 390,
       "height": 719,
-      "fill": "$bg",
+      "fill": "#FFFFFF00",
       "layout": "vertical",
       "padding": [
         16,
@@ -1678,20 +2049,9 @@
           "name": "TimerTop",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 14,
+          "gap": 16,
           "alignItems": "center",
           "children": [
-            {
-              "type": "text",
-              "id": "eIIp6",
-              "name": "NowLabel",
-              "fill": "#14171A66",
-              "content": "NOW",
-              "fontFamily": "Inter",
-              "fontSize": 13,
-              "fontWeight": "700",
-              "letterSpacing": 1.5
-            },
             {
               "type": "text",
               "id": "p1PWs",
@@ -1719,13 +2079,15 @@
               "name": "ProgressTrack",
               "clip": true,
               "width": "fill_container",
-              "height": 10,
-              "fill": "#14171A14",
-              "cornerRadius": 6,
+              "height": 8,
+              "fill": "#FFFFFF66",
+              "cornerRadius": 4,
+              "stroke": "$glass-stroke",
+              "strokeWidth": 1,
               "children": [
                 {
                   "type": "rectangle",
-                  "cornerRadius": 6,
+                  "cornerRadius": 4,
                   "id": "EkgLe",
                   "name": "ProgressFill",
                   "fill": "$accent-green-bright",
@@ -1751,13 +2113,31 @@
           "id": "hXmhM",
           "name": "NextBox",
           "width": "fill_container",
-          "fill": "$surface",
-          "cornerRadius": 14,
+          "fill": "$glass-fill",
+          "cornerRadius": 16,
+          "stroke": "$glass-stroke",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": "$glass-blur"
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "$glass-shadow",
+              "offset": {
+                "x": 0,
+                "y": 6
+              },
+              "blur": 18
+            }
+          ],
           "layout": "vertical",
           "gap": 4,
           "padding": [
             16,
-            18
+            20
           ],
           "children": [
             {
@@ -1789,7 +2169,7 @@
           "name": "TimerBottom",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 18,
+          "gap": 16,
           "alignItems": "center",
           "children": [
             {
@@ -1805,9 +2185,9 @@
                   "ref": "P62dBk",
                   "name": "PauseButton",
                   "width": "fill_container",
-                  "fill": "#FFFFFF",
-                  "stroke": "#14171A29",
-                  "strokeWidth": 1.5,
+                  "fill": "$glass-fill-strong",
+                  "stroke": "$glass-stroke",
+                  "strokeWidth": 1,
                   "descendants": {
                     "Byscn": {
                       "content": "一時停止",
@@ -1942,8 +2322,8 @@
                               "type": "icon",
                               "id": "ybIUx",
                               "name": "SettingsIcon",
-                              "width": 22,
-                              "height": 22,
+                              "width": 24,
+                              "height": 24,
                               "icon": "settings",
                               "library": "lucide",
                               "fill": "$ink"
@@ -2005,10 +2385,11 @@
                           "id": "b78TQd",
                           "name": "AddItemRow",
                           "width": "fill_container",
+                          "fill": "$glass-fill",
                           "cornerRadius": 16,
-                          "stroke": "#14171A33",
+                          "stroke": "$glass-stroke",
                           "strokeWidth": 1.5,
-                          "padding": 14,
+                          "padding": 16,
                           "justifyContent": "center",
                           "children": [
                             {
@@ -2115,8 +2496,8 @@
                               "type": "icon",
                               "id": "a4bPDt",
                               "name": "SettingsIcon",
-                              "width": 22,
-                              "height": 22,
+                              "width": 24,
+                              "height": 24,
                               "icon": "settings",
                               "library": "lucide",
                               "fill": "$ink"
@@ -2141,7 +2522,7 @@
                       "name": "EmptyState",
                       "width": "fill_container",
                       "layout": "vertical",
-                      "gap": 10,
+                      "gap": 12,
                       "alignItems": "center",
                       "children": [
                         {
@@ -2184,7 +2565,7 @@
                           "name": "EmptyAddWrap",
                           "width": "fill_container",
                           "padding": [
-                            14,
+                            16,
                             0,
                             0,
                             0
@@ -2195,10 +2576,11 @@
                               "id": "P1U7AI",
                               "name": "AddItemRow",
                               "width": "fill_container",
+                              "fill": "$glass-fill",
                               "cornerRadius": 16,
-                              "stroke": "#14171A33",
+                              "stroke": "$glass-stroke",
                               "strokeWidth": 1.5,
-                              "padding": 14,
+                              "padding": 16,
                               "justifyContent": "center",
                               "children": [
                                 {
@@ -2272,7 +2654,81 @@
               "name": "TimerPhone",
               "width": 390,
               "height": 844,
-              "fill": "$bg",
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                }
+              ],
               "descendants": {
                 "E7RKbY": {
                   "id": "V2Zp4",
@@ -2312,7 +2768,81 @@
               "name": "TimerPhone",
               "width": 390,
               "height": 844,
-              "fill": "$bg",
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                }
+              ],
               "descendants": {
                 "E7RKbY": {
                   "id": "U0u0nz",
@@ -2327,7 +2857,7 @@
                       "fill": "$accent-yellow-deep"
                     },
                     "EkgLe": {
-                      "width": 274,
+                      "width": 276,
                       "fill": "$accent-yellow"
                     },
                     "z6QeUG": {
@@ -2366,7 +2896,81 @@
               "name": "TimerPhone",
               "width": 390,
               "height": 844,
-              "fill": "$bg",
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                }
+              ],
               "descendants": {
                 "E7RKbY": {
                   "id": "x5UkqZ",
@@ -2426,7 +3030,81 @@
               "name": "TimerPhone",
               "width": 390,
               "height": 844,
-              "fill": "$bg",
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                }
+              ],
               "descendants": {
                 "E7RKbY": {
                   "id": "FZtPa",
@@ -2474,7 +3152,81 @@
               "name": "TimerEndPhone",
               "width": 390,
               "height": 844,
-              "fill": "$bg",
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                }
+              ],
               "descendants": {
                 "E7RKbY": {
                   "type": "frame",
@@ -2670,8 +3422,26 @@
                               "id": "N06aqM",
                               "name": "ModeCard",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
+                              "stroke": "$glass-stroke",
+                              "strokeWidth": 1,
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
+                              ],
                               "layout": "vertical",
                               "children": [
                                 {
@@ -2680,10 +3450,7 @@
                                   "name": "ModeRow",
                                   "width": "fill_container",
                                   "gap": 12,
-                                  "padding": [
-                                    14,
-                                    16
-                                  ],
+                                  "padding": 16,
                                   "alignItems": "center",
                                   "children": [
                                     {
@@ -2742,10 +3509,7 @@
                                   "name": "ModeRow",
                                   "width": "fill_container",
                                   "gap": 12,
-                                  "padding": [
-                                    14,
-                                    16
-                                  ],
+                                  "padding": 16,
                                   "alignItems": "center",
                                   "children": [
                                     {
@@ -2804,10 +3568,7 @@
                                   "name": "ModeRow",
                                   "width": "fill_container",
                                   "gap": 12,
-                                  "padding": [
-                                    14,
-                                    16
-                                  ],
+                                  "padding": 16,
                                   "alignItems": "center",
                                   "children": [
                                     {
@@ -2880,8 +3641,26 @@
                               "id": "aDJnl",
                               "name": "EndTimeCard",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
+                              "stroke": "$glass-stroke",
+                              "strokeWidth": 1,
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
+                              ],
                               "gap": 12,
                               "padding": [
                                 14,
@@ -2915,8 +3694,8 @@
                                   "type": "icon",
                                   "id": "gdl3y",
                                   "name": "Chevron",
-                                  "width": 18,
-                                  "height": 18,
+                                  "width": 20,
+                                  "height": 20,
                                   "icon": "chevron-right",
                                   "library": "lucide",
                                   "fill": "#14171A66"
@@ -2959,8 +3738,26 @@
                               "id": "Ekbl2",
                               "name": "NotifCard",
                               "width": "fill_container",
-                              "fill": "#FFFFFF",
+                              "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
+                              "stroke": "$glass-stroke",
+                              "strokeWidth": 1,
+                              "effect": [
+                                {
+                                  "type": "background_blur",
+                                  "radius": "$glass-blur"
+                                },
+                                {
+                                  "type": "shadow",
+                                  "shadowType": "outer",
+                                  "color": "$glass-shadow",
+                                  "offset": {
+                                    "x": 0,
+                                    "y": 8
+                                  },
+                                  "blur": 24
+                                }
+                              ],
                               "layout": "vertical",
                               "children": [
                                 {
@@ -2970,7 +3767,7 @@
                                   "width": "fill_container",
                                   "gap": 12,
                                   "padding": [
-                                    13,
+                                    12,
                                     16
                                   ],
                                   "alignItems": "center",
@@ -3010,7 +3807,7 @@
                                   "width": "fill_container",
                                   "gap": 12,
                                   "padding": [
-                                    13,
+                                    12,
                                     16
                                   ],
                                   "alignItems": "center",
@@ -3050,7 +3847,7 @@
                                   "width": "fill_container",
                                   "gap": 12,
                                   "padding": [
-                                    13,
+                                    12,
                                     16
                                   ],
                                   "alignItems": "center",
@@ -3089,9 +3886,9 @@
                       "ref": "P62dBk",
                       "name": "CloseButton",
                       "width": "fill_container",
-                      "fill": "#FFFFFF",
-                      "stroke": "#14171A29",
-                      "strokeWidth": 1.5,
+                      "fill": "$glass-fill-strong",
+                      "stroke": "$glass-stroke",
+                      "strokeWidth": 1,
                       "descendants": {
                         "Byscn": {
                           "content": "閉じる",
@@ -3111,11 +3908,11 @@
   "variables": {
     "bg": {
       "type": "color",
-      "value": "#FAFAF8"
+      "value": "#EEF3EF"
     },
     "surface": {
       "type": "color",
-      "value": "#F1F0EC"
+      "value": "#FFFFFF4D"
     },
     "ink": {
       "type": "color",
@@ -3152,6 +3949,46 @@
     "accent-red-deep": {
       "type": "color",
       "value": "#DC2626"
+    },
+    "bg-grad-a": {
+      "type": "color",
+      "value": "#DFF0E4"
+    },
+    "bg-grad-b": {
+      "type": "color",
+      "value": "#F4F1E4"
+    },
+    "bg-grad-c": {
+      "type": "color",
+      "value": "#E3EEF6"
+    },
+    "glass-fill": {
+      "type": "color",
+      "value": "#FFFFFF66"
+    },
+    "glass-fill-strong": {
+      "type": "color",
+      "value": "#FFFFFF99"
+    },
+    "glass-stroke": {
+      "type": "color",
+      "value": "#FFFFFFB3"
+    },
+    "glass-shadow": {
+      "type": "color",
+      "value": "#14171A1F"
+    },
+    "glass-blur": {
+      "type": "number",
+      "value": 24
+    },
+    "glass-dark-fill": {
+      "type": "color",
+      "value": "#14171A99"
+    },
+    "glass-dark-stroke": {
+      "type": "color",
+      "value": "#FFFFFF33"
     }
   },
   "fileToken": "f2543cf2-5d58-47a4-bfeb-c8d8e06d71de"
