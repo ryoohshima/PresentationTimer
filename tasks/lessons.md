@@ -34,3 +34,10 @@
 - **何があったか**: PR #56（turbo 2.10.3）の CI が `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` で失敗。パッケージ公開が 2026-07-03T16:49Z、CI 実行が 2026-07-04T13:38Z で、24 時間の閾値に約 3 時間届かなかっただけだった。調査時点（07-05）には閾値を超えており、`gh run rerun <run-id> --failed` の再実行のみで全ジョブ成功した。
 - **ルール**: このエラーを見たら、まずログの「published at」と「cutoff」の時刻差を計算する。既に閾値を超えていれば lockfile 再生成やポリシー緩和は行わず、失敗 run の再実行だけで解消する。閾値未達なら経過を待ってから再実行する。ポリシー自体は供給網防御として妥当なので緩めない。
 - **構造的背景**: dependabot はリリース直後に PR を作るため、pnpm 11 の minimumReleaseAge（既定 24h）と常に競合し得る。恒久対策は `.github/dependabot.yml` の `cooldown` 設定（別イシュー候補）。
+
+## 2026-07-14 `expo install` 自体もSDKと不整合なバージョンを提案することがある
+
+### 7. `expo install` の出力を鵜呑みにせず bundledNativeModules.json と照合する
+- **何があったか**: `apps/mobile`（Expo SDK 54, `expo ~54.0.35`）で `npx expo install expo-linear-gradient` を実行したところ、CLI は「SDK 52.0.0 compatible native module」と表示し `expo-linear-gradient@~14.0.2`（SDK 52 用）を追加した。`node_modules/expo/bundledNativeModules.json` を見ると SDK 54 の正しい対応バージョンは `~15.0.8` だった。
+- **ルール**: `expo install` の完了メッセージに表示される「SDK x.x.x compatible」の行を必ず確認する。プロジェクトの `expo` バージョン（= SDK）と一致しない場合は、インストール結果を鵜呑みにせず `node_modules/expo/bundledNativeModules.json` の対応バージョンで `pnpm add <pkg>@<正しいrange>` により手動修正する。[[dependabot-expo-sdk-mismatch]] と同根の問題であり、dependabot だけでなく `expo install` 自体もこの種の不整合を起こし得る。
+- **副次的発見（未修正のまま残置）**: 同じ調査中、`apps/mobile` は PR #65（`@babel/core` 7.29.7→8.0.1 bump）以降、`react-native-worklets`/`react-native-gesture-handler` の Babel プラグインが `Requires Babel "^7.0.0-0", but was loaded with "8.0.1"` で例外を投げ、`expo start --web` のバンドルが**常に失敗する**状態になっている（`git stash` で変更前のコードに戻しても同じエラーが再現することを確認済み＝本セッションの変更とは無関係の既存バグ）。UI 修正タスクのスコープ外のため意図的に未修正。次にこのリポジトリに触るときは、`@babel/core` を `^7.26.0` 系へ戻すか worklets 側の対応を待つ必要がある。
