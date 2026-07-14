@@ -155,3 +155,29 @@
 - タイマー5状態は AppTimerContent コンポーネント1つ＋ref の descendants 上書きで表現（LP の TimerMockContent と同型のパターン）。
 - 既知の問題: Pencil MCP のスクリーンショット経路が新規サブツリーを描画しない（ライブエディタ表示・データは正常）。検証は export_html 経由で実施。
 - 注意: Pencil アプリは main リポジトリ側 design.pen（feature/lp-design ブランチ）に保存する。worktree へは保存後にバイトコピーで同期する運用。
+
+---
+
+# todo: design.pen デザイン差分の解消（2026-07-15）
+
+> 計画: ~/.claude/plans/pencil-mcp-design-pen-frolicking-pizza.md
+> design.pen と apps/mobile 実装の突き合わせで見つかった 7 差分（②タイマー中心）を修正する。
+
+## 計画
+
+- [x] A-1: ② 残り時間の文字色を design 準拠へ（safe=ink / warning=accentYellowDeep / over=accentRedDeep）
+- [x] A-2: ② ProgressFill を明色系（accentGreenBright / accentYellow / accentRed）へ
+- [x] A-3: ② 押し/巻きラベルを中央揃えに
+- [x] A-4: ② タイマー数字に letterSpacing -2
+- [x] A-5: ① アジェンダ行の間隔 8 → 12
+- [x] A-6: ① 「＋ 項目を追加」枠線 1 → 1.5
+- [x] A-7: ① 空状態アイコンを clipboard-list 系へ
+- [x] lint / typecheck / test 実行（lint exit 0 / typecheck 6 タスク / test 全緑）
+- [x] 実画面での目視確認（expo web + Chrome DevTools MCP、①空状態と②running を確認）
+- [x] コミット
+
+## レビュー
+
+- design.pen のペース配色は「小さい文字=深色系」「バー=明色系」「特大数字=平常時 ink」の 3 用途で、実装は深色系 1 写像に潰れていたのが根本原因。`paceColors.ts` に `PACE_BAR_COLORS` / `PACE_TIME_COLORS` を追加して用途別写像に分離した（コンポーネント側は写像の差し替えのみ）。
+- 修正対象外として維持した近似: 背景の放射→線形グラデ（デザインよりかなり淡い）、Space Grotesk / Noto Sans JP 未適用、実ブラー未使用、影の blur 値差。いずれもコード内コメントで方針明示済み。
+- 検証: pnpm lint / typecheck / test 全緑。expo start --web + Chrome DevTools MCP で ①（clipboard-list アイコン・枠線 1.5・開始 disabled）と ②（残り時間が黒・巻きラベル中央・バー明色緑）を目視確認。
