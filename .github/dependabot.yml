@@ -30,6 +30,11 @@ updates:
       - dependency-name: "react-native"
       - dependency-name: "react-native-*"
       # react / react-dom は web(^19)/mobile(18.3.1) で要求が割れるため、あえて対象に含めない。
+      # react-native-worklets / gesture-handler の Babel プラグインは Babel 7 系のみ対応。
+      # Babel 8 への major bump はバンドル不能を招くため、worklets 側の対応まで major を無視する。
+      # 参照: Issue #80（PR #46/#65 で 2 度誤 bump された事例）
+      - dependency-name: "@babel/core"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
