@@ -21,7 +21,8 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <TimerProvider>
           <AgendaPersistence />
-          <Stack>
+          {/* 各画面がヘッダー行をコンテンツ内で自前描画する（design.pen 準拠）ため、ネイティブヘッダーは非表示にする。 */}
+          <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" options={{ title: "アジェンダ編集" }} />
             <Stack.Screen name="timer" options={{ title: "タイマー実行" }} />
             <Stack.Screen name="settings" options={{ title: "設定", presentation: "modal" }} />
