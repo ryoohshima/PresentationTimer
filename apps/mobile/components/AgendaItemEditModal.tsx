@@ -103,11 +103,7 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
             </View>
           </View>
 
-          <PillButton
-            label={item === undefined ? "追加" : "保存"}
-            onPress={handleSave}
-            fullWidth
-          />
+          <PillButton label={item === undefined ? "追加" : "保存"} onPress={handleSave} fullWidth />
         </View>
       </KeyboardAvoidingView>
     </Modal>
