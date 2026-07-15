@@ -9,7 +9,7 @@ import { createContext, type Dispatch, useCallback, useContext, useReducer } fro
 
 type Action =
   | { type: "SET_AGENDA"; items: AgendaItem[] }
-  | { type: "ADD_ITEM"; title?: string }
+  | { type: "ADD_ITEM"; title?: string; plannedSec?: number }
   | { type: "REMOVE_ITEM"; id: string }
   | { type: "MOVE_ITEM"; id: string; toIndex: number }
   | { type: "UPDATE_ITEM"; id: string; patch: { title?: string; plannedSec?: number } }
@@ -85,17 +85,20 @@ function timerReducer(state: TimerState, action: Action): TimerState {
       return engine.loadAgenda(state, action.items);
     // 編集系はいずれも「新しい items を組み立てて loadAgenda へ委譲」で統一する。
     // totalPlannedSec 再計算と idle リセットを一元化するため（編集は idle 中の操作前提, docs/06）。
-    case "ADD_ITEM":
+    case "ADD_ITEM": {
+      const plannedSec =
+        action.plannedSec === undefined ? DEFAULT_PLANNED_SEC : normalizeSec(action.plannedSec);
       return engine.loadAgenda(state, [
         ...state.agenda,
         {
           id: createItemId(),
           title: action.title ?? "",
-          plannedSec: DEFAULT_PLANNED_SEC,
-          allocatedSec: DEFAULT_PLANNED_SEC,
+          plannedSec,
+          allocatedSec: plannedSec,
           isLocked: false,
         },
       ]);
+    }
     case "REMOVE_ITEM": {
       const items = state.agenda.filter((item) => item.id !== action.id);
       return items.length === state.agenda.length ? state : engine.loadAgenda(state, items);
@@ -155,8 +158,8 @@ export interface TimerStore {
   state: TimerState;
   /** 編集画面でアジェンダを確定する。totalPlannedSec を再計算し idle にリセットする。 */
   setAgenda: (items: AgendaItem[]) => void;
-  /** 末尾に新規項目を追加する（plannedSec はデフォルト 5 分）。 */
-  addItem: (title?: string) => void;
+  /** 末尾に新規項目を追加する（plannedSec 省略時はデフォルト 5 分）。 */
+  addItem: (title?: string, plannedSec?: number) => void;
   /** 指定 ID の項目を削除する。 */
   removeItem: (id: string) => void;
   /** 指定 ID の項目を toIndex の位置へ移動する（範囲外はクランプ）。 */
@@ -192,7 +195,7 @@ export function useTimerStore(): TimerStore {
     [dispatch],
   );
   const addItem = useCallback(
-    (title?: string) => dispatch({ type: "ADD_ITEM", title }),
+    (title?: string, plannedSec?: number) => dispatch({ type: "ADD_ITEM", title, plannedSec }),
     [dispatch],
   );
   const removeItem = useCallback((id: string) => dispatch({ type: "REMOVE_ITEM", id }), [dispatch]);
