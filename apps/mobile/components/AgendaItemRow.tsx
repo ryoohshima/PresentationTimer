@@ -1,6 +1,6 @@
 import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { colors } from "../constants/theme";
 import { GlassCard } from "./GlassCard";
 
