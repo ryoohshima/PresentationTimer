@@ -1,9 +1,11 @@
+import { BlurView } from "expo-blur";
 import type { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { colors, radius } from "../constants/theme";
 
-// design.pen のガラスモーフィズムカード（半透明の白 + 縁取り + 影）の近似。
-// 実機ブラー（background_blur）は使わず、半透明フィルのみで質感を表現する。
+// design.pen のガラスモーフィズムカード（背景ブラー + 半透明の白 + 縁取り + 影）。
+// background_blur（glass-blur 24）は expo-blur で表現する。web は backdrop-filter
+// 上限（intensity 100 = 20px）に丸め、Android はネイティブ非対応のため半透明フィルへ退化する。
 
 interface GlassCardProps {
   children: React.ReactNode;
@@ -21,6 +23,7 @@ export function GlassCard({ children, strong = false, style }: GlassCardProps) {
         style,
       ]}
     >
+      <BlurView intensity={100} tint="light" style={styles.blur} pointerEvents="none" />
       {children}
     </View>
   );
@@ -36,5 +39,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 3,
+  },
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: radius.card,
+    overflow: "hidden",
   },
 });
