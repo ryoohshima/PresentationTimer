@@ -200,4 +200,5 @@
 - [x] components/AgendaItemRow.tsx: 表示専用へ（タイトル + 「5分 00秒 ・固定」）。行タップで編集モーダル、ドラッグ/ロック/削除は行上のまま
 - [x] app/index.tsx: モーダル配線（add/edit 両モード）。「＋ 項目を追加」ラベルを accentGreen/700 に変更（disabled 誤認の防止）
 - [x] lint / typecheck / test 全緑（store 18 tests）。expo web で編集・追加フローを操作して確認
-- [ ] design.pen へ編集モーダルのデザイン追加 + AddItemText の色同期（**Pencil エディタで design.pen が未オープンのためブロック中**。開いてもらい次第 batch_design で反映する）
+- [x] design.pen へ編集モーダルのデザイン追加（FokaP に EditModalCol: 暗転オーバーレイ + 項目編集モーダルカード）+ AddItemText を accent-green/700 へ同期。スクリーンショットでレイアウト崩れなしを確認
+- [x] design.pen の Cmd+S 保存（ユーザー実施）→ worktree へバイトコピー同期（md5 一致確認済み）
