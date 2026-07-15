@@ -1,14 +1,12 @@
 import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../constants/theme";
 import { GlassCard } from "./GlassCard";
 
-// 画面① アジェンダ編集の 1 行。タイトル・分:秒入力・ロックトグル・削除・ドラッグハンドル。
-// 分:秒はテキスト入力中の中間状態（空文字等）を許すため行ローカル state に持ち、
-// 確定値のみ onUpdate で store へ流す（docs/06-screens.md 画面①）。
-// 見た目は design.pen の AppAgendaRow（ガラスカード + アイコン式ロック/削除）に準拠する。
+// 画面① アジェンダ編集の 1 行。表示専用とし、行タップで編集モーダルを開く
+// （行内インライン入力は入力可否が分かりづらいため AgendaItemEditModal に集約）。
+// 見た目は design.pen の AppAgendaRow（タイトル + 「5分 00秒」詳細 + ロック/削除）に準拠する。
 
 interface AgendaItemRowProps {
   item: AgendaItem;
@@ -16,33 +14,24 @@ interface AgendaItemRowProps {
   drag: () => void;
   /** ドラッグ中の行なら true（ハイライト表示用）。 */
   isActive: boolean;
-  onUpdate: (patch: { title?: string; plannedSec?: number }) => void;
+  onEdit: () => void;
   onToggleLock: () => void;
   onRemove: () => void;
 }
 
-/** 数値入力文字列を 0 以上の整数へ変換する（数値以外・空文字は 0 扱い）。 */
-function toSec(text: string): number {
-  const value = Number.parseInt(text, 10);
-  return Number.isNaN(value) ? 0 : Math.max(0, value);
+/** 秒数を「5分 00秒」表記へ整形する。 */
+function formatPlanned(sec: number): string {
+  return `${Math.floor(sec / 60)}分 ${String(sec % 60).padStart(2, "0")}秒`;
 }
 
 export function AgendaItemRow({
   item,
   drag,
   isActive,
-  onUpdate,
+  onEdit,
   onToggleLock,
   onRemove,
 }: AgendaItemRowProps) {
-  const [minText, setMinText] = useState(String(Math.floor(item.plannedSec / 60)));
-  const [secText, setSecText] = useState(String(item.plannedSec % 60));
-
-  const commitTime = (nextMinText: string, nextSecText: string) => {
-    const sec = Math.min(59, toSec(nextSecText));
-    onUpdate({ plannedSec: toSec(nextMinText) * 60 + sec });
-  };
-
   return (
     <GlassCard
       strong
@@ -57,42 +46,21 @@ export function AgendaItemRow({
         <Text style={styles.dragHandleLabel}>≡</Text>
       </Pressable>
 
-      <View style={styles.body}>
-        <TextInput
-          value={item.title}
-          onChangeText={(text) => onUpdate({ title: text })}
-          placeholder="項目名"
-          placeholderTextColor="#14171A66"
-          style={styles.titleInput}
-          accessibilityLabel="項目名"
-        />
-
-        <View style={styles.timeRow}>
-          <TextInput
-            value={minText}
-            onChangeText={(text) => {
-              setMinText(text);
-              commitTime(text, secText);
-            }}
-            keyboardType="number-pad"
-            style={styles.timeInput}
-            accessibilityLabel="予定時間（分）"
-          />
-          <Text style={styles.timeSeparator}>分</Text>
-          <TextInput
-            value={secText}
-            onChangeText={(text) => {
-              setSecText(text);
-              commitTime(minText, text);
-            }}
-            keyboardType="number-pad"
-            style={styles.timeInput}
-            accessibilityLabel="予定時間（秒）"
-          />
-          <Text style={styles.timeSeparator}>秒</Text>
-          {item.isLocked && <Text style={styles.lockedSuffix}>・固定</Text>}
-        </View>
-      </View>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title || "無題の項目"}を編集`}
+        onPress={onEdit}
+        onLongPress={drag}
+        style={styles.body}
+      >
+        <Text style={[styles.title, item.title === "" && styles.titlePlaceholder]}>
+          {item.title || "（無題）"}
+        </Text>
+        <Text style={styles.detail}>
+          {formatPlanned(item.plannedSec)}
+          {item.isLocked && <Text style={styles.lockedSuffix}> ・固定</Text>}
+        </Text>
+      </Pressable>
 
       <Pressable
         accessibilityRole="button"
@@ -147,28 +115,19 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 2,
   },
-  titleInput: {
+  title: {
     fontSize: 16,
     fontWeight: "700",
     color: colors.ink,
-    padding: 0,
   },
-  timeRow: {
-    flexDirection: "row",
-    alignItems: "center",
+  titlePlaceholder: {
+    color: "#14171A66",
   },
-  timeInput: {
-    minWidth: 20,
-    fontSize: 13,
-    color: "#6B7280",
-    padding: 0,
-  },
-  timeSeparator: {
+  detail: {
     fontSize: 13,
     color: "#6B7280",
   },
   lockedSuffix: {
-    fontSize: 13,
     color: colors.accentGreen,
     fontWeight: "600",
   },
