@@ -2,6 +2,12 @@
 
 ユーザーから修正・指摘を受けたパターンと、再発防止ルールを記録する。
 
+## 2026-07-15 ローカル lint と CI の検査範囲差で push 後に CI が落ちる
+
+### 8. push 前の検証は CI と同じコマンド（`biome ci .`）で行う
+- **何があったか**: PR #84 で CI の lint ジョブが失敗。ローカルでは `pnpm lint` が exit 0 だったが、ルートの `lint` スクリプトは `biome lint .`（lint 規則のみ）で、CI は `biome ci .`（lint + **format 検査**）を実行していた。新規作成した `AgendaItemEditModal.tsx` の整形差分（1 行に収まる JSX を複数行で記述）が CI でのみ検出された。
+- **ルール**: このリポジトリで push / PR 作成の前は `pnpm lint` ではなく **`pnpm exec biome ci .`** で検証する。`pnpm lint` の成功は format 検査の成功を意味しない。新規ファイル作成時は `biome format --write <file>` を通してからコミットすると安全。
+
 ## 2026-06-27 CI・Linter/Formatter セットアップ
 
 ### 1. 既存の「明示値」を勝手に別値へ変更しない
