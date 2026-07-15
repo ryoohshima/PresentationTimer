@@ -179,5 +179,13 @@
 ## レビュー
 
 - design.pen のペース配色は「小さい文字=深色系」「バー=明色系」「特大数字=平常時 ink」の 3 用途で、実装は深色系 1 写像に潰れていたのが根本原因。`paceColors.ts` に `PACE_BAR_COLORS` / `PACE_TIME_COLORS` を追加して用途別写像に分離した（コンポーネント側は写像の差し替えのみ）。
-- 修正対象外として維持した近似: 背景の放射→線形グラデ（デザインよりかなり淡い）、Space Grotesk / Noto Sans JP 未適用、実ブラー未使用、影の blur 値差。いずれもコード内コメントで方針明示済み。
+- 修正対象外として維持した近似: Space Grotesk / Noto Sans JP 未適用、影の blur 値差。コード内コメントで方針明示済み。
 - 検証: pnpm lint / typecheck / test 全緑。expo start --web + Chrome DevTools MCP で ①（clipboard-list アイコン・枠線 1.5・開始 disabled）と ②（残り時間が黒・巻きラベル中央・バー明色緑）を目視確認。
+
+## 追加対応（同日・ユーザー指摘）: 背景グラデとグラスモーフィズムの実装
+
+- [x] 背景を design.pen 通りの放射グラデ3枚（#9EDDBB / #9CC9E8 / #EFDFA8 on #ECF2E9）へ。react-native-svg 15.12.1（SDK 54 対応版を bundledNativeModules.json で照合）の Ellipse + RadialGradient で実装、expo-linear-gradient は依存ごと除去
+- [x] GlassCard / PillButton(secondary) に expo-blur ~15.0.8 の BlurView で実ブラー（background_blur 相当）を追加。web は intensity 100 = 20px が上限（design は 24px）
+- [x] バグ修正: web では SVG id がドキュメント全体で共有されるため、スタック内の複数画面で `bg-blob-0` が衝突し ② 以降の画面で背景が描画されなかった → useId() でインスタンスごとに一意化
+- [x] lint / typecheck / test 全緑。expo web で ①②③ すべて背景・ガラス質感を目視確認
+- 留意: Android の BlurView はデフォルト非対応のため半透明フィルへ退化する（従来と同等の見た目）。実機で必要なら experimentalBlurMethod の検討を別途
