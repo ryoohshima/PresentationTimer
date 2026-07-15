@@ -189,3 +189,15 @@
 - [x] バグ修正: web では SVG id がドキュメント全体で共有されるため、スタック内の複数画面で `bg-blob-0` が衝突し ② 以降の画面で背景が描画されなかった → useId() でインスタンスごとに一意化
 - [x] lint / typecheck / test 全緑。expo web で ①②③ すべて背景・ガラス質感を目視確認
 - 留意: Android の BlurView はデフォルト非対応のため半透明フィルへ退化する（従来と同等の見た目）。実機で必要なら experimentalBlurMethod の検討を別途
+
+## 追加対応（同日・ユーザー指摘 2）: 画面① の入力 UX をモーダル方式へ
+
+> 指摘: 数字と分/秒ラベルが離れすぎ・入力可否が分かりづらい・タイトルも同様・追加ボタンが disabled に見える。
+> ユーザー確認の上「モーダル入力方式 + design.pen 同期」を採用。
+
+- [x] packages/store: ADD_ITEM / addItem に plannedSec を追加（モーダルから時間付きで新規追加するため）+ テスト
+- [x] components/AgendaItemEditModal.tsx 新規: タイトル・分/秒入力・保存/追加ボタンのモーダル（白背景の入力欄で入力可否を明示、分/秒はラベル近接）
+- [x] components/AgendaItemRow.tsx: 表示専用へ（タイトル + 「5分 00秒 ・固定」）。行タップで編集モーダル、ドラッグ/ロック/削除は行上のまま
+- [x] app/index.tsx: モーダル配線（add/edit 両モード）。「＋ 項目を追加」ラベルを accentGreen/700 に変更（disabled 誤認の防止）
+- [x] lint / typecheck / test 全緑（store 18 tests）。expo web で編集・追加フローを操作して確認
+- [ ] design.pen へ編集モーダルのデザイン追加 + AddItemText の色同期（**Pencil エディタで design.pen が未オープンのためブロック中**。開いてもらい次第 batch_design で反映する）
