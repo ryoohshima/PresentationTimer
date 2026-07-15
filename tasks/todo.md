@@ -155,3 +155,50 @@
 - タイマー5状態は AppTimerContent コンポーネント1つ＋ref の descendants 上書きで表現（LP の TimerMockContent と同型のパターン）。
 - 既知の問題: Pencil MCP のスクリーンショット経路が新規サブツリーを描画しない（ライブエディタ表示・データは正常）。検証は export_html 経由で実施。
 - 注意: Pencil アプリは main リポジトリ側 design.pen（feature/lp-design ブランチ）に保存する。worktree へは保存後にバイトコピーで同期する運用。
+
+---
+
+# todo: design.pen デザイン差分の解消（2026-07-15）
+
+> 計画: ~/.claude/plans/pencil-mcp-design-pen-frolicking-pizza.md
+> design.pen と apps/mobile 実装の突き合わせで見つかった 7 差分（②タイマー中心）を修正する。
+
+## 計画
+
+- [x] A-1: ② 残り時間の文字色を design 準拠へ（safe=ink / warning=accentYellowDeep / over=accentRedDeep）
+- [x] A-2: ② ProgressFill を明色系（accentGreenBright / accentYellow / accentRed）へ
+- [x] A-3: ② 押し/巻きラベルを中央揃えに
+- [x] A-4: ② タイマー数字に letterSpacing -2
+- [x] A-5: ① アジェンダ行の間隔 8 → 12
+- [x] A-6: ① 「＋ 項目を追加」枠線 1 → 1.5
+- [x] A-7: ① 空状態アイコンを clipboard-list 系へ
+- [x] lint / typecheck / test 実行（lint exit 0 / typecheck 6 タスク / test 全緑）
+- [x] 実画面での目視確認（expo web + Chrome DevTools MCP、①空状態と②running を確認）
+- [x] コミット
+
+## レビュー
+
+- design.pen のペース配色は「小さい文字=深色系」「バー=明色系」「特大数字=平常時 ink」の 3 用途で、実装は深色系 1 写像に潰れていたのが根本原因。`paceColors.ts` に `PACE_BAR_COLORS` / `PACE_TIME_COLORS` を追加して用途別写像に分離した（コンポーネント側は写像の差し替えのみ）。
+- 修正対象外として維持した近似: Space Grotesk / Noto Sans JP 未適用、影の blur 値差。コード内コメントで方針明示済み。
+- 検証: pnpm lint / typecheck / test 全緑。expo start --web + Chrome DevTools MCP で ①（clipboard-list アイコン・枠線 1.5・開始 disabled）と ②（残り時間が黒・巻きラベル中央・バー明色緑）を目視確認。
+
+## 追加対応（同日・ユーザー指摘）: 背景グラデとグラスモーフィズムの実装
+
+- [x] 背景を design.pen 通りの放射グラデ3枚（#9EDDBB / #9CC9E8 / #EFDFA8 on #ECF2E9）へ。react-native-svg 15.12.1（SDK 54 対応版を bundledNativeModules.json で照合）の Ellipse + RadialGradient で実装、expo-linear-gradient は依存ごと除去
+- [x] GlassCard / PillButton(secondary) に expo-blur ~15.0.8 の BlurView で実ブラー（background_blur 相当）を追加。web は intensity 100 = 20px が上限（design は 24px）
+- [x] バグ修正: web では SVG id がドキュメント全体で共有されるため、スタック内の複数画面で `bg-blob-0` が衝突し ② 以降の画面で背景が描画されなかった → useId() でインスタンスごとに一意化
+- [x] lint / typecheck / test 全緑。expo web で ①②③ すべて背景・ガラス質感を目視確認
+- 留意: Android の BlurView はデフォルト非対応のため半透明フィルへ退化する（従来と同等の見た目）。実機で必要なら experimentalBlurMethod の検討を別途
+
+## 追加対応（同日・ユーザー指摘 2）: 画面① の入力 UX をモーダル方式へ
+
+> 指摘: 数字と分/秒ラベルが離れすぎ・入力可否が分かりづらい・タイトルも同様・追加ボタンが disabled に見える。
+> ユーザー確認の上「モーダル入力方式 + design.pen 同期」を採用。
+
+- [x] packages/store: ADD_ITEM / addItem に plannedSec を追加（モーダルから時間付きで新規追加するため）+ テスト
+- [x] components/AgendaItemEditModal.tsx 新規: タイトル・分/秒入力・保存/追加ボタンのモーダル（白背景の入力欄で入力可否を明示、分/秒はラベル近接）
+- [x] components/AgendaItemRow.tsx: 表示専用へ（タイトル + 「5分 00秒 ・固定」）。行タップで編集モーダル、ドラッグ/ロック/削除は行上のまま
+- [x] app/index.tsx: モーダル配線（add/edit 両モード）。「＋ 項目を追加」ラベルを accentGreen/700 に変更（disabled 誤認の防止）
+- [x] lint / typecheck / test 全緑（store 18 tests）。expo web で編集・追加フローを操作して確認
+- [x] design.pen へ編集モーダルのデザイン追加（FokaP に EditModalCol: 暗転オーバーレイ + 項目編集モーダルカード）+ AddItemText を accent-green/700 へ同期。スクリーンショットでレイアウト崩れなしを確認
+- [x] design.pen の Cmd+S 保存（ユーザー実施）→ worktree へバイトコピー同期（md5 一致確認済み）

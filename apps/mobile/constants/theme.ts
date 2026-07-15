@@ -21,8 +21,18 @@ export const colors = {
   glassDarkStroke: "#FFFFFF33",
 } as const;
 
-/** PhoneMock の背景に使う斜めグラデーション（放射グラデーション3枚の近似）。 */
-export const backgroundGradientColors = [colors.bgGradA, colors.bg, colors.bgGradC] as const;
+/** design.pen PhoneMock 背景のベース色。 */
+export const backgroundBase = "#ECF2E9";
+
+/**
+ * design.pen PhoneMock 背景の放射グラデーション3枚（緑・青・黄）。
+ * cx/cy はデザインの center、rx/ry はデザインの size（楕円直径比）の半分。
+ */
+export const backgroundBlobs = [
+  { color: "#9EDDBB", cx: "15%", cy: "12%", rx: "65%", ry: "45%" },
+  { color: "#9CC9E8", cx: "90%", cy: "42%", rx: "60%", ry: "42.5%" },
+  { color: "#EFDFA8", cx: "40%", cy: "95%", rx: "75%", ry: "45%" },
+] as const;
 
 export const radius = {
   pill: 100,
