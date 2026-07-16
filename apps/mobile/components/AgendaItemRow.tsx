@@ -2,6 +2,7 @@ import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { GestureDetector, type PanGesture } from "react-native-gesture-handler";
 import { colors } from "../constants/theme";
 import { GlassCard } from "./GlassCard";
 
@@ -12,8 +13,8 @@ import { GlassCard } from "./GlassCard";
 
 interface AgendaItemRowProps {
   item: AgendaItem;
-  /** 長押しでドラッグ並べ替えを開始する（react-native-draggable-flatlist の drag）。 */
-  drag: () => void;
+  /** ≡ ハンドルに付けるドラッグ並べ替えジェスチャー（DraggableRow が生成する Pan）。 */
+  dragGesture: PanGesture;
   /** ドラッグ中の行なら true（ハイライト表示用）。 */
   isActive: boolean;
   onUpdate: (patch: { title?: string; plannedSec?: number }) => void;
@@ -29,7 +30,7 @@ function toSec(text: string): number {
 
 export function AgendaItemRow({
   item,
-  drag,
+  dragGesture,
   isActive,
   onUpdate,
   onToggleLock,
@@ -48,14 +49,18 @@ export function AgendaItemRow({
       strong
       style={[styles.row, isActive && styles.rowActive, item.isLocked && styles.rowLocked]}
     >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="ドラッグして並べ替え"
-        onLongPress={drag}
-        style={styles.dragHandle}
-      >
-        <Text style={styles.dragHandleLabel}>≡</Text>
-      </Pressable>
+      <GestureDetector gesture={dragGesture}>
+        <View
+          accessible
+          accessibilityLabel="ドラッグして並べ替え"
+          style={styles.dragHandle}
+          hitSlop={8}
+        >
+          <Text selectable={false} style={styles.dragHandleLabel}>
+            ≡
+          </Text>
+        </View>
+      </GestureDetector>
 
       <View style={styles.body}>
         <TextInput
@@ -138,6 +143,8 @@ const styles = StyleSheet.create({
   dragHandle: {
     paddingHorizontal: 4,
     paddingVertical: 4,
+    // Web でドラッグ中にテキスト選択が走らないようにする。
+    userSelect: "none",
   },
   dragHandleLabel: {
     fontSize: 18,

@@ -14,7 +14,7 @@ function AgendaPersistence() {
 // 全ルート共通の親レイアウト。
 // index / timer は通常のスタック画面、settings はモーダル表示にする
 // （docs/06-screens.md: 設定は ① / ② いずれからも開けるモーダル）。
-// GestureHandlerRootView はドラッグ並べ替え（react-native-draggable-flatlist）に必須。
+// GestureHandlerRootView はドラッグ並べ替え（DraggableRow の Gesture.Pan）に必須。
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={styles.root}>

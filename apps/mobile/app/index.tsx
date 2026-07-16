@@ -4,12 +4,14 @@ import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import DraggableFlatList, { type RenderItemParams } from "react-native-draggable-flatlist";
+import { ScrollView } from "react-native-gesture-handler";
 import { AgendaItemRow } from "../components/AgendaItemRow";
+import { DraggableRow } from "../components/DraggableRow";
 import { GlassCard } from "../components/GlassCard";
 import { GradientBackground } from "../components/GradientBackground";
 import { PillButton } from "../components/PillButton";
 import { colors } from "../constants/theme";
+import { useDragReorder } from "../hooks/useDragReorder";
 
 // ① アジェンダ編集画面（docs/06-screens.md 画面①）。
 // 項目の追加・削除・ドラッグ並べ替え・plannedSec 入力を行い、「開始」で ② タイマー実行へ。
@@ -19,21 +21,20 @@ export default function AgendaEditScreen() {
   const { state, addItem, removeItem, moveItem, updateItem, toggleLock, start } = useTimerStore();
   const { agenda } = state;
 
+  const drag = useDragReorder({
+    itemCount: agenda.length,
+    onReorder: (from, to) => {
+      const moved: AgendaItem | undefined = agenda[from];
+      if (moved) {
+        moveItem(moved.id, to);
+      }
+    },
+  });
+
   const handleStart = () => {
     start();
     router.push("/timer");
   };
-
-  const renderItem = ({ item, drag, isActive }: RenderItemParams<AgendaItem>) => (
-    <AgendaItemRow
-      item={item}
-      drag={drag}
-      isActive={isActive}
-      onUpdate={(patch) => updateItem(item.id, patch)}
-      onToggleLock={() => toggleLock(item.id)}
-      onRemove={() => removeItem(item.id)}
-    />
-  );
 
   return (
     <GradientBackground style={styles.container}>
@@ -69,18 +70,27 @@ export default function AgendaEditScreen() {
         </View>
       ) : (
         <>
-          <DraggableFlatList
-            data={agenda}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            onDragEnd={({ from, to }) => {
-              const moved = agenda[from];
-              if (moved) {
-                moveItem(moved.id, to);
-              }
-            }}
-            containerStyle={styles.list}
-          />
+          {/* ドラッグ中はリスト自体のスクロールを止め、Pan とタッチが競合しないようにする。 */}
+          <ScrollView
+            ref={drag.scrollRef}
+            style={styles.list}
+            scrollEnabled={drag.activeId === null}
+          >
+            {agenda.map((item, index) => (
+              <DraggableRow key={item.id} index={index} itemId={item.id} controller={drag}>
+                {(gesture) => (
+                  <AgendaItemRow
+                    item={item}
+                    dragGesture={gesture}
+                    isActive={drag.activeId === item.id}
+                    onUpdate={(patch) => updateItem(item.id, patch)}
+                    onToggleLock={() => toggleLock(item.id)}
+                    onRemove={() => removeItem(item.id)}
+                  />
+                )}
+              </DraggableRow>
+            ))}
+          </ScrollView>
 
           <GlassCard>
             <Pressable
