@@ -5,9 +5,11 @@ import { GestureDetector, type PanGesture } from "react-native-gesture-handler";
 import { colors } from "../constants/theme";
 import { GlassCard } from "./GlassCard";
 
-// 画面① アジェンダ編集の 1 行。表示専用とし、行タップで編集モーダルを開く
-// （行内インライン入力は入力可否が分かりづらいため AgendaItemEditModal に集約）。
-// 見た目は design.pen の AppAgendaRow（タイトル + 「5分 00秒」詳細 + ロック/削除）に準拠する。
+// 画面① アジェンダ編集の 1 行。表示専用とし、鉛筆アイコンで編集モーダルを開く
+// （行内インライン入力は入力可否が分かりづらいため AgendaItemEditModal に集約。
+//   行本体のタップは何もしない: ドラッグしようとして行を触った際の誤爆モーダルを防ぎ、
+//   行上の操作を明示的なアイコン（≡ / 鉛筆 / ロック / 削除）に 1:1 対応させる）。
+// 見た目は design.pen の AppAgendaRow（タイトル + 「5分 00秒」詳細 + アイコン列）に準拠する。
 
 interface AgendaItemRowProps {
   item: AgendaItem;
@@ -51,12 +53,7 @@ export function AgendaItemRow({
         </View>
       </GestureDetector>
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`${item.title || "無題の項目"}を編集`}
-        onPress={onEdit}
-        style={styles.body}
-      >
+      <View style={styles.body}>
         <Text style={[styles.title, item.title === "" && styles.titlePlaceholder]}>
           {item.title || "（無題）"}
         </Text>
@@ -64,6 +61,16 @@ export function AgendaItemRow({
           {formatPlanned(item.plannedSec)}
           {item.isLocked && <Text style={styles.lockedSuffix}> ・固定</Text>}
         </Text>
+      </View>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title || "無題の項目"}を編集`}
+        onPress={onEdit}
+        hitSlop={8}
+        style={styles.iconButton}
+      >
+        <Feather name="edit-2" size={20} color="#9CA3AF" />
       </Pressable>
 
       <Pressable
