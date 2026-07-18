@@ -2396,11 +2396,11 @@
                               "type": "text",
                               "id": "L6Nba",
                               "name": "AddItemText",
-                              "fill": "#14171A66",
+                              "fill": "$accent-green",
                               "content": "＋ 項目を追加",
                               "fontFamily": "Noto Sans JP",
                               "fontSize": 14,
-                              "fontWeight": "600"
+                              "fontWeight": "700"
                             }
                           ]
                         }
@@ -2587,11 +2587,11 @@
                                   "type": "text",
                                   "id": "uKZXz",
                                   "name": "AddItemText",
-                                  "fill": "#14171A66",
+                                  "fill": "$accent-green",
                                   "content": "＋ 項目を追加",
                                   "fontFamily": "Noto Sans JP",
                                   "fontSize": 14,
-                                  "fontWeight": "600"
+                                  "fontWeight": "700"
                                 }
                               ]
                             }
@@ -2611,6 +2611,359 @@
                           "content": "開始"
                         }
                       }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ztH7b",
+          "name": "EditModalCol",
+          "layout": "vertical",
+          "gap": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "Wv4Wh",
+              "type": "ref",
+              "ref": "t3cnU",
+              "name": "EditModalPill",
+              "descendants": {
+                "B8qdTq": {
+                  "content": "① アジェンダ編集 — 項目入力モーダル"
+                }
+              }
+            },
+            {
+              "id": "ChU2N",
+              "type": "ref",
+              "ref": "eHuov",
+              "name": "EditModalPhone",
+              "width": 390,
+              "height": 844,
+              "fill": [
+                "#ECF2E9",
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.3,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#9EDDBB",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9EDDBB00",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.15,
+                    "y": 0.12
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.2,
+                    "height": 0.85
+                  },
+                  "colors": [
+                    {
+                      "color": "#9CC9E8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#9CC9E800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.9,
+                    "y": 0.42
+                  }
+                },
+                {
+                  "type": "gradient",
+                  "gradientType": "radial",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "width": 1.5,
+                    "height": 0.9
+                  },
+                  "colors": [
+                    {
+                      "color": "#EFDFA8",
+                      "position": 0
+                    },
+                    {
+                      "color": "#EFDFA800",
+                      "position": 1
+                    }
+                  ],
+                  "center": {
+                    "x": 0.4,
+                    "y": 0.95
+                  }
+                },
+                "#14171A66"
+              ],
+              "descendants": {
+                "E7RKbY": {
+                  "type": "frame",
+                  "id": "tZD2w",
+                  "name": "ModalWrap",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "padding": [
+                    0,
+                    24
+                  ],
+                  "justifyContent": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "FBAWf",
+                      "name": "ItemEditModal",
+                      "width": "fill_container",
+                      "fill": "#FFFFFFF2",
+                      "cornerRadius": 16,
+                      "stroke": "$glass-stroke",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#14171A33",
+                        "offset": {
+                          "x": 0,
+                          "y": 8
+                        },
+                        "blur": 24
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 20,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "vNv20",
+                          "name": "ModalHeader",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "M748b",
+                              "name": "ModalTitle",
+                              "fill": "$ink",
+                              "content": "項目の編集",
+                              "fontFamily": "Noto Sans JP",
+                              "fontSize": 17,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "N7wBDA",
+                              "name": "ModalClose",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "x",
+                              "library": "lucide",
+                              "fill": "$ink"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "xEvsm",
+                          "name": "TitleSection",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J2CXRE",
+                              "name": "TitleLabel",
+                              "fill": "#14171A8C",
+                              "content": "タイトル",
+                              "fontFamily": "Noto Sans JP",
+                              "fontSize": 13,
+                              "fontWeight": "700",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "frame",
+                              "id": "wfvWh",
+                              "name": "TitleInput",
+                              "width": "fill_container",
+                              "fill": "#FFFFFF",
+                              "cornerRadius": 12,
+                              "stroke": "#14171A1F",
+                              "strokeWidth": 1,
+                              "padding": [
+                                12,
+                                14
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "xwzBY",
+                                  "name": "TitleValue",
+                                  "fill": "$ink",
+                                  "content": "オープニング",
+                                  "fontFamily": "Noto Sans JP",
+                                  "fontSize": 16,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Eiz67",
+                          "name": "TimeSection",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Xckbf",
+                              "name": "TimeLabel",
+                              "fill": "#14171A8C",
+                              "content": "時間",
+                              "fontFamily": "Noto Sans JP",
+                              "fontSize": 13,
+                              "fontWeight": "700",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Wje0K",
+                              "name": "TimeRow",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "sRGWZ",
+                                  "name": "MinInput",
+                                  "width": 72,
+                                  "fill": "#FFFFFF",
+                                  "cornerRadius": 12,
+                                  "stroke": "#14171A1F",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    12,
+                                    0
+                                  ],
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "H3suqt",
+                                      "name": "MinValue",
+                                      "fill": "$ink",
+                                      "content": "5",
+                                      "fontFamily": "Space Grotesk",
+                                      "fontSize": 20,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Ys16S",
+                                  "name": "MinUnitWrap",
+                                  "padding": [
+                                    0,
+                                    10,
+                                    0,
+                                    0
+                                  ],
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "lIxxU",
+                                      "name": "MinUnit",
+                                      "fill": "#14171A8C",
+                                      "content": "分",
+                                      "fontFamily": "Noto Sans JP",
+                                      "fontSize": 15,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "L484J5",
+                                  "name": "SecInput",
+                                  "width": 72,
+                                  "fill": "#FFFFFF",
+                                  "cornerRadius": 12,
+                                  "stroke": "#14171A1F",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    12,
+                                    0
+                                  ],
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "QCi3H",
+                                      "name": "SecValue",
+                                      "fill": "$ink",
+                                      "content": "00",
+                                      "fontFamily": "Space Grotesk",
+                                      "fontSize": 20,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "g6ztb",
+                                  "name": "SecUnit",
+                                  "fill": "#14171A8C",
+                                  "content": "秒",
+                                  "fontFamily": "Noto Sans JP",
+                                  "fontSize": 15,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "HFEsk",
+                          "type": "ref",
+                          "ref": "P62dBk",
+                          "name": "SaveButton",
+                          "width": "fill_container",
+                          "descendants": {
+                            "Byscn": {
+                              "content": "保存"
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 }

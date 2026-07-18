@@ -16,7 +16,7 @@ import { GradientBackground } from "../components/GradientBackground";
 import { NextItemPreview } from "../components/NextItemPreview";
 import { PillButton } from "../components/PillButton";
 import { ProgressBar } from "../components/ProgressBar";
-import { paceColor } from "../constants/paceColors";
+import { paceColor, paceTimeColor } from "../constants/paceColors";
 import { colors } from "../constants/theme";
 import { useTimerTick } from "../hooks/useTimerTick";
 
@@ -96,7 +96,7 @@ export default function TimerScreen() {
         </Text>
 
         <Text
-          style={[styles.remaining, { color: paceColor(paceLevel) }]}
+          style={[styles.remaining, { color: paceTimeColor(paceLevel) }]}
           numberOfLines={1}
           adjustsFontSizeToFit
         >
@@ -156,11 +156,13 @@ const styles = StyleSheet.create({
     fontSize: 96,
     fontWeight: "700",
     fontVariant: ["tabular-nums"],
+    letterSpacing: -2,
     textAlign: "center",
   },
   overUnder: {
     fontSize: 18,
     fontWeight: "700",
+    textAlign: "center",
   },
   bottom: {
     gap: 16,

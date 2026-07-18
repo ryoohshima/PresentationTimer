@@ -1,8 +1,11 @@
+import { BlurView } from "expo-blur";
 import type { StyleProp, ViewStyle } from "react-native";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { colors, radius } from "../constants/theme";
 
-// design.pen の PillButton コンポーネント（primary=緑塗り / secondary=半透明白）の近似。
+// design.pen の PillButton コンポーネント（primary=緑塗り / secondary=半透明白）。
+// secondary はガラス面のため background_blur を expo-blur で表現する
+// （primary は 80% 不透明の緑塗りでブラーがほぼ見えないため適用しない）。
 
 interface PillButtonProps {
   label: string;
@@ -38,6 +41,9 @@ export function PillButton({
         style,
       ]}
     >
+      {variant === "secondary" && (
+        <BlurView intensity={100} tint="light" style={styles.blur} pointerEvents="none" />
+      )}
       <Text style={variant === "primary" ? styles.primaryLabel : styles.secondaryLabel}>
         {label}
       </Text>
@@ -73,6 +79,11 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.4,
+  },
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: radius.pill,
+    overflow: "hidden",
   },
   primaryLabel: {
     color: "#FFFFFF",

@@ -1,10 +1,12 @@
 import { formatMinSec } from "@agenda-timer/core-logic";
 import { useTimerStore } from "@agenda-timer/store";
 import type { AgendaItem } from "@agenda-timer/types";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { AgendaItemEditModal } from "../components/AgendaItemEditModal";
 import { AgendaItemRow } from "../components/AgendaItemRow";
 import { DraggableRow } from "../components/DraggableRow";
 import { GlassCard } from "../components/GlassCard";
@@ -14,12 +16,18 @@ import { colors } from "../constants/theme";
 import { useDragReorder } from "../hooks/useDragReorder";
 
 // ① アジェンダ編集画面（docs/06-screens.md 画面①）。
-// 項目の追加・削除・ドラッグ並べ替え・plannedSec 入力を行い、「開始」で ② タイマー実行へ。
+// 行は表示専用で、タップ（または「＋ 項目を追加」）で編集モーダルを開いて入力する。
+// 削除・ドラッグ並べ替え・ロックは行上で直接行い、「開始」で ② タイマー実行へ。
 // 見た目は design.pen の「App — ① アジェンダ編集」に準拠する。
+
+/** モーダルの編集対象。undefined=閉、{mode:"add"}=新規、{mode:"edit"}=既存項目。 */
+type EditorTarget = { mode: "add" } | { mode: "edit"; item: AgendaItem };
+
 export default function AgendaEditScreen() {
   const router = useRouter();
   const { state, addItem, removeItem, moveItem, updateItem, toggleLock, start } = useTimerStore();
   const { agenda } = state;
+  const [editorTarget, setEditorTarget] = useState<EditorTarget | undefined>(undefined);
 
   const drag = useDragReorder({
     itemCount: agenda.length,
@@ -35,6 +43,27 @@ export default function AgendaEditScreen() {
     start();
     router.push("/timer");
   };
+
+  const handleSave = (title: string, plannedSec: number) => {
+    if (editorTarget?.mode === "edit") {
+      updateItem(editorTarget.item.id, { title, plannedSec });
+    } else {
+      addItem(title, plannedSec);
+    }
+    setEditorTarget(undefined);
+  };
+
+  const addButton = (
+    <GlassCard style={styles.addCard}>
+      <Pressable
+        accessibilityRole="button"
+        style={styles.addButtonInner}
+        onPress={() => setEditorTarget({ mode: "add" })}
+      >
+        <Text style={styles.addLabel}>＋ 項目を追加</Text>
+      </Pressable>
+    </GlassCard>
+  );
 
   return (
     <GradientBackground style={styles.container}>
@@ -53,20 +82,12 @@ export default function AgendaEditScreen() {
 
       {agenda.length === 0 ? (
         <View style={styles.empty}>
-          <Feather name="clipboard" size={40} color="#14171A33" />
+          <MaterialCommunityIcons name="clipboard-list-outline" size={40} color="#14171A33" />
           <Text style={styles.emptyTitle}>アジェンダがありません</Text>
           <Text style={styles.emptyDesc}>
             「＋ 項目を追加」から発表の流れを組み立ててください。
           </Text>
-          <GlassCard style={styles.emptyAddButton}>
-            <Pressable
-              accessibilityRole="button"
-              style={styles.addButtonInner}
-              onPress={() => addItem()}
-            >
-              <Text style={styles.addLabel}>＋ 項目を追加</Text>
-            </Pressable>
-          </GlassCard>
+          <View style={styles.emptyAddButton}>{addButton}</View>
         </View>
       ) : (
         <>
@@ -83,7 +104,7 @@ export default function AgendaEditScreen() {
                     item={item}
                     dragGesture={gesture}
                     isActive={drag.activeId === item.id}
-                    onUpdate={(patch) => updateItem(item.id, patch)}
+                    onEdit={() => setEditorTarget({ mode: "edit", item })}
                     onToggleLock={() => toggleLock(item.id)}
                     onRemove={() => removeItem(item.id)}
                   />
@@ -91,22 +112,20 @@ export default function AgendaEditScreen() {
               </DraggableRow>
             ))}
           </ScrollView>
-
-          <GlassCard>
-            <Pressable
-              accessibilityRole="button"
-              style={styles.addButtonInner}
-              onPress={() => addItem()}
-            >
-              <Text style={styles.addLabel}>＋ 項目を追加</Text>
-            </Pressable>
-          </GlassCard>
+          {addButton}
         </>
       )}
 
       <View style={styles.footer}>
         <PillButton label="開始" onPress={handleStart} disabled={agenda.length === 0} fullWidth />
       </View>
+
+      <AgendaItemEditModal
+        visible={editorTarget !== undefined}
+        item={editorTarget?.mode === "edit" ? editorTarget.item : undefined}
+        onSave={handleSave}
+        onClose={() => setEditorTarget(undefined)}
+      />
     </GradientBackground>
   );
 }
@@ -156,14 +175,19 @@ const styles = StyleSheet.create({
     marginTop: 4,
     alignSelf: "stretch",
   },
+  // design.pen の AddItemRow は他カード（strokeWidth 1）より太い 1.5。
+  addCard: {
+    borderWidth: 1.5,
+  },
   addButtonInner: {
     paddingVertical: 16,
     alignItems: "center",
   },
   addLabel: {
-    color: "#14171A66",
+    // アクションであることが伝わるようアクセント色 + 太字にする（disabled 誤認の防止）。
+    color: colors.accentGreen,
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   footer: {
     gap: 8,

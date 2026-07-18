@@ -72,6 +72,19 @@ describe("アジェンダ編集アクション（Issue #16-#18）", () => {
     expect(next.totalPlannedSec).toBe(1200);
   });
 
+  test("ADD_ITEM は plannedSec 指定時にその値で追加する（allocatedSec も同値）", () => {
+    const next = timerReducer(loadedState(), {
+      type: "ADD_ITEM",
+      title: "休憩",
+      plannedSec: 90,
+    });
+
+    const added = next.agenda[2];
+    expect(added?.plannedSec).toBe(90);
+    expect(added?.allocatedSec).toBe(90);
+    expect(next.totalPlannedSec).toBe(990);
+  });
+
   test("ADD_ITEM が生成する id は既存項目と重複しない", () => {
     let state = loadedState();
     for (let i = 0; i < 10; i += 1) {
