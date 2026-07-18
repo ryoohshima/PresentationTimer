@@ -230,3 +230,30 @@
 - iOS / Android 実機・シミュレータでの確認は未実施（人手確認またはフォローアップ）。
 - マージ対応（2026-07-18）: PR #84（画面①モーダル化）が develop へ先行マージされコンフリクト。develop の新 UI（表示専用行 + AgendaItemEditModal）を土台に、ドラッグ実装（GestureDetector ハンドル + DraggableRow + useDragReorder）を再適用して統合。行本体の長押しドラッグ（旧 onLongPress={drag}）はタップ編集と競合するため廃止し、ドラッグは ≡ ハンドルに一本化。
 - 追加対応（2026-07-18・ユーザー提案）: 編集導線を「行タップ」→「鉛筆アイコン」へ変更。ドラッグ目的で行を触った際にタップ判定が成立して編集モーダルが誤爆する経路を排除し、行上の操作を明示的なアイコン（≡ / 鉛筆 / ロック / 削除）に 1:1 対応させた。Web 検証: 行タップ無反応・鉛筆でモーダル開閉・ドラッグ往復とも正常、コンソールエラーなし。design.pen の AppAgendaRow へ RowEditIcon（lucide pencil）を追加同期済み（Pencil 保存はユーザー実施、md5 一致でバイトコピー確認）。
+
+---
+
+# todo: React バージョン不整合の修正 + catalog 一元管理化（2026-07-18）
+
+> 背景: Android 起動時に `Incompatible React versions: react 19.2.7 / react-native-renderer 19.1.0` でクラッシュ。
+> 原因: dependabot PR #67/#68 が SDK 54 対応の react 19.1.0 を 19.2.7 へ個別 bump（ignore コメントの前提が SDK 52 時代のまま陳腐化していた穴）。
+> 計画: ~/.claude/plans/app-error-android-bundled-curious-stallman.md — ユーザー決定により pnpm catalog で一元管理。
+
+## 計画
+
+- [x] ブランチ作成（fix/react-version-catalog、origin/develop f7197d9 起点）
+- [x] pnpm-workspace.yaml: catalog 定義（react/react-dom 19.1.0, @types/react ~19.1.10, @types/react-dom ~19.1.9）+ SDK 52 の古いコメント修正
+- [x] apps/mobile・web・lp / packages/store の react 系を `catalog:` 参照へ統一
+- [x] 追加対応: expo-router の間接依存 vaul が peer @types/react-dom を 19.2.3 に自動解決し hoisted で catalog 版を覆い隠す問題 → overrides で catalog 版へ強制統一
+- [x] .github/dependabot.yml: react / react-dom / @types/react / @types/react-dom を ignore に追加、陳腐化したコメントを更新
+- [x] pnpm install → bundledNativeModules.json で正値照合（react 19.1.0 / react-dom 19.1.0 / react-native 0.81.5 一致）
+- [x] RN 内蔵 renderer の期待値 "19.1.0" と react 19.1.0 の厳密一致を静的確認
+- [x] 検証: pnpm peers check クリーン / typecheck 6 タスク緑 / biome ci exit 0 / test 52 passed / expo export --platform android バンドル成功
+- [ ] コミット・PR 作成（base: develop）
+- [ ] 実機（Expo Go / Android）での起動確認 → 人手フォロー
+
+## レビュー
+
+- 修正の本質: mobile の react を SDK 54 正値 19.1.0 へ戻す。あわせて全ワークスペースの react 系を pnpm catalog（pnpm-workspace.yaml）で一元管理化し、web/lp は ^19.2.7 → 19.1.0 へ統一（RN renderer との厳密一致制約が最も強いため mobile 基準に揃える）。
+- 防御は catalog ではなく dependabot ignore が担う（dependabot は catalog エントリも bump し得るため両方必要）。
+- expo-doctor の残指摘（@expo/vector-icons 14.0.4 vs ^15.0.3、async-storage 3.1.1 vs 2.2.0、expo patch）は既存の別問題でスコープ外。別イシュー候補。

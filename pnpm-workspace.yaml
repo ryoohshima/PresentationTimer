@@ -1,10 +1,24 @@
 packages:
   - "packages/*"
   - "apps/*"
-# Expo(SDK 52)+React Native は pnpm の isolated install だとネイティブモジュールを
+# Expo(SDK 54)+React Native は pnpm の isolated install だとネイティブモジュールを
 # 解決できないことがあるため、Expo 公式推奨の hoisted リンカを使う
 # 参照: https://docs.expo.dev/guides/monorepos/
 nodeLinker: hoisted
 allowBuilds:
   # vitest が内部利用する esbuild のネイティブバイナリ取得を許可する
   esbuild: true
+# react は react-native 内蔵の renderer と完全一致が必須のため、
+# Expo SDK が要求するバージョンに全ワークスペースで揃える（catalog で一元管理）。
+# SDK 更新時は node_modules/expo/bundledNativeModules.json の値に合わせてここを書き換える。
+# 参照: PR #67/#68 で dependabot が react を個別 bump し起動不能になった事例
+catalog:
+  react: 19.1.0
+  react-dom: 19.1.0
+  "@types/react": ~19.1.10
+  "@types/react-dom": ~19.1.9
+# expo-router の間接依存(vaul)が peer の @types/react-dom を最新(19.2系)へ自動解決し、
+# hoisted 環境で catalog 版を覆い隠すため、間接依存も catalog 版へ強制統一する
+overrides:
+  "@types/react": "catalog:"
+  "@types/react-dom": "catalog:"

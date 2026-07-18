@@ -47,3 +47,11 @@
 - **何があったか**: `apps/mobile`（Expo SDK 54, `expo ~54.0.35`）で `npx expo install expo-linear-gradient` を実行したところ、CLI は「SDK 52.0.0 compatible native module」と表示し `expo-linear-gradient@~14.0.2`（SDK 52 用）を追加した。`node_modules/expo/bundledNativeModules.json` を見ると SDK 54 の正しい対応バージョンは `~15.0.8` だった。
 - **ルール**: `expo install` の完了メッセージに表示される「SDK x.x.x compatible」の行を必ず確認する。プロジェクトの `expo` バージョン（= SDK）と一致しない場合は、インストール結果を鵜呑みにせず `node_modules/expo/bundledNativeModules.json` の対応バージョンで `pnpm add <pkg>@<正しいrange>` により手動修正する。[[dependabot-expo-sdk-mismatch]] と同根の問題であり、dependabot だけでなく `expo install` 自体もこの種の不整合を起こし得る。
 - **副次的発見（未修正のまま残置）**: 同じ調査中、`apps/mobile` は PR #65（`@babel/core` 7.29.7→8.0.1 bump）以降、`react-native-worklets`/`react-native-gesture-handler` の Babel プラグインが `Requires Babel "^7.0.0-0", but was loaded with "8.0.1"` で例外を投げ、`expo start --web` のバンドルが**常に失敗する**状態になっている（`git stash` で変更前のコードに戻しても同じエラーが再現することを確認済み＝本セッションの変更とは無関係の既存バグ）。UI 修正タスクのスコープ外のため意図的に未修正。次にこのリポジトリに触るときは、`@babel/core` を `^7.26.0` 系へ戻すか worklets 側の対応を待つ必要がある。
+
+## 2026-07-18 dependabot ignore の「前提コメント」が SDK 更新で陳腐化し穴になる
+
+### 9. ignore ルールの前提条件は SDK / メジャー更新のたびに見直す
+- **何があったか**: dependabot.yml の ignore コメントに「react / react-dom は web(^19)/mobile(18.3.1) で要求が割れるため、あえて対象に含めない」とあった。これは SDK 52 時代（mobile が react 18.3.1）の判断だが、SDK 54 化（#69）で mobile も react 19.1.0 厳密固定が必要になった。ignore に入っていなかったため dependabot（PR #67/#68）が react を 19.2.7 へ個別 bump し、`react(19.2.7) ≠ react-native-renderer(19.1.0)` の厳密一致違反で Android 起動不能になった。
+- **ルール**: Expo SDK 更新など前提が変わる作業をしたら、dependabot.yml の ignore ルールと**そのコメントに書かれた前提**を必ず読み直し、陳腐化していれば同じ PR で更新する。「ignore に入っていない＝安全に bump できる」ではない。
+- **恒久対応**: react / react-dom / @types/react / @types/react-dom を pnpm catalog（pnpm-workspace.yaml）で一元管理し、dependabot ignore にも追加した。SDK 更新時は bundledNativeModules.json の値に合わせて catalog を 1 箇所書き換える。
+- **副次の学び**: pnpm は文脈に無い peer 依存を最新版で自動解決する（今回 expo-router→vaul の peer @types/react-dom が 19.2.3 に）。`nodeLinker: hoisted` ではこれがトップレベルを占有し catalog 版を覆い隠すため、間接依存の型パッケージは `overrides` でも固定する必要がある。`pnpm peers check` が検知手段。
