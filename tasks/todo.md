@@ -202,3 +202,31 @@
 - [x] lint / typecheck / test 全緑（store 18 tests）。expo web で編集・追加フローを操作して確認
 - [x] design.pen へ編集モーダルのデザイン追加（FokaP に EditModalCol: 暗転オーバーレイ + 項目編集モーダルカード）+ AddItemText を accent-green/700 へ同期。スクリーンショットでレイアウト崩れなしを確認
 - [x] design.pen の Cmd+S 保存（ユーザー実施）→ worktree へバイトコピー同期（md5 一致確認済み）
+
+---
+
+# todo: ドラッグ並べ替えの自前実装への置き換え（2026-07-16）
+
+> 背景: 画面①のドラッグ並べ替えが Web で動かない（draggable-flatlist × reanimated 4 / Web の非互換疑い、SDK 54 更新時の残リスクが顕在化）。
+> 計画: ~/.claude/plans/sprightly-twirling-pixel.md — gesture-handler + reanimated による自前実装へ置き換え。
+
+- [x] package.json から react-native-draggable-flatlist を削除
+- [x] pnpm install で lockfile 更新
+- [x] apps/mobile/hooks/useDragReorder.ts 新規作成
+- [x] apps/mobile/components/DraggableRow.tsx 新規作成
+- [x] apps/mobile/components/AgendaItemRow.tsx のハンドルを GestureDetector + Pan に差し替え
+- [x] apps/mobile/app/index.tsx を ScrollView + DraggableRow に差し替え
+- [x] apps/mobile/app/_layout.tsx のコメント修正
+- [x] pnpm turbo run typecheck / test（全緑）+ biome ci（エラー 0、警告 15 は既存）
+- [x] Web でドラッグ動作を実機確認（Chrome DevTools MCP）
+- [x] コミット（機能実装と依存削除を分割、fix: / chore: プレフィックス）
+
+## レビュー
+
+- 成果物: `useDragReorder` フック（shared value 3 つ + JS 側 activeId、moveItem への委譲）＋ `DraggableRow`（Gesture.Pan 生成・行変位アニメーション・render prop）。store / types は無変更。ハンドルは長押し不要の即ドラッグ開始に変更。
+- Web 検証（Chrome DevTools MCP、pointer イベント合成）: 下方向/上方向ドラッグで並べ替え成功、リロード後も AsyncStorage から復元、範囲外ドラッグは端へクランプ、微小ドラッグは無変化、項目追加/削除後のドラッグも正常、合計時間の再計算正確、コンソールエラーなし。
+- 検証ハーネスの注意: 合成 PointerEvent は偽 pointerId のため RNGH の setPointerCapture が NotFoundError を出す（実マウスでは発生しない）。検証時は capture をスタブした。また evaluate 呼び出しを跨いでドラッグを保持するとフォーカス喪失でジェスチャーがキャンセルされる。
+- 発見（既存問題・未修正）: ロック行（・固定）は Web でサフィックスが縦に折り返し、行高が非ロック行より約 20px 高い（82.5 vs 103）。rowOffset は単一 shared value（最後に onLayout した行の高さ）のため、行高が混在すると長距離ドラッグで移動先が 1 つずれる可能性がある。実測では 2 行ホップまで正確。根本対処はロック表示のレイアウト修正 or 行別高さ測定（v2 候補）。
+- iOS / Android 実機・シミュレータでの確認は未実施（人手確認またはフォローアップ）。
+- マージ対応（2026-07-18）: PR #84（画面①モーダル化）が develop へ先行マージされコンフリクト。develop の新 UI（表示専用行 + AgendaItemEditModal）を土台に、ドラッグ実装（GestureDetector ハンドル + DraggableRow + useDragReorder）を再適用して統合。行本体の長押しドラッグ（旧 onLongPress={drag}）はタップ編集と競合するため廃止し、ドラッグは ≡ ハンドルに一本化。
+- 追加対応（2026-07-18・ユーザー提案）: 編集導線を「行タップ」→「鉛筆アイコン」へ変更。ドラッグ目的で行を触った際にタップ判定が成立して編集モーダルが誤爆する経路を排除し、行上の操作を明示的なアイコン（≡ / 鉛筆 / ロック / 削除）に 1:1 対応させた。Web 検証: 行タップ無反応・鉛筆でモーダル開閉・ドラッグ往復とも正常、コンソールエラーなし。design.pen の AppAgendaRow へ RowEditIcon（lucide pencil）を追加同期済み（Pencil 保存はユーザー実施、md5 一致でバイトコピー確認）。

@@ -2004,6 +2004,16 @@
         },
         {
           "type": "icon",
+          "id": "K3P3yQ",
+          "name": "RowEditIcon",
+          "width": 20,
+          "height": 20,
+          "icon": "pencil",
+          "library": "lucide",
+          "fill": "#9CA3AF"
+        },
+        {
+          "type": "icon",
           "id": "sPwGu",
           "name": "RowLockIcon",
           "width": 20,

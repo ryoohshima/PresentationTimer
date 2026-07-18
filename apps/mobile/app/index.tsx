@@ -5,17 +5,19 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import DraggableFlatList, { type RenderItemParams } from "react-native-draggable-flatlist";
+import { ScrollView } from "react-native-gesture-handler";
 import { AgendaItemEditModal } from "../components/AgendaItemEditModal";
 import { AgendaItemRow } from "../components/AgendaItemRow";
+import { DraggableRow } from "../components/DraggableRow";
 import { GlassCard } from "../components/GlassCard";
 import { GradientBackground } from "../components/GradientBackground";
 import { PillButton } from "../components/PillButton";
 import { colors } from "../constants/theme";
+import { useDragReorder } from "../hooks/useDragReorder";
 
 // ① アジェンダ編集画面（docs/06-screens.md 画面①）。
-// 行は表示専用で、タップ（または「＋ 項目を追加」）で編集モーダルを開いて入力する。
-// 削除・ドラッグ並べ替え・ロックは行上で直接行い、「開始」で ② タイマー実行へ。
+// 行は表示専用で、鉛筆アイコン（または「＋ 項目を追加」）で編集モーダルを開いて入力する。
+// 削除・ドラッグ並べ替え・ロックは行上のアイコンで直接行い、「開始」で ② タイマー実行へ。
 // 見た目は design.pen の「App — ① アジェンダ編集」に準拠する。
 
 /** モーダルの編集対象。undefined=閉、{mode:"add"}=新規、{mode:"edit"}=既存項目。 */
@@ -26,6 +28,16 @@ export default function AgendaEditScreen() {
   const { state, addItem, removeItem, moveItem, updateItem, toggleLock, start } = useTimerStore();
   const { agenda } = state;
   const [editorTarget, setEditorTarget] = useState<EditorTarget | undefined>(undefined);
+
+  const drag = useDragReorder({
+    itemCount: agenda.length,
+    onReorder: (from, to) => {
+      const moved: AgendaItem | undefined = agenda[from];
+      if (moved) {
+        moveItem(moved.id, to);
+      }
+    },
+  });
 
   const handleStart = () => {
     start();
@@ -40,17 +52,6 @@ export default function AgendaEditScreen() {
     }
     setEditorTarget(undefined);
   };
-
-  const renderItem = ({ item, drag, isActive }: RenderItemParams<AgendaItem>) => (
-    <AgendaItemRow
-      item={item}
-      drag={drag}
-      isActive={isActive}
-      onEdit={() => setEditorTarget({ mode: "edit", item })}
-      onToggleLock={() => toggleLock(item.id)}
-      onRemove={() => removeItem(item.id)}
-    />
-  );
 
   const addButton = (
     <GlassCard style={styles.addCard}>
@@ -90,18 +91,27 @@ export default function AgendaEditScreen() {
         </View>
       ) : (
         <>
-          <DraggableFlatList
-            data={agenda}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            onDragEnd={({ from, to }) => {
-              const moved = agenda[from];
-              if (moved) {
-                moveItem(moved.id, to);
-              }
-            }}
-            containerStyle={styles.list}
-          />
+          {/* ドラッグ中はリスト自体のスクロールを止め、Pan とタッチが競合しないようにする。 */}
+          <ScrollView
+            ref={drag.scrollRef}
+            style={styles.list}
+            scrollEnabled={drag.activeId === null}
+          >
+            {agenda.map((item, index) => (
+              <DraggableRow key={item.id} index={index} itemId={item.id} controller={drag}>
+                {(gesture) => (
+                  <AgendaItemRow
+                    item={item}
+                    dragGesture={gesture}
+                    isActive={drag.activeId === item.id}
+                    onEdit={() => setEditorTarget({ mode: "edit", item })}
+                    onToggleLock={() => toggleLock(item.id)}
+                    onRemove={() => removeItem(item.id)}
+                  />
+                )}
+              </DraggableRow>
+            ))}
+          </ScrollView>
           {addButton}
         </>
       )}

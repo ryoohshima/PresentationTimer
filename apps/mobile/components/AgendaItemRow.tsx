@@ -1,17 +1,20 @@
 import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { GestureDetector, type PanGesture } from "react-native-gesture-handler";
 import { colors } from "../constants/theme";
 import { GlassCard } from "./GlassCard";
 
-// 画面① アジェンダ編集の 1 行。表示専用とし、行タップで編集モーダルを開く
-// （行内インライン入力は入力可否が分かりづらいため AgendaItemEditModal に集約）。
-// 見た目は design.pen の AppAgendaRow（タイトル + 「5分 00秒」詳細 + ロック/削除）に準拠する。
+// 画面① アジェンダ編集の 1 行。表示専用とし、鉛筆アイコンで編集モーダルを開く
+// （行内インライン入力は入力可否が分かりづらいため AgendaItemEditModal に集約。
+//   行本体のタップは何もしない: ドラッグしようとして行を触った際の誤爆モーダルを防ぎ、
+//   行上の操作を明示的なアイコン（≡ / 鉛筆 / ロック / 削除）に 1:1 対応させる）。
+// 見た目は design.pen の AppAgendaRow（タイトル + 「5分 00秒」詳細 + アイコン列）に準拠する。
 
 interface AgendaItemRowProps {
   item: AgendaItem;
-  /** 長押しでドラッグ並べ替えを開始する（react-native-draggable-flatlist の drag）。 */
-  drag: () => void;
+  /** ≡ ハンドルに付けるドラッグ並べ替えジェスチャー（DraggableRow が生成する Pan）。 */
+  dragGesture: PanGesture;
   /** ドラッグ中の行なら true（ハイライト表示用）。 */
   isActive: boolean;
   onEdit: () => void;
@@ -26,7 +29,7 @@ function formatPlanned(sec: number): string {
 
 export function AgendaItemRow({
   item,
-  drag,
+  dragGesture,
   isActive,
   onEdit,
   onToggleLock,
@@ -37,22 +40,20 @@ export function AgendaItemRow({
       strong
       style={[styles.row, isActive && styles.rowActive, item.isLocked && styles.rowLocked]}
     >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="ドラッグして並べ替え"
-        onLongPress={drag}
-        style={styles.dragHandle}
-      >
-        <Text style={styles.dragHandleLabel}>≡</Text>
-      </Pressable>
+      <GestureDetector gesture={dragGesture}>
+        <View
+          accessible
+          accessibilityLabel="ドラッグして並べ替え"
+          style={styles.dragHandle}
+          hitSlop={8}
+        >
+          <Text selectable={false} style={styles.dragHandleLabel}>
+            ≡
+          </Text>
+        </View>
+      </GestureDetector>
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`${item.title || "無題の項目"}を編集`}
-        onPress={onEdit}
-        onLongPress={drag}
-        style={styles.body}
-      >
+      <View style={styles.body}>
         <Text style={[styles.title, item.title === "" && styles.titlePlaceholder]}>
           {item.title || "（無題）"}
         </Text>
@@ -60,6 +61,16 @@ export function AgendaItemRow({
           {formatPlanned(item.plannedSec)}
           {item.isLocked && <Text style={styles.lockedSuffix}> ・固定</Text>}
         </Text>
+      </View>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title || "無題の項目"}を編集`}
+        onPress={onEdit}
+        hitSlop={8}
+        style={styles.iconButton}
+      >
+        <Feather name="edit-2" size={20} color="#9CA3AF" />
       </Pressable>
 
       <Pressable
@@ -106,6 +117,8 @@ const styles = StyleSheet.create({
   dragHandle: {
     paddingHorizontal: 4,
     paddingVertical: 4,
+    // Web でドラッグ中にテキスト選択が走らないようにする。
+    userSelect: "none",
   },
   dragHandleLabel: {
     fontSize: 18,
