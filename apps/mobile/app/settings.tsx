@@ -6,19 +6,25 @@ import { Fragment, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GlassCard } from "../components/GlassCard";
 import { GradientBackground } from "../components/GradientBackground";
-import { PillButton } from "../components/PillButton";
 import { ToggleSwitch } from "../components/ToggleSwitch";
 import { colors } from "../constants/theme";
 
 // ③ 設定画面（モーダル表示）。① / ② いずれからも開ける。
-// 「閉じる」でモーダルを閉じて呼び出し元へ戻る。
+// 右上の × でモーダルを閉じて呼び出し元へ戻る（設定は選択した瞬間に反映される）。
 // 見た目は design.pen の「App — ③ 設定」に準拠する。
 
-const MODE_OPTIONS: { mode: ReallocationMode; title: string; desc: string }[] = [
-  { mode: "proportional", title: "比例配分", desc: "押した分を残りの項目へ比例配分します" },
-  { mode: "fixed-end", title: "終了時刻固定", desc: "決めた終了時刻から逆算して配分します" },
-  { mode: "off", title: "再配分しない", desc: "各項目の持ち時間を変更しません" },
-];
+// fixed-end は再配分ロジック・終了時刻の設定 UI とも未実装のため選択不可にする（Issue #90）。
+const MODE_OPTIONS: { mode: ReallocationMode; title: string; desc: string; disabled?: boolean }[] =
+  [
+    { mode: "proportional", title: "比例配分", desc: "押した分を残りの項目へ比例配分します" },
+    {
+      mode: "fixed-end",
+      title: "終了時刻固定（準備中）",
+      desc: "決めた終了時刻から逆算して配分します",
+      disabled: true,
+    },
+    { mode: "off", title: "再配分しない", desc: "各項目の持ち時間を変更しません" },
+  ];
 
 /** エポック秒を "HH:MM" 表記へ整形する。未設定なら "未設定"。 */
 function formatEndTime(endAtEpochSec: number | undefined): string {
@@ -64,9 +70,13 @@ export default function SettingsScreen() {
                 {index > 0 && <View style={styles.divider} />}
                 <Pressable
                   accessibilityRole="radio"
-                  accessibilityState={{ checked: state.reallocationMode === option.mode }}
+                  accessibilityState={{
+                    checked: state.reallocationMode === option.mode,
+                    disabled: option.disabled ?? false,
+                  }}
+                  disabled={option.disabled}
                   onPress={() => setReallocationMode(option.mode)}
-                  style={styles.modeRow}
+                  style={[styles.modeRow, option.disabled && styles.modeRowDisabled]}
                 >
                   <RadioDot selected={state.reallocationMode === option.mode} />
                   <View style={styles.modeTextCol}>
@@ -121,15 +131,12 @@ export default function SettingsScreen() {
           </GlassCard>
         </View>
       </View>
-
-      <PillButton label="閉じる" onPress={() => router.back()} variant="secondary" fullWidth />
     </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between",
     paddingHorizontal: 24,
   },
   main: {
@@ -163,6 +170,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     padding: 16,
+  },
+  modeRowDisabled: {
+    opacity: 0.4,
   },
   radio: {
     width: 20,
