@@ -281,7 +281,7 @@
 - [x] 6. AgendaItemEditModal: タイトル必須化（保存 disabled）
 - [x] 7. settings.tsx: 下部閉じる削除＋fixed-end「準備中」disabled 化（#90 参照）
 - [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
-- [x] コミット分割（git-commit）→ PR #91 作成（CI: typecheck / lint / test / claude-review 全 pass）
+- [x] コミット分割（git-commit）→ PR #91 作成（CI: typecheck / lint / test / claude-review 全 pass）→ develop へマージ済み
 
 ## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile、#91 にスタック）
 
@@ -302,3 +302,4 @@
   - PR #92 の CI 本体（lint/typecheck/test）は base が develop でないため未発火。#91 マージ後の自動リターゲットで発火する（ci.yml の branches 制約）。ローカルで biome ci / typecheck / test（core-logic 44 / store 18）は全緑確認済み
   - Android 実機での最終確認（ガラス面の見た目・レイアウトシフト・削除ダイアログ）は人手フォロー
   - 設定値（reallocationMode 等）の永続化は未対応のまま（#90 の提案に含めた）
+  - #91 の squash merge により #92 が todo.md でコンフリクト → develop を merge し最新の作業記録（本セクション）を採用して解消
