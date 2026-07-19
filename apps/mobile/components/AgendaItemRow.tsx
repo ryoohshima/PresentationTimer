@@ -105,14 +105,15 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 12,
     padding: 16,
+    // ロック/ドラッグ時は borderColor のみ切り替える。太さを常時 1.5 に固定して
+    // 切り替え時のレイアウトシフトを防ぐ（AddItemRow の 1.5 とも揃う）。
+    borderWidth: 1.5,
   },
   rowActive: {
     borderColor: colors.accentGreen,
-    borderWidth: 1.5,
   },
   rowLocked: {
     borderColor: colors.accentGreen,
-    borderWidth: 1.5,
   },
   dragHandle: {
     paddingHorizontal: 4,
