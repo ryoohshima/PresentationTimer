@@ -31,6 +31,10 @@ function toSec(text: string): number {
   return Number.isNaN(value) ? 0 : Math.max(0, value);
 }
 
+// number-pad はソフトキーボードを制限するだけで、Web・外部キーボード・ペーストでは
+// 任意文字列が入るため、保存前に文字列そのものを検証する。
+const DIGITS_ONLY = /^\d+$/;
+
 export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaItemEditModalProps) {
   const [title, setTitle] = useState("");
   const [minText, setMinText] = useState("5");
@@ -45,6 +49,18 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
       setSecText(String(plannedSec % 60).padStart(2, "0"));
     }
   }, [visible, item]);
+
+  // エラーは state に持たず毎レンダー導出する（入力との同期ズレを防ぐ）。
+  const minError = !DIGITS_ONLY.test(minText);
+  const secDigitsError = !DIGITS_ONLY.test(secText);
+  const secRangeError = !secDigitsError && Number.parseInt(secText, 10) > 59;
+  const secError = secDigitsError || secRangeError;
+  const timeErrorMessage =
+    minError || secDigitsError
+      ? "分・秒は数字で入力してください"
+      : secRangeError
+        ? "秒は 0〜59 で入力してください"
+        : null;
 
   const handleSave = () => {
     const plannedSec = toSec(minText) * 60 + Math.min(59, toSec(secText));
@@ -75,6 +91,7 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
               placeholderTextColor="#14171A66"
               style={styles.titleInput}
               accessibilityLabel="項目名"
+              maxLength={100}
               autoFocus
             />
           </View>
@@ -86,8 +103,9 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
                 value={minText}
                 onChangeText={setMinText}
                 keyboardType="number-pad"
-                style={styles.timeInput}
+                style={[styles.timeInput, minError && styles.timeInputError]}
                 accessibilityLabel="予定時間（分）"
+                maxLength={3}
                 selectTextOnFocus
               />
               <Text style={styles.timeUnit}>分</Text>
@@ -95,19 +113,25 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
                 value={secText}
                 onChangeText={setSecText}
                 keyboardType="number-pad"
-                style={styles.timeInput}
+                style={[styles.timeInput, secError && styles.timeInputError]}
                 accessibilityLabel="予定時間（秒）"
+                maxLength={2}
                 selectTextOnFocus
               />
               <Text style={styles.timeUnit}>秒</Text>
             </View>
+            {timeErrorMessage !== null && (
+              <Text style={styles.errorText} accessibilityLiveRegion="polite">
+                {timeErrorMessage}
+              </Text>
+            )}
           </View>
 
-          {/* タイトルは必須（空のまま保存して「（無題）」項目が生まれるのを防ぐ）。 */}
+          {/* タイトルは必須（空のまま保存して「（無題）」項目が生まれるのを防ぐ）。時間も不正なら保存不可。 */}
           <PillButton
             label={item === undefined ? "追加" : "保存"}
             onPress={handleSave}
-            disabled={title.trim() === ""}
+            disabled={title.trim() === "" || minError || secError}
             fullWidth
           />
         </View>
@@ -187,5 +211,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#14171A8C",
     marginRight: 10,
+  },
+  // borderWidth は変えず色だけ変える（太さ変更によるレイアウトシフトを避ける）。
+  timeInputError: {
+    borderColor: colors.accentRed,
+  },
+  errorText: {
+    fontSize: 12,
+    color: colors.accentRedDeep,
   },
 });
