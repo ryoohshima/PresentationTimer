@@ -281,13 +281,14 @@
 - [x] 6. AgendaItemEditModal: タイトル必須化（保存 disabled）
 - [x] 7. settings.tsx: 下部閉じる削除＋fixed-end「準備中」disabled 化（#90 参照）
 - [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
-- [ ] コミット分割（git-commit）→ PR 作成（create-draft-pr）→ CI 確認
+- [x] コミット分割（git-commit）→ PR #91 作成（CI: typecheck / lint / test / claude-review 全 pass）
 
-## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile）
+## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile、#91 にスタック）
 
-- [ ] コミット1: TimerState.totalElapsedSec + エンジン更新 + セレクタ（getTotalRemainingSec / getScheduleOverUnderSec）+ テスト
-- [ ] コミット2: timer.tsx に全体残り時間＋全体基準の押し/巻き表示
-- [ ] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .
+- [x] コミット1: TimerState.totalElapsedSec + エンジン更新 + セレクタ（getTotalRemainingSec / getScheduleOverUnderSec）+ テスト（core-logic 44 / store 18 全緑）
+- [x] コミット2: timer.tsx に全体残り時間＋全体基準の押し/巻き表示
+- [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
+- [x] expo web + Chrome DevTools で実画面確認（タイトル必須・削除確認・時間固定表示・準備中 disabled・全体残り/巻き表示・コンソールエラーなし）
 - [ ] PR 作成（create-draft-pr）→ CI 確認
 
 ## レビュー
