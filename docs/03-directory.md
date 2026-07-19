@@ -3,7 +3,7 @@
 > 出典: RFC §3 を整形し、各ディレクトリの責務を補足。
 
 ```text
-agenda-timer-monorepo/
+presentation-timer-monorepo/
 ├── package.json
 ├── turbo.json                # Turborepo の設定
 ├── apps/
