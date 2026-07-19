@@ -59,7 +59,7 @@ export function AgendaItemRow({
         </Text>
         <Text style={styles.detail}>
           {formatPlanned(item.plannedSec)}
-          {item.isLocked && <Text style={styles.lockedSuffix}> ・固定</Text>}
+          {item.isLocked && <Text style={styles.lockedSuffix}> ・時間固定</Text>}
         </Text>
       </View>
 
@@ -75,7 +75,11 @@ export function AgendaItemRow({
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={item.isLocked ? "再配分の対象にする" : "再配分の対象外にする"}
+        accessibilityLabel={
+          item.isLocked
+            ? "時間固定を解除して再配分の対象に戻す"
+            : "時間を固定して再配分の対象外にする"
+        }
         onPress={onToggleLock}
         style={styles.iconButton}
       >
