@@ -1,4 +1,4 @@
-import type { PaceLevel } from "@agenda-timer/core-logic";
+import type { PaceLevel } from "@presentation-timer/core-logic";
 import { StyleSheet, View } from "react-native";
 import { paceBarColor } from "../constants/paceColors";
 import { colors } from "../constants/theme";

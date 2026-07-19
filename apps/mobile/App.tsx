@@ -1,5 +1,5 @@
-import { getRemainingSec } from "@agenda-timer/core-logic";
-import { TimerProvider, useTimerStore } from "@agenda-timer/store";
+import { getRemainingSec } from "@presentation-timer/core-logic";
+import { TimerProvider, useTimerStore } from "@presentation-timer/store";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 

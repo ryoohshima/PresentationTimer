@@ -1,4 +1,4 @@
-import { getCurrentItem, getRemainingSec } from "@agenda-timer/core-logic";
+import { getCurrentItem, getRemainingSec } from "@presentation-timer/core-logic";
 import { useEffect } from "react";
 import { useTimerStore } from "./store/useTimerStore.js";
 

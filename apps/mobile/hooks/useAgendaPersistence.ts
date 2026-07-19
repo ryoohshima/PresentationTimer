@@ -1,12 +1,12 @@
-import { useTimerStore } from "@agenda-timer/store";
-import type { AgendaItem } from "@agenda-timer/types";
+import { useTimerStore } from "@presentation-timer/store";
+import type { AgendaItem } from "@presentation-timer/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 
 // アジェンダの端末ローカル永続化（Issue #19, docs/07: MVP はローカル保存のみ）。
 // 起動時に AsyncStorage から復元し、以降は agenda の変更を保存する。
 
-const STORAGE_KEY = "@agenda-timer/agenda:v1";
+const STORAGE_KEY = "@presentation-timer/agenda:v1";
 
 /** 保存データが AgendaItem として最低限の形を保っているか検証する。 */
 function isAgendaItem(value: unknown): value is AgendaItem {

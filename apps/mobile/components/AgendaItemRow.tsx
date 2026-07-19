@@ -1,5 +1,5 @@
-import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
+import type { AgendaItem } from "@presentation-timer/types";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GestureDetector, type PanGesture } from "react-native-gesture-handler";
 import { colors } from "../constants/theme";

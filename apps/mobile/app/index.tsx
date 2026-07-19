@@ -1,7 +1,7 @@
-import { formatMinSec } from "@agenda-timer/core-logic";
-import { useTimerStore } from "@agenda-timer/store";
-import type { AgendaItem } from "@agenda-timer/types";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { formatMinSec } from "@presentation-timer/core-logic";
+import { useTimerStore } from "@presentation-timer/store";
+import type { AgendaItem } from "@presentation-timer/types";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Platform, Pressable, StyleSheet, Text, View } from "react-native";

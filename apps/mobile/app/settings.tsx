@@ -1,6 +1,6 @@
-import { useTimerStore } from "@agenda-timer/store";
-import type { ReallocationMode } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
+import { useTimerStore } from "@presentation-timer/store";
+import type { ReallocationMode } from "@presentation-timer/types";
 import { useRouter } from "expo-router";
 import { Fragment, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";

@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import {
   formatMinSec,
   getCurrentItem,
@@ -7,9 +8,8 @@ import {
   getRemainingSec,
   getScheduleOverUnderSec,
   getTotalRemainingSec,
-} from "@agenda-timer/core-logic";
-import { useTimerStore } from "@agenda-timer/store";
-import { Feather } from "@expo/vector-icons";
+} from "@presentation-timer/core-logic";
+import { useTimerStore } from "@presentation-timer/store";
 import { useKeepAwake } from "expo-keep-awake";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";

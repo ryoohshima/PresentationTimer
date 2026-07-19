@@ -1,4 +1,4 @@
-import { useTimerStore } from "@agenda-timer/store";
+import { useTimerStore } from "@presentation-timer/store";
 import { useEffect } from "react";
 
 // tick 駆動（Issue #21, docs/05: 時間計測は UI 層の責務、エンジンは純粋関数）。

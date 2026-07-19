@@ -1,6 +1,6 @@
-// @agenda-timer/store への再エクスポート。web 固有の追加ロジックはない。
+// @presentation-timer/store への再エクスポート。web 固有の追加ロジックはない。
 
-export type { TimerAction, TimerStore } from "@agenda-timer/store";
+export type { TimerAction, TimerStore } from "@presentation-timer/store";
 export {
   DEFAULT_TIMER_STATE,
   TimerDispatchContext,
@@ -8,4 +8,4 @@ export {
   timerReducer,
   useTimerReducer,
   useTimerStore,
-} from "@agenda-timer/store";
+} from "@presentation-timer/store";
