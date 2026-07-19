@@ -257,3 +257,39 @@
 - 修正の本質: mobile の react を SDK 54 正値 19.1.0 へ戻す。あわせて全ワークスペースの react 系を pnpm catalog（pnpm-workspace.yaml）で一元管理化し、web/lp は ^19.2.7 → 19.1.0 へ統一（RN renderer との厳密一致制約が最も強いため mobile 基準に揃える）。
 - 防御は catalog ではなく dependabot ignore が担う（dependabot は catalog エントリも bump し得るため両方必要）。
 - expo-doctor の残指摘（@expo/vector-icons 14.0.4 vs ^15.0.3、async-storage 3.1.1 vs 2.2.0、expo patch）は既存の別問題でスコープ外。別イシュー候補。
+
+---
+
+# todo: Android 実機フィードバック対応（2026-07-19）
+
+> 計画: ~/.claude/plans/android-buzzing-liskov.md
+> 13 件のフィードバックを「即修正（2 PR）」「issue 起票（2件）」に分類して対応。
+
+## issue 起票（先行・create-issue スキル）
+
+- [x] issue: 全画面の横向き（ランドスケープ）対応デザイン → #89
+- [x] issue: 「終了時刻固定（fixed-end）」モードの実装 → #90
+
+## PR1: fix/android-ui-feedback（apps/mobile 内で完結）
+
+- [x] ブランチ作成（develop から）
+- [x] 1. GlassCard: Android で BlurView を描画しない（背景色と外枠の不一致修正。同根の PillButton secondary も同様に対応）
+- [x] 2. AgendaItemRow: borderWidth 1.5 常時確保（固定切替のレイアウトシフト解消）
+- [x] 3. index.tsx: 削除確認ダイアログ（web は confirm 分岐）
+- [x] 4. AgendaItemRow: 「・固定」→「・時間固定」等の文言改善
+- [x] 5. timer.tsx: 設定リンク削除＋「編集に戻る」へ文言変更
+- [x] 6. AgendaItemEditModal: タイトル必須化（保存 disabled）
+- [x] 7. settings.tsx: 下部閉じる削除＋fixed-end「準備中」disabled 化（#90 参照）
+- [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
+- [ ] コミット分割（git-commit）→ PR 作成（create-draft-pr）→ CI 確認
+
+## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile）
+
+- [ ] コミット1: TimerState.totalElapsedSec + エンジン更新 + セレクタ（getTotalRemainingSec / getScheduleOverUnderSec）+ テスト
+- [ ] コミット2: timer.tsx に全体残り時間＋全体基準の押し/巻き表示
+- [ ] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .
+- [ ] PR 作成（create-draft-pr）→ CI 確認
+
+## レビュー
+
+（完了後に追記）
