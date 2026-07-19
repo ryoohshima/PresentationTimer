@@ -9,7 +9,7 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AgendaTimer</Text>
+      <Text style={styles.title}>プレゼンタイマー</Text>
       <Text style={styles.status}>
         Status: {state.status} / Remaining: {remaining ?? "—"}
       </Text>

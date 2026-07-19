@@ -18,7 +18,7 @@ export function App() {
 
   return (
     <main style={{ fontFamily: "sans-serif", padding: "2rem" }}>
-      <h1>Agenda Timer</h1>
+      <h1>プレゼンタイマー</h1>
       <p>グローバルストア（TimerContext）経由で TimerState を管理しているでござる。</p>
       <dl>
         <dt>ステータス</dt>
