@@ -2,10 +2,11 @@ import {
   formatMinSec,
   getCurrentItem,
   getNextItem,
-  getOverUnderSec,
   getPaceLevel,
   getProgressRate,
   getRemainingSec,
+  getScheduleOverUnderSec,
+  getTotalRemainingSec,
 } from "@agenda-timer/core-logic";
 import { useTimerStore } from "@agenda-timer/store";
 import { Feather } from "@expo/vector-icons";
@@ -16,7 +17,7 @@ import { GradientBackground } from "../components/GradientBackground";
 import { NextItemPreview } from "../components/NextItemPreview";
 import { PillButton } from "../components/PillButton";
 import { ProgressBar } from "../components/ProgressBar";
-import { paceColor, paceTimeColor } from "../constants/paceColors";
+import { paceTimeColor } from "../constants/paceColors";
 import { colors } from "../constants/theme";
 import { useTimerTick } from "../hooks/useTimerTick";
 
@@ -43,6 +44,19 @@ function overUnderLabel(overUnderSec: number): string {
   return "定刻";
 }
 
+// 全体基準の押し/巻きの色。項目内ペース（paceLevel）とは独立に、偏差の符号のみで決める。
+const NEUTRAL_LABEL_COLOR = "#14171A8C";
+
+function scheduleColor(overUnderSec: number): string {
+  if (overUnderSec > 0) {
+    return colors.accentRedDeep;
+  }
+  if (overUnderSec < 0) {
+    return colors.accentGreen;
+  }
+  return NEUTRAL_LABEL_COLOR;
+}
+
 export default function TimerScreen() {
   const router = useRouter();
   const { state, pause, resume, advanceItem } = useTimerStore();
@@ -51,7 +65,8 @@ export default function TimerScreen() {
   const currentItem = getCurrentItem(state);
   const nextItem = getNextItem(state);
   const remainingSec = getRemainingSec(state);
-  const overUnderSec = getOverUnderSec(state);
+  const scheduleOverUnderSec = getScheduleOverUnderSec(state);
+  const totalRemainingSec = getTotalRemainingSec(state);
   const progressRate = getProgressRate(state);
   const paceLevel = getPaceLevel(state);
   const isRunning = state.status === "running";
@@ -105,9 +120,14 @@ export default function TimerScreen() {
 
         <ProgressBar rate={progressRate} level={paceLevel} />
 
-        <Text style={[styles.overUnder, { color: paceColor(paceLevel) }]}>
-          {overUnderSec === undefined ? "" : overUnderLabel(overUnderSec)}
+        {/* 押し/巻きは項目内ではなく全体スケジュール基準（当初計画との累積偏差）で表示する。 */}
+        <Text style={[styles.overUnder, { color: scheduleColor(scheduleOverUnderSec) }]}>
+          {overUnderLabel(scheduleOverUnderSec)}
           {isPaused ? "（一時停止中）" : ""}
+        </Text>
+
+        <Text style={styles.totalRemaining}>
+          全体 残り {formatMinSec(totalRemainingSec)} / {formatMinSec(state.totalPlannedSec)}
         </Text>
       </View>
 
@@ -159,6 +179,13 @@ const styles = StyleSheet.create({
   overUnder: {
     fontSize: 18,
     fontWeight: "700",
+    textAlign: "center",
+  },
+  totalRemaining: {
+    fontSize: 15,
+    fontWeight: "600",
+    fontVariant: ["tabular-nums"],
+    color: NEUTRAL_LABEL_COLOR,
     textAlign: "center",
   },
   bottom: {

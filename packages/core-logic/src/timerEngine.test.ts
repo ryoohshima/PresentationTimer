@@ -8,6 +8,8 @@ import {
   getPaceLevel,
   getProgressRate,
   getRemainingSec,
+  getScheduleOverUnderSec,
+  getTotalRemainingSec,
   loadAgenda,
   MIN_ALLOCATED_SEC,
   pause,
@@ -27,6 +29,7 @@ const makeState = (overrides: Partial<TimerState> = {}): TimerState => ({
   currentIndex: 0,
   status: "idle",
   elapsedInItemSec: 0,
+  totalElapsedSec: 0,
   totalPlannedSec: 480,
   reallocationMode: "proportional",
   ...overrides,
@@ -340,6 +343,67 @@ describe("redistribute による比例再配分", () => {
     // プール合計が poolAllocatedTotal - delta = 300 - 1 = 299 に一致する
     const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]!.allocatedSec, 0);
     expect(poolTotal).toBe(299);
+  });
+});
+
+describe("totalElapsedSec の遷移（全体スケジュール基準の実績）", () => {
+  test("tick は totalElapsedSec も加算する", () => {
+    const next = tick(makeState({ status: "running", totalElapsedSec: 100 }), 1);
+    expect(next.totalElapsedSec).toBe(101);
+  });
+
+  test("running 以外では加算しない", () => {
+    const next = tick(makeState({ status: "paused", totalElapsedSec: 100 }), 1);
+    expect(next.totalElapsedSec).toBe(100);
+  });
+
+  test("start / loadAgenda は totalElapsedSec を 0 リセットする", () => {
+    const state = makeState({ totalElapsedSec: 100 });
+    expect(start(state).totalElapsedSec).toBe(0);
+    expect(loadAgenda(state, makeAgenda()).totalElapsedSec).toBe(0);
+  });
+
+  test("advanceItem 後も totalElapsedSec は維持される", () => {
+    const state = makeState({ status: "running", elapsedInItemSec: 120, totalElapsedSec: 120 });
+    const next = advanceItem(state);
+    expect(next.totalElapsedSec).toBe(120);
+    expect(next.elapsedInItemSec).toBe(0);
+  });
+});
+
+describe("getTotalRemainingSec / getScheduleOverUnderSec（全体基準セレクタ）", () => {
+  test("getTotalRemainingSec は当初計画合計 - 累積実績を返し、超過で負になる", () => {
+    expect(getTotalRemainingSec(makeState({ totalElapsedSec: 100 }))).toBe(380);
+    expect(getTotalRemainingSec(makeState({ totalElapsedSec: 500 }))).toBe(-20);
+  });
+
+  test("現項目が予定内なら完了項目の偏差のみを返す（項目内の巻きは未確定扱い）", () => {
+    // A(planned 300) を 200 秒で確定 → 巻き 100。B 進行中 50 秒（planned 180 未満）
+    const state = makeState({ currentIndex: 1, elapsedInItemSec: 50, totalElapsedSec: 250 });
+    expect(getScheduleOverUnderSec(state)).toBe(-100);
+  });
+
+  test("現項目が予定超過なら超過分が上乗せされる（押しは即時反映）", () => {
+    // A を予定どおり 300 秒で確定。B 進行中 200 秒（planned 180 を 20 秒超過）
+    const state = makeState({ currentIndex: 1, elapsedInItemSec: 200, totalElapsedSec: 500 });
+    expect(getScheduleOverUnderSec(state)).toBe(20);
+  });
+
+  test("進行中の先頭項目が予定内のあいだは 0 を保つ", () => {
+    const state = makeState({ status: "running", elapsedInItemSec: 100, totalElapsedSec: 100 });
+    expect(getScheduleOverUnderSec(state)).toBe(0);
+  });
+
+  test("finished では累積実績 - 当初計画合計になる", () => {
+    // 全項目確定済み（currentIndex = agenda.length）。実績合計 520 vs 計画 480 → 押し 40
+    const state = makeState({ status: "finished", currentIndex: 2, totalElapsedSec: 520 });
+    expect(getScheduleOverUnderSec(state)).toBe(40);
+  });
+
+  test("空アジェンダ・idle では 0 を返す", () => {
+    const state = makeState({ agenda: [], totalPlannedSec: 0 });
+    expect(getScheduleOverUnderSec(state)).toBe(0);
+    expect(getTotalRemainingSec(state)).toBe(0);
   });
 });
 

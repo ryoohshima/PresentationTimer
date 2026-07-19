@@ -48,6 +48,7 @@ describe("timerReducer の core-logic 委譲", () => {
     const next = timerReducer(running, { type: "TICK", deltaSec: 10 });
     expect(next).toEqual(engine.tick(running, 10));
     expect(next.elapsedInItemSec).toBe(10);
+    expect(next.totalElapsedSec).toBe(10);
   });
 
   test("ADVANCE_ITEM は engine.advanceItem に委譲する", () => {

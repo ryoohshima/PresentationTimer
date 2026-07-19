@@ -75,6 +75,7 @@ const DEFAULT_STATE: TimerState = {
   currentIndex: 0,
   status: "idle",
   elapsedInItemSec: 0,
+  totalElapsedSec: 0,
   totalPlannedSec: 0,
   reallocationMode: "proportional",
 };

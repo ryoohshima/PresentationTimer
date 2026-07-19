@@ -281,15 +281,25 @@
 - [x] 6. AgendaItemEditModal: タイトル必須化（保存 disabled）
 - [x] 7. settings.tsx: 下部閉じる削除＋fixed-end「準備中」disabled 化（#90 参照）
 - [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
-- [ ] コミット分割（git-commit）→ PR 作成（create-draft-pr）→ CI 確認
+- [x] コミット分割（git-commit）→ PR #91 作成（CI: typecheck / lint / test / claude-review 全 pass）→ develop へマージ済み
 
-## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile）
+## PR2: feat/overall-schedule-pace（types → core-logic → store → mobile、#91 にスタック）
 
-- [ ] コミット1: TimerState.totalElapsedSec + エンジン更新 + セレクタ（getTotalRemainingSec / getScheduleOverUnderSec）+ テスト
-- [ ] コミット2: timer.tsx に全体残り時間＋全体基準の押し/巻き表示
-- [ ] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .
-- [ ] PR 作成（create-draft-pr）→ CI 確認
+- [x] コミット1: TimerState.totalElapsedSec + エンジン更新 + セレクタ（getTotalRemainingSec / getScheduleOverUnderSec）+ テスト（core-logic 44 / store 18 全緑）
+- [x] コミット2: timer.tsx に全体残り時間＋全体基準の押し/巻き表示
+- [x] 検証: pnpm test / pnpm typecheck / pnpm exec biome ci .（すべて緑）
+- [x] expo web + Chrome DevTools で実画面確認（タイトル必須・削除確認・時間固定表示・準備中 disabled・全体残り/巻き表示・コンソールエラーなし）
+- [x] PR #92 作成（base: fix/android-ui-feedback にスタック）→ claude-review pass
 
 ## レビュー
 
-（完了後に追記）
+- 成果物: issue #89（横向き対応）/ #90（fixed-end 実装）、PR #91（UI/UX 修正 8 件・CI 全 pass）、PR #92（全体スケジュール基準の押し/巻き・#91 にスタック）
+- 設計判断:
+  - 色不一致の根本原因は Android での expo-blur 退化（半透明白の単色レイヤーが fill と二重合成）。Android では BlurView を描画しない方針とし、同構造の PillButton secondary にも同修正を適用
+  - 全体押し/巻きは `totalElapsedSec − (完了項目 plannedSec 合計 + min(現項目経過, 現項目 plannedSec))`。項目内の巻きは確定まで反映しない非対称定義。基準は再配分で帳尻が合う allocatedSec ではなく plannedSec
+  - 「固定」は再配分除外フラグであり並び順は固定しない（ユーザー確認の上、文言改善のみで対応）
+- 留意点:
+  - PR #92 の CI 本体（lint/typecheck/test）は base が develop でないため未発火。#91 マージ後の自動リターゲットで発火する（ci.yml の branches 制約）。ローカルで biome ci / typecheck / test（core-logic 44 / store 18）は全緑確認済み
+  - Android 実機での最終確認（ガラス面の見た目・レイアウトシフト・削除ダイアログ）は人手フォロー
+  - 設定値（reallocationMode 等）の永続化は未対応のまま（#90 の提案に含めた）
+  - #91 の squash merge により #92 が todo.md でコンフリクト → develop を merge し最新の作業記録（本セクション）を採用して解消
