@@ -126,10 +126,7 @@ export default function TimerScreen() {
 
         <View style={styles.footer}>
           <Pressable accessibilityRole="button" onPress={handleBackToEdit}>
-            <Text style={styles.linkLabel}>一時停止して編集に戻る</Text>
-          </Pressable>
-          <Pressable accessibilityRole="button" onPress={() => router.push("/settings")}>
-            <Text style={styles.linkLabel}>設定</Text>
+            <Text style={styles.linkLabel}>編集に戻る</Text>
           </Pressable>
         </View>
       </View>
