@@ -27,6 +27,12 @@ export interface TimerState {
   status: TimerStatus;
   /** 現項目に入ってからの経過秒。項目を進める際に 0 リセットされる。 */
   elapsedInItemSec: number;
+  /**
+   * 開始からの累積実績秒。tick で加算し、start / loadAgenda で 0 リセットする。
+   * advanceItem では維持され、完了済み項目の実績合計 + 現項目経過を常に表す
+   * （全体スケジュール基準の押し/巻き算出に使う）。
+   */
+  totalElapsedSec: number;
   /** 全項目の plannedSec 合計（不変の基準）。 */
   totalPlannedSec: number;
   reallocationMode: ReallocationMode;

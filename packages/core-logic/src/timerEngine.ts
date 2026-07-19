@@ -20,12 +20,19 @@ export function loadAgenda(state: TimerState, items: AgendaItem[]): TimerState {
     status: "idle",
     currentIndex: 0,
     elapsedInItemSec: 0,
+    totalElapsedSec: 0,
   };
 }
 
 /** idle から計測を開始する。先頭項目・経過 0 にリセットする。 */
 export function start(state: TimerState): TimerState {
-  return { ...state, status: "running", currentIndex: 0, elapsedInItemSec: 0 };
+  return {
+    ...state,
+    status: "running",
+    currentIndex: 0,
+    elapsedInItemSec: 0,
+    totalElapsedSec: 0,
+  };
 }
 
 /** 計測を一時停止する。running 以外では状態を変えない。 */
@@ -43,7 +50,11 @@ export function resume(state: TimerState): TimerState {
 /** 経過時間を加算する（UI の tick から毎秒呼ぶ想定）。running 時のみ進む。 */
 export function tick(state: TimerState, deltaSec: number): TimerState {
   if (state.status !== "running") return state;
-  return { ...state, elapsedInItemSec: state.elapsedInItemSec + deltaSec };
+  return {
+    ...state,
+    elapsedInItemSec: state.elapsedInItemSec + deltaSec,
+    totalElapsedSec: state.totalElapsedSec + deltaSec,
+  };
 }
 
 /**
@@ -144,6 +155,30 @@ export function getProgressRate(state: TimerState): number | undefined {
 /** 次の項目。現項目が最後（または範囲外）なら undefined。 */
 export function getNextItem(state: TimerState): AgendaItem | undefined {
   return state.agenda[state.currentIndex + 1];
+}
+
+/** アジェンダ全体の残り秒（当初計画合計 - 累積実績）。負なら全体超過。 */
+export function getTotalRemainingSec(state: TimerState): number {
+  return state.totalPlannedSec - state.totalElapsedSec;
+}
+
+/**
+ * 全体スケジュール基準の押し/巻き秒。正なら押し、負なら巻き。
+ *
+ * 累積実績と「予定上の同時点経過（完了項目の plannedSec 合計 + 現項目経過）」の差 =
+ * (完了項目の実績 - plannedSec) の合計 + max(0, 現項目の plannedSec 超過分)。
+ * 現項目内の巻きは advanceItem で確定するまで反映せず（まだ時間を使い切りうるため）、
+ * 押しは即時反映する（使った時間は戻らない）。基準は再配分で変わる allocatedSec ではなく
+ * 当初計画の plannedSec（allocatedSec は再配分で常に帳尻が合い偏差が見えないため）。
+ */
+export function getScheduleOverUnderSec(state: TimerState): number {
+  const completedPlannedSec = state.agenda
+    .slice(0, state.currentIndex)
+    .reduce((sum, item) => sum + item.plannedSec, 0);
+  const currentPlannedSec = state.agenda[state.currentIndex]?.plannedSec ?? 0;
+  const plannedElapsedSec =
+    completedPlannedSec + Math.min(state.elapsedInItemSec, currentPlannedSec);
+  return state.totalElapsedSec - plannedElapsedSec;
 }
 
 /** 押し/巻きの度合い。safe=余裕 / warning=残りわずか / over=超過。 */
