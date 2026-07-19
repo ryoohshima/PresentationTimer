@@ -103,7 +103,13 @@ export function AgendaItemEditModal({ visible, item, onSave, onClose }: AgendaIt
             </View>
           </View>
 
-          <PillButton label={item === undefined ? "追加" : "保存"} onPress={handleSave} fullWidth />
+          {/* タイトルは必須（空のまま保存して「（無題）」項目が生まれるのを防ぐ）。 */}
+          <PillButton
+            label={item === undefined ? "追加" : "保存"}
+            onPress={handleSave}
+            disabled={title.trim() === ""}
+            fullWidth
+          />
         </View>
       </KeyboardAvoidingView>
     </Modal>

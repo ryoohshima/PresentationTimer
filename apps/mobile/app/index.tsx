@@ -4,7 +4,7 @@ import type { AgendaItem } from "@agenda-timer/types";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { AgendaItemEditModal } from "../components/AgendaItemEditModal";
 import { AgendaItemRow } from "../components/AgendaItemRow";
@@ -42,6 +42,21 @@ export default function AgendaEditScreen() {
   const handleStart = () => {
     start();
     router.push("/timer");
+  };
+
+  // 誤タップによる即時削除を防ぐため確認を挟む。web は Alert.alert が no-op のため confirm を使う。
+  const confirmRemove = (item: AgendaItem) => {
+    const message = `「${item.title || "（無題）"}」を削除しますか？`;
+    if (Platform.OS === "web") {
+      if (globalThis.confirm(message)) {
+        removeItem(item.id);
+      }
+      return;
+    }
+    Alert.alert("項目を削除", message, [
+      { text: "キャンセル", style: "cancel" },
+      { text: "削除", style: "destructive", onPress: () => removeItem(item.id) },
+    ]);
   };
 
   const handleSave = (title: string, plannedSec: number) => {
@@ -106,7 +121,7 @@ export default function AgendaEditScreen() {
                     isActive={drag.activeId === item.id}
                     onEdit={() => setEditorTarget({ mode: "edit", item })}
                     onToggleLock={() => toggleLock(item.id)}
-                    onRemove={() => removeItem(item.id)}
+                    onRemove={() => confirmRemove(item)}
                   />
                 )}
               </DraggableRow>

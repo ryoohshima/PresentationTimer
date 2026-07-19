@@ -59,7 +59,7 @@ export function AgendaItemRow({
         </Text>
         <Text style={styles.detail}>
           {formatPlanned(item.plannedSec)}
-          {item.isLocked && <Text style={styles.lockedSuffix}> ・固定</Text>}
+          {item.isLocked && <Text style={styles.lockedSuffix}> ・時間固定</Text>}
         </Text>
       </View>
 
@@ -75,7 +75,11 @@ export function AgendaItemRow({
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={item.isLocked ? "再配分の対象にする" : "再配分の対象外にする"}
+        accessibilityLabel={
+          item.isLocked
+            ? "時間固定を解除して再配分の対象に戻す"
+            : "時間を固定して再配分の対象外にする"
+        }
         onPress={onToggleLock}
         style={styles.iconButton}
       >
@@ -105,14 +109,15 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 12,
     padding: 16,
+    // ロック/ドラッグ時は borderColor のみ切り替える。太さを常時 1.5 に固定して
+    // 切り替え時のレイアウトシフトを防ぐ（AddItemRow の 1.5 とも揃う）。
+    borderWidth: 1.5,
   },
   rowActive: {
     borderColor: colors.accentGreen,
-    borderWidth: 1.5,
   },
   rowLocked: {
     borderColor: colors.accentGreen,
-    borderWidth: 1.5,
   },
   dragHandle: {
     paddingHorizontal: 4,
