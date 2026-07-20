@@ -55,3 +55,11 @@
 - **ルール**: Expo SDK 更新など前提が変わる作業をしたら、dependabot.yml の ignore ルールと**そのコメントに書かれた前提**を必ず読み直し、陳腐化していれば同じ PR で更新する。「ignore に入っていない＝安全に bump できる」ではない。
 - **恒久対応**: react / react-dom / @types/react / @types/react-dom を pnpm catalog（pnpm-workspace.yaml）で一元管理し、dependabot ignore にも追加した。SDK 更新時は bundledNativeModules.json の値に合わせて catalog を 1 箇所書き換える。
 - **副次の学び**: pnpm は文脈に無い peer 依存を最新版で自動解決する（今回 expo-router→vaul の peer @types/react-dom が 19.2.3 に）。`nodeLinker: hoisted` ではこれがトップレベルを占有し catalog 版を覆い隠すため、間接依存の型パッケージは `overrides` でも固定する必要がある。`pnpm peers check` が検知手段。
+
+## 2026-07-19 透過色の修正を Web だけで検証し Android の見え方差を見落とす
+
+### 10. 色・影・透過の修正は「報告されたプラットフォーム」で検証する（Web 検証は Android の代わりにならない）
+- **何があったか**: モーダルの半透明背景（`#FFFFFFF2`）が暗いスクリムを透かしてグレーに見える問題を不透明白へ修正し、Expo web ＋ Chrome DevTools のスクリーンショットと computed style で「完了」と報告した。だがユーザーの観測環境は Android 実機であり、「Web では問題ないがネイティブでは差分が残る」との指摘を受けた。
+- **原因**: RN の合成はプラットフォーム依存である。(1) CSS の外側 box-shadow は border-box 内側にクリップされ半透明要素を透けないが、Android の `elevation` 影は View の背後に描画され**半透明背景を透けて中身を濁らせる**。(2) Android は backdrop blur 非対応で、本リポジトリは PR #91 で BlurView を非描画にしているため、Web/iOS で blur+tint により白く補正される面が Android では補正されない。
+- **ルール**: 色・影・透過に関わる修正では、issue/フィードバックの発生プラットフォームを最初に確認し、そのプラットフォームで検証するまで完了と報告しない。検証環境が手元に無い場合（Android SDK 不在等）は「Web でのみ検証済み。Android は未検証」と明示し、実機スクリーンショットでの裏取りをユーザーに依頼する。
+- **副次ルール**: worktree 内の未コミット修正は、ユーザーが別 checkout から起動した実機/開発サーバーには反映されていない。報告前に「ユーザーの実行環境がこの修正を含むコードを指しているか」を確認する（今回は AskUserQuestion で確認し、worktree 起動・モーダルで差分残存と判明）。

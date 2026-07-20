@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.card,
     borderWidth: 1,
     borderColor: colors.glassStroke,
-    backgroundColor: "#FFFFFFF2",
+    backgroundColor: "#FFFFFF",
     padding: 20,
     gap: 20,
     shadowColor: colors.ink,

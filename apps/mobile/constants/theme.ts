@@ -1,5 +1,12 @@
+import { Platform } from "react-native";
+
 // design.pen のデザイントークンをそのまま定数化したもの（Pencil MCP で取得した variables に対応）。
 // フォントはシステムフォントで近似する方針のため font-body / font-display は取り込まない。
+
+// Android は backdrop blur 非対応（BlurView は PR #91 で非描画）に加え、elevation の影が
+// 半透明背景を透けて中身を濁らせるため、ガラス系トークンは backgroundBase(#ECF2E9) と
+// 事前合成した単色で代替する。iOS / web は design.pen の半透明値をそのまま使う。
+const isAndroid = Platform.OS === "android";
 
 export const colors = {
   ink: "#14171A",
@@ -13,9 +20,9 @@ export const colors = {
   accentRedDeep: "#DC2626",
   accentYellow: "#EAB308",
   accentYellowDeep: "#CA8A04",
-  glassFill: "#FFFFFF66",
-  glassFillStrong: "#FFFFFF99",
-  glassStroke: "#FFFFFFB3",
+  glassFill: isAndroid ? "#F4F7F2" : "#FFFFFF66",
+  glassFillStrong: isAndroid ? "#F7FAF6" : "#FFFFFF99",
+  glassStroke: isAndroid ? "#F9FBF8" : "#FFFFFFB3",
   glassShadow: "#14171A1F",
   glassDarkFill: "#14171A99",
   glassDarkStroke: "#FFFFFF33",
