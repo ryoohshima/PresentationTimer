@@ -64,7 +64,9 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   primary: {
-    backgroundColor: `${colors.accentGreen}CC`,
+    // Android は半透明緑(80%)だと elevation の影が透けて濁るため、
+    // backgroundBase と事前合成した単色で代替する（theme.ts のガラス系トークンと同方針）。
+    backgroundColor: Platform.OS === "android" ? "#41975F" : `${colors.accentGreen}CC`,
     borderWidth: 1,
     borderColor: "#FFFFFF59",
     shadowColor: colors.accentGreen,
