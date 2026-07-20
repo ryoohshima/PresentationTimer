@@ -1,4 +1,4 @@
-import type { AgendaItem, TimerState } from "@agenda-timer/types";
+import type { AgendaItem, TimerState } from "@presentation-timer/types";
 import { describe, expect, test } from "vitest";
 import {
   advanceItem,

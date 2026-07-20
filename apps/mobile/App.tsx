@@ -1,5 +1,5 @@
-import { getRemainingSec } from "@agenda-timer/core-logic";
-import { TimerProvider, useTimerStore } from "@agenda-timer/store";
+import { getRemainingSec } from "@presentation-timer/core-logic";
+import { TimerProvider, useTimerStore } from "@presentation-timer/store";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -9,7 +9,7 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AgendaTimer</Text>
+      <Text style={styles.title}>プレゼンタイマー</Text>
       <Text style={styles.status}>
         Status: {state.status} / Remaining: {remaining ?? "—"}
       </Text>

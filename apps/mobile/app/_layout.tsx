@@ -1,4 +1,4 @@
-import { TimerProvider } from "@agenda-timer/store";
+import { TimerProvider } from "@presentation-timer/store";
 import { Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

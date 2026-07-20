@@ -1,8 +1,8 @@
 // TimerState のグローバルストア（docs/04-data-model.md, docs/05-core-logic.md）。
-// React Context + useReducer で実装し、状態更新はすべて @agenda-timer/core-logic 経由で行う。
+// React Context + useReducer で実装し、状態更新はすべて @presentation-timer/core-logic 経由で行う。
 
-import * as engine from "@agenda-timer/core-logic";
-import type { AgendaItem, ReallocationMode, TimerState } from "@agenda-timer/types";
+import * as engine from "@presentation-timer/core-logic";
+import type { AgendaItem, ReallocationMode, TimerState } from "@presentation-timer/types";
 import { createContext, type Dispatch, useCallback, useContext, useReducer } from "react";
 
 // --- アクション型 -----------------------------------------------------------

@@ -1,7 +1,7 @@
 // タイマーエンジン: 副作用を持たない純粋関数の集合（docs/05-core-logic.md）。
 // 「現在の状態 + 入力 → 次の状態」を返すだけにし、時間計測や I/O は UI 層の責務とする。
 
-import type { AgendaItem, TimerState } from "@agenda-timer/types";
+import type { AgendaItem, TimerState } from "@presentation-timer/types";
 
 /** 再配分後の 1 項目あたりの割当下限（秒）。これ未満には圧縮しない。 */
 export const MIN_ALLOCATED_SEC = 30;

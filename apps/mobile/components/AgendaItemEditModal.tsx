@@ -1,5 +1,5 @@
-import type { AgendaItem } from "@agenda-timer/types";
 import { Feather } from "@expo/vector-icons";
+import type { AgendaItem } from "@presentation-timer/types";
 import { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,

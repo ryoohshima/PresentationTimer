@@ -1,4 +1,4 @@
-import type { PaceLevel } from "@agenda-timer/core-logic";
+import type { PaceLevel } from "@presentation-timer/core-logic";
 import { colors } from "./theme";
 
 // 押し/巻きレベルの配色（docs/06: 緑=余裕 / 黄=残りわずか / 赤=超過）。

@@ -2,6 +2,9 @@
 
 > 出典: RFC §1 を整形。
 
+- **正式サービス名**: プレゼンタイマー
+- **公式ドメイン**: [presentation-timer.net](https://presentation-timer.net)
+
 ## 💡 背景と市場の機会
 
 - **現状の課題**: Android 市場（Google Play）における「アジェンダ登録型・全画面プレゼンタイマー」は、UI/UX が古いものが多く、モダンで使いやすいアプリの選択肢が少ない。

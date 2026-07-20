@@ -1,5 +1,5 @@
 {
-  "name": "@agenda-timer/web",
+  "name": "@presentation-timer/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@agenda-timer/core-logic": "workspace:*",
-    "@agenda-timer/store": "workspace:*",
-    "@agenda-timer/types": "workspace:*",
+    "@presentation-timer/core-logic": "workspace:*",
+    "@presentation-timer/store": "workspace:*",
+    "@presentation-timer/types": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

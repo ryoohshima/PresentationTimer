@@ -1,5 +1,5 @@
 {
-  "name": "@agenda-timer/store",
+  "name": "@presentation-timer/store",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,8 +13,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agenda-timer/core-logic": "workspace:*",
-    "@agenda-timer/types": "workspace:*"
+    "@presentation-timer/core-logic": "workspace:*",
+    "@presentation-timer/types": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18"

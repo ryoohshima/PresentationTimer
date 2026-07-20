@@ -1,5 +1,5 @@
 {
-  "name": "@agenda-timer/core-logic",
+  "name": "@presentation-timer/core-logic",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,6 +13,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agenda-timer/types": "workspace:*"
+    "@presentation-timer/types": "workspace:*"
   }
 }

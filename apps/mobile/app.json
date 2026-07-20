@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "AgendaTimer",
-    "slug": "agenda-timer",
+    "name": "プレゼンタイマー",
+    "slug": "presentation-timer",
     "version": "1.0.0",
     "orientation": "default",
-    "scheme": "agendatimer",
+    "scheme": "presentationtimer",
     "platforms": ["android", "ios", "web"],
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,10 +17,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.agendatimer.app"
+      "package": "net.presentationtimer.app"
     },
     "ios": {
-      "bundleIdentifier": "com.agendatimer.app"
+      "bundleIdentifier": "net.presentationtimer.app"
     },
     "newArchEnabled": true,
     "web": {

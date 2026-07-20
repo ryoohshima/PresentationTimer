@@ -58,21 +58,21 @@ importers:
 
   apps/mobile:
     dependencies:
-      '@agenda-timer/core-logic':
-        specifier: workspace:*
-        version: link:../../packages/core-logic
-      '@agenda-timer/store':
-        specifier: workspace:*
-        version: link:../../packages/store
-      '@agenda-timer/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@expo/metro-runtime':
         specifier: ~6.1.2
         version: 6.1.2(expo@54.0.35)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       '@expo/vector-icons':
         specifier: ~14.0.4
         version: 14.0.4
+      '@presentation-timer/core-logic':
+        specifier: workspace:*
+        version: link:../../packages/core-logic
+      '@presentation-timer/store':
+        specifier: workspace:*
+        version: link:../../packages/store
+      '@presentation-timer/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@react-native-async-storage/async-storage':
         specifier: 3.1.1
         version: 3.1.1(react-native@0.81.5(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -140,13 +140,13 @@ importers:
 
   apps/web:
     dependencies:
-      '@agenda-timer/core-logic':
+      '@presentation-timer/core-logic':
         specifier: workspace:*
         version: link:../../packages/core-logic
-      '@agenda-timer/store':
+      '@presentation-timer/store':
         specifier: workspace:*
         version: link:../../packages/store
-      '@agenda-timer/types':
+      '@presentation-timer/types':
         specifier: workspace:*
         version: link:../../packages/types
       react:
@@ -171,16 +171,16 @@ importers:
 
   packages/core-logic:
     dependencies:
-      '@agenda-timer/types':
+      '@presentation-timer/types':
         specifier: workspace:*
         version: link:../types
 
   packages/store:
     dependencies:
-      '@agenda-timer/core-logic':
+      '@presentation-timer/core-logic':
         specifier: workspace:*
         version: link:../core-logic
-      '@agenda-timer/types':
+      '@presentation-timer/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:

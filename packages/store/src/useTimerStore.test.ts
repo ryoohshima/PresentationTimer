@@ -1,8 +1,8 @@
-// timerReducer が状態更新をすべて @agenda-timer/core-logic に委譲することを検証する
+// timerReducer が状態更新をすべて @presentation-timer/core-logic に委譲することを検証する
 // （Issue #15 受け入れ基準②）。reducer は純粋関数のため React 描画なしで直接テストできる。
 
-import * as engine from "@agenda-timer/core-logic";
-import type { AgendaItem } from "@agenda-timer/types";
+import * as engine from "@presentation-timer/core-logic";
+import type { AgendaItem } from "@presentation-timer/types";
 import { describe, expect, test } from "vitest";
 import { DEFAULT_TIMER_STATE, timerReducer } from "./useTimerStore";
 

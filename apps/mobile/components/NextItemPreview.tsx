@@ -1,5 +1,5 @@
-import { formatMinSec } from "@agenda-timer/core-logic";
-import type { AgendaItem } from "@agenda-timer/types";
+import { formatMinSec } from "@presentation-timer/core-logic";
+import type { AgendaItem } from "@presentation-timer/types";
 import { StyleSheet, Text } from "react-native";
 import { GlassCard } from "./GlassCard";
 

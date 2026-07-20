@@ -1,5 +1,5 @@
 {
-  "name": "@agenda-timer/mobile",
+  "name": "@presentation-timer/mobile",
   "version": "0.0.0",
   "private": true,
   "main": "expo-router/entry",
@@ -12,9 +12,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@agenda-timer/core-logic": "workspace:*",
-    "@agenda-timer/store": "workspace:*",
-    "@agenda-timer/types": "workspace:*",
+    "@presentation-timer/core-logic": "workspace:*",
+    "@presentation-timer/store": "workspace:*",
+    "@presentation-timer/types": "workspace:*",
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "~14.0.4",
     "@react-native-async-storage/async-storage": "3.1.1",
