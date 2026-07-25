@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { Animated, Pressable, StyleSheet } from "react-native";
-import { colors } from "../constants/theme";
+import { useEffect } from "react";
+import { Pressable, StyleSheet } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 // design.pen の Toggle コンポーネント（緑=ON / 半透明黒=OFF、ノブが左右に動く）の近似。
 
@@ -17,15 +17,15 @@ interface ToggleSwitchProps {
 }
 
 export function ToggleSwitch({ value, onValueChange, accessibilityLabel }: ToggleSwitchProps) {
-  const knobPosition = useRef(new Animated.Value(value ? 1 : 0)).current;
+  const knobPosition = useSharedValue(value ? 1 : 0);
 
   useEffect(() => {
-    Animated.timing(knobPosition, {
-      toValue: value ? 1 : 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
+    knobPosition.value = withTiming(value ? 1 : 0, { duration: 150 });
   }, [value, knobPosition]);
+
+  const knobStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: knobPosition.value * KNOB_TRAVEL }],
+  }));
 
   return (
     <Pressable
@@ -35,21 +35,7 @@ export function ToggleSwitch({ value, onValueChange, accessibilityLabel }: Toggl
       onPress={() => onValueChange(!value)}
       style={[styles.track, { backgroundColor: value ? "#22C55ED9" : "#14171A29" }]}
     >
-      <Animated.View
-        style={[
-          styles.knob,
-          {
-            transform: [
-              {
-                translateX: knobPosition.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, KNOB_TRAVEL],
-                }),
-              },
-            ],
-          },
-        ]}
-      />
+      <Animated.View style={[styles.knob, knobStyle]} />
     </Pressable>
   );
 }
@@ -69,10 +55,6 @@ const styles = StyleSheet.create({
     height: KNOB_SIZE,
     borderRadius: KNOB_SIZE,
     backgroundColor: "#FFFFFF",
-    shadowColor: colors.ink,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 2,
+    boxShadow: "0px 2px 6px rgba(20, 23, 26, 0.2)",
   },
 });

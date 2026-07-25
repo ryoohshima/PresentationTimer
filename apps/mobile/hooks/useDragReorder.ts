@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Keyboard, type LayoutChangeEvent } from "react-native";
 import type { ScrollView } from "react-native-gesture-handler";
 import { type SharedValue, useSharedValue } from "react-native-reanimated";
@@ -58,8 +58,11 @@ export function useDragReorder({
   const scrollRef = useRef<ScrollView | null>(null);
 
   // onReorder は毎レンダー新しい関数が渡っても安全なよう ref 経由で参照する。
+  // レンダー中の ref 書き込みは React の純粋性原則に反するため、commit 後の effect で行う。
   const onReorderRef = useRef(onReorder);
-  onReorderRef.current = onReorder;
+  useEffect(() => {
+    onReorderRef.current = onReorder;
+  });
 
   const handleDragStart = useCallback((id: string) => {
     // キーボードが出たままだと画面高が変わり index 計算が狂うため閉じる（Web では no-op）。

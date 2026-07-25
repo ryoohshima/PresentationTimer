@@ -69,11 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: Platform.OS === "android" ? "#41975F" : `${colors.accentGreen}CC`,
     borderWidth: 1,
     borderColor: "#FFFFFF59",
-    shadowColor: colors.accentGreen,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 24,
-    elevation: 4,
+    boxShadow: "0px 8px 24px rgba(22, 128, 61, 0.25)",
   },
   secondary: {
     backgroundColor: colors.glassFillStrong,
