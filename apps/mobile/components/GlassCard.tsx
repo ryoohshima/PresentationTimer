@@ -37,11 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.card,
     borderWidth: 1,
     borderColor: colors.glassStroke,
-    shadowColor: colors.ink,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 3,
+    boxShadow: "0px 8px 12px rgba(20, 23, 26, 0.12)",
   },
   blur: {
     ...StyleSheet.absoluteFillObject,
