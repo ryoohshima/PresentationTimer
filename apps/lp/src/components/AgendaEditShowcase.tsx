@@ -47,9 +47,7 @@ export function AgendaEditShowcase() {
                   <span style={{ color: "#9ca3af", fontSize: 18 }}>≡</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 15 }}>{row.title}</div>
-                    <div style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>
-                      {row.detail}
-                    </div>
+                    <div style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>{row.detail}</div>
                   </div>
                   {row.locked && (
                     <span
