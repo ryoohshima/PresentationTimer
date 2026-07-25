@@ -17,8 +17,18 @@ on:
 
 jobs:
   claude:
-    # 公開リポでの API 消費悪用を防ぐため、owner のコメント・レビューにのみ反応
-    if: github.repository_owner == github.actor
+    # 公開リポでの API 消費悪用を防ぐため、owner のコメント・レビューにのみ反応。
+    # さらに、コメント対象の Issue/PR 自体の作成者が owner/member/collaborator
+    # でない場合は起動しない。owner を騙って反応させても、フォーク PR 等に
+    # 埋め込まれた第三者の指示文（プロンプトインジェクション）を、書き込み権限を
+    # 持つエージェントに読ませないための防御（トリガーした人物だけでなく、
+    # エージェントが読み書き対象とする内容の出どころも検証する）。
+    if: |
+      github.repository_owner == github.actor &&
+      contains(
+        fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'),
+        github.event.pull_request.author_association || github.event.issue.author_association
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -31,7 +41,39 @@ jobs:
         with:
           fetch-depth: 20
 
+      - name: Reject fork-originated PRs (pwn request guard)
+        # owner のコメントは「誰が起動したか」しか保証しない。コメント対象の PR が
+        # フォーク（別リポジトリ）由来の場合、そのブランチ内容は攻撃者制御下にあり得るため、
+        # secrets と contents:write 等の権限を持つ claude step を実行させない。
+        id: guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_PR_URL: ${{ github.event.issue.pull_request.url }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REVIEW_PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          number=""
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            # PR ではない通常の issue コメントならフォーク由来のブランチは無関係
+            if [ -n "$ISSUE_PR_URL" ]; then
+              number="$ISSUE_NUMBER"
+            fi
+          else
+            number="$REVIEW_PR_NUMBER"
+          fi
+
+          if [ -z "$number" ]; then
+            echo "is_fork=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          is_fork=$(gh pr view "$number" --json isCrossRepository --jq .isCrossRepository)
+          echo "is_fork=$is_fork" >> "$GITHUB_OUTPUT"
+
       - id: claude
+        if: steps.guard.outputs.is_fork != 'true'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
