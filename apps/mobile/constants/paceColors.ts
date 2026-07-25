@@ -8,12 +8,6 @@ import { colors } from "./theme";
 //   面積の大きい進捗バー = 明色系（accent-green-bright / accent-yellow / accent-red）
 //   残り時間の特大数字 = 平常時は ink、warning/over のみ深色系
 
-export const PACE_COLORS: Record<PaceLevel, string> = {
-  safe: colors.accentGreen,
-  warning: colors.accentYellowDeep,
-  over: colors.accentRedDeep,
-};
-
 /** 進捗バーの塗り色（design.pen ProgressFill）。 */
 export const PACE_BAR_COLORS: Record<PaceLevel, string> = {
   safe: colors.accentGreenBright,
@@ -30,10 +24,6 @@ export const PACE_TIME_COLORS: Record<PaceLevel, string> = {
 
 /** レベル未定（現項目無し等）のときのフォールバック色。 */
 export const PACE_COLOR_FALLBACK = "#6b7280";
-
-export function paceColor(level: PaceLevel | undefined): string {
-  return level === undefined ? PACE_COLOR_FALLBACK : PACE_COLORS[level];
-}
 
 export function paceBarColor(level: PaceLevel | undefined): string {
   return level === undefined ? PACE_COLOR_FALLBACK : PACE_BAR_COLORS[level];
