@@ -34,6 +34,8 @@
 
 `advanceItem` は「現項目を確定して次へ進む」操作であり、確定時に **再配分（`redistribute`）を内部で呼び出す**点が要となる。
 
+`start` は上記に加えて全項目の `allocatedSec` を **`plannedSec` へ戻す**。`allocatedSec` は再配分で書き換わる可変値であり、計測開始時に計画値へ戻さないと前回実行の再配分結果を基準に過不足が積み増され、実行を重ねるほど割当がずれる（Issue #98）。裏を返せば **`idle` の間は常に `allocatedSec === plannedSec`** が不変条件となる。
+
 ## 純粋関数シグネチャ（案）
 
 ```ts
