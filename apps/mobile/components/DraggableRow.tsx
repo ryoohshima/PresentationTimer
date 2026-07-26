@@ -40,6 +40,10 @@ export function DraggableRow({ index, itemId, controller, children }: DraggableR
         })
         .onEnd(() => {
           const toIndex = targetIndexOf(index, dragY.value, rowOffset.value, itemCount);
+          // 指を離した位置ではなく「並べ替え確定後の位置」へスナップさせ、store への反映が
+          // 届くまで保持する。こうすると「旧順序 + transform あり」の見た目が
+          // 「新順序 + transform なし」と一致し、切り替わりが視覚的に無変化になる。
+          dragY.value = (toIndex - index) * rowOffset.value;
           runOnJS(handleDrop)(index, toIndex);
         })
         .onFinalize((_event, success) => {
@@ -68,7 +72,8 @@ export function DraggableRow({ index, itemId, controller, children }: DraggableR
   const animatedStyle = useAnimatedStyle(() => {
     const active = activeIndex.value;
     if (active === -1) {
-      // アイドル時は withTiming を通さず即 0 に戻す（moveItem 反映後の二重移動を防ぐ）。
+      // アイドル復帰は並べ替え反映後のコミットでしか起きない（useDragReorder 参照）ため、
+      // withTiming を挟まず即 0 に戻すのが正しい。アニメーションさせると二重移動になる。
       return { transform: [{ translateY: 0 }], zIndex: 0, elevation: 0 };
     }
     if (active === index) {
