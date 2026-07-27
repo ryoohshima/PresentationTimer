@@ -29,6 +29,13 @@ updates:
       - dependency-name: "@expo/*"
       - dependency-name: "react-native"
       - dependency-name: "react-native-*"
+      # スコープ付きの RN コミュニティ製パッケージは上の `react-native-*` に
+      # マッチしないため個別に指定する。Expo Go 同梱のネイティブ実装と JS 側の
+      # バージョンがずれると、例外を出さずに機能だけ壊れる。
+      # 参照: Issue #96（PR #66 で SDK54 想定の 2.2.0 → 3.1.1 へ誤 bump し永続化が無言で失敗した事例）
+      - dependency-name: "@react-native-async-storage/*"
+      - dependency-name: "@react-native/*"
+      - dependency-name: "@react-native-community/*"
       # react / react-dom / @types/react は react-native 内蔵 renderer との完全一致が必須のため、
       # pnpm-workspace.yaml の catalog で Expo SDK 対応バージョンに一元管理し、SDK 更新時に手動で上げる。
       # 参照: PR #67/#68（dependabot が react を 19.1.0→19.2.7 へ個別 bump し起動不能になった事例）
