@@ -48,7 +48,17 @@
 
 ## このリポジトリ固有の注意事項
 
-<!-- 落とし穴・既知の制約・特殊な規約があれば記述 -->
+### `app.json` の `experiments.tsconfigPaths: false`（Issue #107）
+
+`typescript@7` は公開コンパイラ API を同梱せず `ts.sys` が `undefined` になる。
+`@expo/cli@54` の `evaluateTsConfig()` がそれを参照するため、既定のままだと `expo start` が
+全プラットフォームで起動できない。このフラグで tsconfig paths 解決を切って回避している。
+
+本リポジトリはどの tsconfig にも `paths` を定義していないため機能低下は無い。
+`paths` を導入する場合はこのフラグと両立しないので、先に下記の解除条件を満たすこと。
+
+**解除条件**: Expo SDK を 57 系へ更新する（`@expo/cli@57` では `ts.sys` 依存が実装から消えている）。
+または typescript 7.1（programmatic API 復活）と Expo 側の対応が揃うこと。
 
 ## 参照ドキュメント
 
