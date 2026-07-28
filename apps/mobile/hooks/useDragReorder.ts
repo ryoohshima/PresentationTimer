@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Keyboard, type LayoutChangeEvent } from "react-native";
 import type { ScrollView } from "react-native-gesture-handler";
 import { type SharedValue, useSharedValue } from "react-native-reanimated";
@@ -70,19 +70,39 @@ export function useDragReorder({
     setActiveId(id);
   }, []);
 
-  // moveItem・shared value リセット・activeId 解除を同一 tick で行い、
-  // 「並び替え後の自然位置」と「translateY 済みの表示位置」のズレによるちらつきを防ぐ。
+  // 並べ替えを伴うドロップでは shared value のリセットを 1 コミット遅らせる（下の useLayoutEffect）。
+  // shared value は Reanimated の UI スレッド経路で即反映されるのに対し、moveItem の結果は
+  // dispatch → 再レンダー → mount を経て届くため、即リセットすると
+  // 「旧順序なのに transform だけ消えた」フレームが挟まり、元位置の項目が一瞬見える（issue #97）。
+  const pendingReset = useRef(false);
+
   const handleDrop = useCallback(
     (fromIndex: number, toIndex: number) => {
-      if (fromIndex !== toIndex) {
-        onReorderRef.current(fromIndex, toIndex);
+      if (fromIndex === toIndex) {
+        activeIndex.value = -1;
+        dragY.value = 0;
+        setActiveId(null);
+        return;
       }
-      activeIndex.value = -1;
-      dragY.value = 0;
+      pendingReset.current = true;
+      onReorderRef.current(fromIndex, toIndex);
       setActiveId(null);
     },
     [activeIndex, dragY],
   );
+
+  // 上の dispatch と setActiveId は同一 tick の発行なので React に 1 コミットへまとめられる。
+  // そのコミット直後（ペイント前）に戻せば、新しい並び順と transform リセットが同一フレームに載る。
+  // onReorder が並べ替えを行えなかった場合も setActiveId(null) がコミットを起こすため、
+  // ここは必ず 1 度だけ実行され、shared value が変位したまま残ることはない。
+  useLayoutEffect(() => {
+    if (!pendingReset.current) {
+      return;
+    }
+    pendingReset.current = false;
+    activeIndex.value = -1;
+    dragY.value = 0;
+  });
 
   /** ジェスチャーがキャンセルされた場合（onEnd 未到達）の後始末。 */
   const handleRelease = useCallback(() => {
