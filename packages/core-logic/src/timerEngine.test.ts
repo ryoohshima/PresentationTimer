@@ -346,6 +346,61 @@ describe("redistribute による比例再配分", () => {
   });
 });
 
+describe("実行をまたぐ再配分の累積防止（Issue #98）", () => {
+  /** 先頭項目を overSec だけ押して確定し、残りは割当どおりに消費して finished まで進める。 */
+  const runSession = (initial: TimerState, overSec: number): TimerState => {
+    let state = start(initial);
+    state = advanceItem({ ...state, elapsedInItemSec: state.agenda[0]!.allocatedSec + overSec });
+    while (state.status !== "finished") {
+      state = advanceItem({
+        ...state,
+        elapsedInItemSec: state.agenda[state.currentIndex]!.allocatedSec,
+      });
+    }
+    return state;
+  };
+
+  const makeState3 = (overrides: Partial<TimerState> = {}): TimerState =>
+    makeState({ agenda: makeAgenda3(), totalPlannedSec: 780, ...overrides });
+
+  test("start は前回実行で書き換わった allocatedSec を plannedSec へ戻す", () => {
+    // Arrange: A を 90 秒押しで確定した実行を 1 回終える
+    const finished = runSession(makeState3(), 90);
+    expect(finished.agenda.map((item) => item.allocatedSec)).toEqual([300, 244, 146]);
+
+    // Act
+    const restarted = start(finished);
+
+    // Assert
+    expect(restarted.agenda.map((item) => item.allocatedSec)).toEqual([300, 300, 180]);
+  });
+
+  test("同じ押し方で 2 回実行しても再配分結果が一致する", () => {
+    // Arrange & Act
+    const first = runSession(makeState3(), 90);
+    const second = runSession(first, 90);
+
+    // Assert
+    expect(second.agenda).toEqual(first.agenda);
+  });
+
+  test("off モードでも start は割当を計画値へ戻す", () => {
+    // Arrange: proportional で実行した後に「再配分しない」へ切り替える
+    const finished = runSession(makeState3(), 90);
+
+    // Act
+    const restarted = start({ ...finished, reallocationMode: "off" });
+
+    // Assert
+    expect(restarted.agenda.map((item) => item.allocatedSec)).toEqual([300, 300, 180]);
+  });
+
+  test("割当が計画値と一致していれば agenda を同一参照で返す", () => {
+    const state = makeState3();
+    expect(start(state).agenda).toBe(state.agenda);
+  });
+});
+
 describe("totalElapsedSec の遷移（全体スケジュール基準の実績）", () => {
   test("tick は totalElapsedSec も加算する", () => {
     const next = tick(makeState({ status: "running", totalElapsedSec: 100 }), 1);

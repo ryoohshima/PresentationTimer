@@ -24,10 +24,23 @@ export function loadAgenda(state: TimerState, items: AgendaItem[]): TimerState {
   };
 }
 
-/** idle から計測を開始する。先頭項目・経過 0 にリセットする。 */
+/**
+ * 全項目の allocatedSec を plannedSec へ戻す。
+ *
+ * allocatedSec は redistribute が書き換える可変値であり、計測開始時に計画値へ戻さないと
+ * 前回実行の再配分結果を基準に押し/巻きが積み増され、実行を重ねるほど割当がずれる（Issue #98）。
+ * 変化が無い場合は同一参照を返し、不要な再レンダリング・再保存を避ける。
+ */
+function resetAllocations(items: AgendaItem[]): AgendaItem[] {
+  if (items.every((item) => item.allocatedSec === item.plannedSec)) return items;
+  return items.map((item) => ({ ...item, allocatedSec: item.plannedSec }));
+}
+
+/** idle から計測を開始する。割当を計画値へ戻し、先頭項目・経過 0 にリセットする。 */
 export function start(state: TimerState): TimerState {
   return {
     ...state,
+    agenda: resetAllocations(state.agenda),
     status: "running",
     currentIndex: 0,
     elapsedInItemSec: 0,
