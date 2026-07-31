@@ -414,7 +414,7 @@ describe("redistribute による比例再配分", () => {
     expect(next.agenda[2]?.allocatedSec).toBe(100);
     expect(next.agenda[3]?.allocatedSec).toBe(99);
     // プール合計が poolAllocatedTotal - delta = 300 - 1 = 299 に一致する
-    const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]?.allocatedSec, 0);
+    const poolTotal = [1, 2, 3].reduce((s, i) => s + (next.agenda[i]?.allocatedSec ?? 0), 0);
     expect(poolTotal).toBe(299);
   });
 });
@@ -423,11 +423,14 @@ describe("実行をまたぐ再配分の累積防止（Issue #98）", () => {
   /** 先頭項目を overSec だけ押して確定し、残りは割当どおりに消費して finished まで進める。 */
   const runSession = (initial: TimerState, overSec: number): TimerState => {
     let state = start(initial);
-    state = advanceItem({ ...state, elapsedInItemSec: state.agenda[0]?.allocatedSec + overSec });
+    state = advanceItem({
+      ...state,
+      elapsedInItemSec: (state.agenda[0]?.allocatedSec ?? 0) + overSec,
+    });
     while (state.status !== "finished") {
       state = advanceItem({
         ...state,
-        elapsedInItemSec: state.agenda[state.currentIndex]?.allocatedSec,
+        elapsedInItemSec: state.agenda[state.currentIndex]?.allocatedSec ?? 0,
       });
     }
     return state;

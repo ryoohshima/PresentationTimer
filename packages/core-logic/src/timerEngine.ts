@@ -114,7 +114,7 @@ export function redistribute(state: TimerState): TimerState {
 
   const poolPlannedTotal = pool.reduce((sum, { item }) => sum + item.plannedSec, 0);
   const poolIndexSet = new Set(pool.map(({ index }) => index));
-  const lastPoolIndex = pool[pool.length - 1]!.index;
+  const lastPoolIndex = pool[pool.length - 1]?.index;
 
   // 丸め残差を最後の項目で吸収するため、プール全体の目標合計を先に確定する
   const poolAllocatedTotal = pool.reduce((sum, { item }) => sum + item.allocatedSec, 0);
