@@ -1,8 +1,6 @@
 # 04. データモデル
 
-> **本章は設計提案である。** 提示された RFC には含まれず、拙者が起草した。実装フェーズの検証により変更されうる。
->
-> 配置先想定: `packages/types/src/index.ts`
+> **本章は設計提案として起草し、その後 `packages/types/src/index.ts` へ実装済み。** 提示された RFC には含まれず、拙者が起草した章である。
 
 アジェンダおよびタイマー進行状態の共通型を定義する。`apps/mobile` / `apps/web` / `packages/core-logic` がこれを共通参照する。
 
@@ -38,6 +36,7 @@ interface TimerState {
   currentIndex: number;     // 進行中の項目インデックス（0 始まり）
   status: TimerStatus;
   elapsedInItemSec: number; // 現項目の経過秒
+  totalElapsedSec: number;  // 計測開始からの累積実績秒（全体の押し/巻き算出に使用）
   totalPlannedSec: number;  // 全項目の plannedSec 合計（不変の基準）
   reallocationMode: ReallocationMode;
   endAtEpochSec?: number;   // fixed-end モード時の発表終了時刻（任意）
@@ -51,16 +50,18 @@ interface TimerState {
 | `AgendaItem.isLocked` | 「この項目だけは時間を削られたくない」を表現。再配分の分母から除外される |
 | `TimerState.currentIndex` | `finished` 時は `agenda.length`（全項目消化）を取りうる |
 | `TimerState.elapsedInItemSec` | 現項目に入ってからの経過。項目を進める際に 0 リセットされる |
+| `TimerState.totalElapsedSec` | `tick` で加算し、`start` / `loadAgenda` で 0 にリセットする。`advanceItem` では維持され、完了済み項目の実績合計 + 現項目経過を常に表す |
 | `TimerState.totalPlannedSec` | 編集時に確定する不変値。進捗率や全体差分の算出基準 |
 | `TimerState.endAtEpochSec` | `fixed-end` モードでのみ参照。発表全体の終了時刻（エポック秒） |
 
 ## 派生値（型には持たず、関数で算出する想定）
 
-状態の正規化（single source of truth）のため、以下は **保存せず** セレクタ関数で都度導出する。
+状態の正規化（single source of truth）のため、以下は **保存せず** `packages/core-logic` のセレクタ関数で都度導出する。実装済みの一覧は [05. コアロジック](./05-core-logic.md#セレクタ関数群) を参照。
 
 - 現項目の残り秒: `currentItem.allocatedSec - elapsedInItemSec`
 - 進捗率: `elapsedInItemSec / currentItem.allocatedSec`
-- 押し/巻き: `elapsedInItemSec - currentItem.allocatedSec`（正なら押し、負なら巻き）
+- 現項目の押し/巻き: `elapsedInItemSec - currentItem.allocatedSec`（正なら押し、負なら巻き）
+- 全体スケジュール基準の押し/巻き: 累積実績 (`totalElapsedSec`) と当初計画上の同時点経過の差（実際にタイマー画面で表示するのはこちら。現項目内の押し/巻きではなく、この全体基準値）
 
 ## 関連ドキュメント
 

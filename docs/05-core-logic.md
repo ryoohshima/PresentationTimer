@@ -1,8 +1,6 @@
 # 05. コアロジック（タイマーエンジン）
 
-> **本章は設計提案である。** 提示された RFC には含まれず、拙者が起草した。本アプリの核心ゆえ、最優先でレビューされたい。実装フェーズの検証により変更されうる。
->
-> 配置先想定: `packages/core-logic/src/timerEngine.ts`
+> **本章は設計提案として起草し、その後 `packages/core-logic/src/timerEngine.ts` へ実装済み。** 提示された RFC には含まれず、拙者が起草した章である。本アプリの核心ゆえ、変更時は最優先でレビューされたい。
 
 ## 設計方針：純粋関数の集合
 
@@ -36,10 +34,21 @@
 
 `start` は上記に加えて全項目の `allocatedSec` を **`plannedSec` へ戻す**。`allocatedSec` は再配分で書き換わる可変値であり、計測開始時に計画値へ戻さないと前回実行の再配分結果を基準に過不足が積み増され、実行を重ねるほど割当がずれる（Issue #98）。裏を返せば **`idle` の間は常に `allocatedSec === plannedSec`** が不変条件となる。
 
-## 純粋関数シグネチャ（案）
+## 制御系（純粋関数）
 
 ```ts
-// 経過時間を加算する（UI の tick から毎秒呼ぶ想定）
+// 編集画面で確定したアジェンダを読み込み、計測前の初期状態にする
+// （totalPlannedSec を再計算し、idle・先頭項目・経過 0 にリセット）
+function loadAgenda(state: TimerState, items: AgendaItem[]): TimerState;
+
+// idle から計測を開始する。割当（allocatedSec）を計画値（plannedSec）へ戻し、
+// 先頭項目・経過 0 にリセットする
+function start(state: TimerState): TimerState;
+
+function pause(state: TimerState): TimerState;
+function resume(state: TimerState): TimerState;
+
+// 経過時間を加算する（UI の tick から毎秒呼ぶ想定）。running 時のみ進む
 function tick(state: TimerState, deltaSec: number): TimerState;
 
 // 現項目を確定し、過不足を残項目へ再配分してから次項目へ進む
@@ -47,11 +56,36 @@ function advanceItem(state: TimerState): TimerState;
 
 // 現項目で生じた過不足を、残項目の allocatedSec へ反映する（advanceItem 内部から利用）
 function redistribute(state: TimerState): TimerState;
+```
 
-// 制御系（必要に応じて）
-function start(state: TimerState): TimerState;
-function pause(state: TimerState): TimerState;
-function resume(state: TimerState): TimerState;
+## セレクタ関数群
+
+状態には保持せず、都度導出する派生値（[04. データモデル](./04-data-model.md#派生値型には持たず関数で算出する想定)）。
+
+```ts
+function getCurrentItem(state: TimerState): AgendaItem | undefined;
+function getNextItem(state: TimerState): AgendaItem | undefined;
+
+// 現項目の残り秒（allocatedSec - elapsedInItemSec）
+function getRemainingSec(state: TimerState): number | undefined;
+
+// 現項目の押し/巻き秒（elapsedInItemSec - allocatedSec）
+function getOverUnderSec(state: TimerState): number | undefined;
+
+// 現項目の進捗率（elapsedInItemSec / allocatedSec, 0〜1+）
+function getProgressRate(state: TimerState): number | undefined;
+
+// アジェンダ全体の残り秒（totalPlannedSec - totalElapsedSec）
+function getTotalRemainingSec(state: TimerState): number;
+
+// 全体スケジュール基準の押し/巻き秒。正なら押し、負なら巻き。
+// タイマー画面（②）はこちらを表示する（現項目内の押し/巻きではなく全体の累積偏差）
+function getScheduleOverUnderSec(state: TimerState): number;
+
+// 押し/巻きの度合い（進捗率ベース）。safe=余裕 / warning=残りわずか / over=超過
+type PaceLevel = "safe" | "warning" | "over";
+const PACE_WARNING_RATE = 0.8; // warning 判定のしきい値（進捗率）
+function getPaceLevel(state: TimerState): PaceLevel | undefined;
 ```
 
 ## 時間再配分アルゴリズム（3モード）
@@ -78,6 +112,8 @@ poolPlannedTotal = Σ plannedSec (再配分プール)
 > 6 分側へ `90 × 6/9 = 60 秒`、3 分側へ `90 × 3/9 = 30 秒` を圧縮。
 
 ### 2. `fixed-end`（終了時刻固定）
+
+> **現状の実装状況**: `redistribute` は `reallocationMode !== "proportional"` の場合に即 `state` を返すため、`fixed-end` の再配分ロジックは未実装であり `off` と同じ挙動（再配分なし）になる。設定画面（③）でも `fixed-end` の選択肢は準備中として無効化している（Issue #90）。以下は Phase 2（[07. ロードマップ](./07-roadmap.md)）で実装する仕様。
 
 発表全体の終了時刻 `endAtEpochSec` を固定し、残時間を再配分プールへ比例配分する。「会議の終了時刻は動かせない」ユースケース向け。
 

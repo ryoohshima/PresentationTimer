@@ -9,9 +9,10 @@
 | レイヤ | 採用技術 | 役割 |
 |---|---|---|
 | モノレポ管理 | **Turborepo** | 高速なビルド・キャッシュ管理 |
-| パッケージマネージャ | **pnpm** | モノレポとの相性・速度面で推奨 |
-| モバイル（Android / iOS） | **React Native + Expo** | メインターゲット。1コードベースで両 OS |
-| Web | **React + Vite**（または Next.js） | 大画面共有用・管理用 |
+| パッケージマネージャ | **pnpm**（workspace + catalog） | モノレポとの相性・速度面で推奨。`react`/`react-dom` 等は catalog で全ワークスペース一元管理 |
+| モバイル（Android / iOS） | **React Native + Expo**（`expo-router`） | メインターゲット。1コードベースで両 OS・ファイルベースルーティング |
+| Web | **React + Vite** | 大画面共有用・管理用（`apps/web`）とプロダクト紹介サイト（`apps/lp`）の 2 アプリ |
+| 状態管理 | **React Context + `useReducer`**（`packages/store`） | `apps/mobile` / `apps/web` が共有するタイマーストア。状態更新は `core-logic` へ委譲 |
 | 共通言語 | **TypeScript** | ロジック・型をプラットフォーム横断で共有 |
 
 ## なぜこの構成か（設計意図）
@@ -20,17 +21,21 @@
 
 型定義（`packages/types`）も同様に共有することで、アジェンダやタイマー状態の構造が全プラットフォームで一致し、プラットフォーム間の実装差異による不整合を防ぐ。Turborepo のキャッシュにより、共有パッケージの変更時も影響範囲のみを再ビルドできる。
 
+状態管理（`packages/store`）は React Context + `useReducer` で実装し、reducer 内の状態更新はすべて `core-logic` の純粋関数（`loadAgenda` / `start` / `tick` / `advanceItem` 等）へ委譲する。UI 層に計算ロジックを一切持たせないことで、`core-logic` の純粋性を保ったまま、状態管理の配線部分だけをプラットフォーム間で共有できる。
+
 ## 依存関係の方向
 
 ```text
 apps/mobile ─┐
-             ├─→ packages/core-logic ─→ packages/types
+             ├─→ packages/store ─→ packages/core-logic ─→ packages/types
 apps/web ────┘
 ```
 
-- `apps/*`（UI）は `core-logic` と `types` に依存する。
+- `apps/mobile` / `apps/web` は `store` 経由で状態を扱いつつ、`core-logic` の関数（フォーマッタ・セレクタ等）も直接 import する。
+- `store` は `core-logic` と `types` に依存する。
 - `core-logic` は `types` のみに依存し、UI フレームワークには **依存しない**（純粋 TS）。
-- 依存は常に「UI → ロジック → 型」の一方向で、逆流させない。
+- 依存は常に「UI → ストア → ロジック → 型」の一方向で、逆流させない。
+- `apps/lp`（プロダクト紹介サイト）はマーケティング用の独立したアプリであり、上記の依存関係には含まれない。
 
 ## 関連ドキュメント
 
