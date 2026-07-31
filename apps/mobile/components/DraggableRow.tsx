@@ -1,7 +1,8 @@
 import { type ComponentType, type ReactNode, type RefObject, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { Gesture, type PanGesture } from "react-native-gesture-handler";
-import Animated, { runOnJS, useAnimatedStyle, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import { type DragReorderController, movedSlots, targetIndexOf } from "../hooks/useDragReorder";
 
 // 画面① アジェンダ編集の 1 行分ラッパー。ドラッグジェスチャーの生成と行の配置を担う。
@@ -43,7 +44,7 @@ export function DraggableRow({ agendaIndex, itemId, controller, children }: Drag
           grabbedSlot.value = slots.value[itemId] ?? agendaIndex;
           dragY.value = 0;
           draggingId.value = itemId;
-          runOnJS(handleDragStart)(itemId);
+          scheduleOnRN(handleDragStart, itemId);
         })
         .onUpdate((event) => {
           dragY.value = event.translationY;
@@ -66,12 +67,12 @@ export function DraggableRow({ agendaIndex, itemId, controller, children }: Drag
           settling.value = true;
           draggingId.value = null;
           dragY.value = 0;
-          runOnJS(handleDrop)(fromSlot, toSlot);
+          scheduleOnRN(handleDrop, fromSlot, toSlot);
         })
         .onFinalize((_event, success) => {
           // キャンセル時（onEnd 未到達）のみ後始末。通常終了は onEnd が処理済み。
           if (!success) {
-            runOnJS(handleRelease)();
+            scheduleOnRN(handleRelease);
           }
         })
         // ハンドルに触れた瞬間に ScrollView へタッチを奪われないようにする。
