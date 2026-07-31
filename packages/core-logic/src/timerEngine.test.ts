@@ -288,8 +288,9 @@ describe("redistribute による比例再配分", () => {
     expect(next.agenda[1]!.allocatedSec).toBe(10);
   });
 
-  test("押しでも MIN_ALLOCATED_SEC 未満の項目は引き上げず現割当を維持する", () => {
-    // delta=+3（押し）。B の下限は min(30, 5)=5 なので 30 へ膨らまず、圧縮もされない
+  test("押しでは MIN_ALLOCATED_SEC 未満の項目も全体残りまで圧縮される（項目1=10秒を12秒で確定）", () => {
+    // delta=+2（押し）。B は 30 秒未満なので下限は 0 となり、5-2=3 へ圧縮される。
+    // 旧実装では下限 min(30, 5)=5 が現割当を固定し「残り5秒」のままだった（報告バグの再現）
     const agenda: AgendaItem[] = [
       { id: "a", title: "A", plannedSec: 10, allocatedSec: 10, isLocked: false },
       { id: "b", title: "B", plannedSec: 5, allocatedSec: 5, isLocked: false },
@@ -297,12 +298,49 @@ describe("redistribute による比例再配分", () => {
     const state = makeState({
       agenda,
       currentIndex: 0,
-      elapsedInItemSec: 13,
+      elapsedInItemSec: 12,
       totalPlannedSec: 15,
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(5);
+    expect(next.agenda[1]!.allocatedSec).toBe(3);
+  });
+
+  test("押しが残割当を超える場合、MIN_ALLOCATED_SEC 未満の項目は 0 でクランプされ負にならない", () => {
+    // delta=+10（押し）。targetTotal = 5-10 = -5 だが下限 0 でクランプ
+    const agenda: AgendaItem[] = [
+      { id: "a", title: "A", plannedSec: 10, allocatedSec: 10, isLocked: false },
+      { id: "b", title: "B", plannedSec: 5, allocatedSec: 5, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 20,
+      totalPlannedSec: 15,
+      status: "running",
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(0);
+  });
+
+  test("押しの比例配分枝（残差吸収でない項目）でも MIN_ALLOCATED_SEC 未満の項目が圧縮される", () => {
+    // delta=+2, pool: B(5), C(5), poolPlannedTotal=10
+    // B: round(max(0, 5 - 2*(5/10))) = 4, C (残差吸収): (10-2) - 4 = 4
+    const agenda: AgendaItem[] = [
+      { id: "a", title: "A", plannedSec: 10, allocatedSec: 10, isLocked: false },
+      { id: "b", title: "B", plannedSec: 5, allocatedSec: 5, isLocked: false },
+      { id: "c", title: "C", plannedSec: 5, allocatedSec: 5, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 12,
+      totalPlannedSec: 20,
+      status: "running",
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(4);
+    expect(next.agenda[2]!.allocatedSec).toBe(4);
   });
 
   test("再配分プールが空（全ロック）のとき state を変えない", () => {
