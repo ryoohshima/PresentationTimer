@@ -91,9 +91,10 @@ export function advanceItem(state: TimerState): TimerState {
  *
  * proportional モード: 再配分プール（index > currentIndex かつ !isLocked）各項目の
  * plannedSec 比で delta を配分し、下限でクランプして整数秒に丸める。
- * 下限は min(MIN_ALLOCATED_SEC, 現在の allocatedSec)。一律 MIN_ALLOCATED_SEC にすると
- * もともと 30 秒未満の項目が巻き・押しのどちらでも 30 秒へ「引き上げ」られてしまうため、
- * クランプは圧縮方向にのみ効かせる（下限の意図は docs/05 の「ゼロ／マイナス防止」）。
+ * 下限は「割当が MIN_ALLOCATED_SEC 以上の項目のみ MIN_ALLOCATED_SEC、未満の項目は 0」。
+ * 一律 MIN_ALLOCATED_SEC では 30 秒未満の項目が 30 秒へ引き上げられ（Issue #112 の症状）、
+ * min(MIN_ALLOCATED_SEC, 現割当) では 30 秒未満の項目が押しで一切圧縮されない。
+ * クランプは圧縮方向にのみ効き、短時間項目はマイナスにならない範囲で全量圧縮を許す。
  * off モードおよびプールが空の場合は state をそのまま返す。
  */
 export function redistribute(state: TimerState): TimerState {
@@ -113,7 +114,7 @@ export function redistribute(state: TimerState): TimerState {
 
   const poolPlannedTotal = pool.reduce((sum, { item }) => sum + item.plannedSec, 0);
   const poolIndexSet = new Set(pool.map(({ index }) => index));
-  const lastPoolIndex = pool[pool.length - 1]!.index;
+  const lastPoolIndex = pool[pool.length - 1]?.index;
 
   // 丸め残差を最後の項目で吸収するため、プール全体の目標合計を先に確定する
   const poolAllocatedTotal = pool.reduce((sum, { item }) => sum + item.allocatedSec, 0);
@@ -124,7 +125,8 @@ export function redistribute(state: TimerState): TimerState {
   const newAgenda = state.agenda.map((item, index) => {
     if (!poolIndexSet.has(index)) return item;
 
-    const minSec = Math.min(MIN_ALLOCATED_SEC, item.allocatedSec);
+    // 圧縮方向の下限。もともと下限未満の項目は 0 を下限に圧縮を許す（負値のみ防止）
+    const minSec = item.allocatedSec >= MIN_ALLOCATED_SEC ? MIN_ALLOCATED_SEC : 0;
     let newAllocatedSec: number;
     if (index === lastPoolIndex) {
       // 残差吸収: 前項目の丸め誤差をここで吸収して合計を目標値に合わせる

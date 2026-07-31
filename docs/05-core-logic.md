@@ -102,11 +102,12 @@ poolPlannedTotal = Σ plannedSec (再配分プール)
 
 各 item について:
   share = item.plannedSec / poolPlannedTotal
-  item.allocatedSec = max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share)
+  minSec = item.allocatedSec >= MIN_ALLOCATED_SEC ? MIN_ALLOCATED_SEC : 0
+  item.allocatedSec = max(minSec, item.allocatedSec - delta * share)
 ```
 
 - 押し（`delta > 0`）なら残項目が一律圧縮され、巻き（`delta < 0`）なら残項目が緩む。
-- `MIN_ALLOCATED_SEC`（例: 30 秒）を下限とし、項目がゼロ／マイナスになるのを防ぐ。
+- 下限は圧縮方向にのみ効かせる。割当が `MIN_ALLOCATED_SEC`（例: 30 秒）以上の項目はそれ未満へ圧縮せず、もともと下限未満の短時間項目は 0 秒を下限に全量圧縮を許す（マイナスのみ防止）。一律の下限だと短時間項目が引き上げられ、`min(下限, 現割当)` だと短時間項目が押しで一切圧縮できない。
 
 > **例**: 残り 2 項目（予定 6 分 / 3 分）。現項目で +90 秒の押し。
 > 6 分側へ `90 × 6/9 = 60 秒`、3 分側へ `90 × 3/9 = 30 秒` を圧縮。
