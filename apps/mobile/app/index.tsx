@@ -30,7 +30,7 @@ export default function AgendaEditScreen() {
   const [editorTarget, setEditorTarget] = useState<EditorTarget | undefined>(undefined);
 
   const drag = useDragReorder({
-    itemCount: agenda.length,
+    agendaIds: agenda.map((item) => item.id),
     onReorder: (from, to) => {
       const moved: AgendaItem | undefined = agenda[from];
       if (moved) {
@@ -112,20 +112,23 @@ export default function AgendaEditScreen() {
             style={styles.list}
             scrollEnabled={drag.activeId === null}
           >
-            {agenda.map((item, index) => (
-              <DraggableRow key={item.id} index={index} itemId={item.id} controller={drag}>
-                {(gesture) => (
-                  <AgendaItemRow
-                    item={item}
-                    dragGesture={gesture}
-                    isActive={drag.activeId === item.id}
-                    onEdit={() => setEditorTarget({ mode: "edit", item })}
-                    onToggleLock={() => toggleLock(item.id)}
-                    onRemove={() => confirmRemove(item)}
-                  />
-                )}
-              </DraggableRow>
-            ))}
+            {/* 行は absolute 配置（測定後）のため、リスト高さはここで明示する。 */}
+            <View style={drag.listHeight === undefined ? undefined : { height: drag.listHeight }}>
+              {agenda.map((item, index) => (
+                <DraggableRow key={item.id} agendaIndex={index} itemId={item.id} controller={drag}>
+                  {(gesture) => (
+                    <AgendaItemRow
+                      item={item}
+                      dragGesture={gesture}
+                      isActive={drag.activeId === item.id}
+                      onEdit={() => setEditorTarget({ mode: "edit", item })}
+                      onToggleLock={() => toggleLock(item.id)}
+                      onRemove={() => confirmRemove(item)}
+                    />
+                  )}
+                </DraggableRow>
+              ))}
+            </View>
           </ScrollView>
           {addButton}
         </>

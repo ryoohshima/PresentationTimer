@@ -1,68 +1,53 @@
-# todo: Issue #96 アプリ再起動後にアジェンダが復元されない
+# todo: ドラッグ並べ替え時のちらつき再発（ネイティブのみ）
 
-> 根本原因は永続化ロジックのバグではなく、dependabot PR #66 による `@react-native-async-storage/async-storage` の Expo SDK 54 非対応バージョンへの bump（2.2.0 → 3.1.1）。
-> 調査中に別障害（TS 7 で `expo start` 起動不能）を発見し Issue #107 として起票、その修正も本ブランチに含めた。
+> Issue #97 の修正（PR #103）後も、アプリ（ネイティブ）では入れ替え時に一瞬ちらつきが残る。
+> Web で再現しないのは既知（Reanimated の JS/UI スレッド競合は Web に存在しない）。
 
-## 計画
+## 根本原因
 
-- [x] `apps/mobile/package.json` の async-storage を SDK 54 対応の `2.2.0` へ戻す
-- [x] `.github/dependabot.yml` の ignore に `@react-native-async-storage/*` を追加（スコープ付きパッケージが `react-native-*` パターンをすり抜けた穴を塞ぐ）
-- [x] `useAgendaPersistence.ts` の握り潰し catch に開発時ログを追加し、同種の無症状故障を検知可能にする
-- [x] `pnpm install` で lockfile を更新
-- [x] 検証（`biome ci .` / typecheck / test / Web バンドル生成）
-- [x] Issue #107 起票（TS 7 で `expo start` が起動不能）
-- [x] `apps/mobile/app.json` に `experiments.tsconfigPaths: false` を追加し起動を回復
-- [x] フラグの解除条件を CLAUDE.md に記載
-- [ ] **Android 実機での再現確認（作成 → タスクキル → 再起動）** ← 未完了
+Reanimated 4（Fabric）は transform 系の更新を `ShadowTree::commit` と**同期しない**高速パス
+（`synchronouslyUpdateViewOnUIThread`）で適用する（deepwiki で仕様確認済み）。
+そのため PR #103 の「React の並び替え commit と shared value リセットを同一フレームに載せる」
+方式は、ネイティブでは 1 フレームの不整合（旧順序＋transform 消失）を原理的に排除できない。
+
+## 修正方針: 表示位置の所有権を UI スレッドへ移す
+
+行を absolute 配置にし、表示位置を shared value `slots`（id → 表示スロット）だけで決める。
+`moveItem` の commit はレイアウトへ一切影響しなくなり、スレッド間の適用順序に依存する
+見た目そのものが消滅する（sortable list の定石パターン）。
+
+- [x] 原因調査（Reanimated 4 のスレッド同期仕様の確認）
+- [x] `useDragReorder.ts`: `slots` マップ主体へ書き換え（リセット機構を全廃）
+- [x] `DraggableRow.tsx`: absolute 配置 + slots ベースの translateY へ書き換え
+- [x] `app/index.tsx`: agendaIds の受け渡しとリスト高さの明示
+- [x] 検証（`biome ci .` / typecheck / test / Web での基本動作）
+- [ ] **Android 実機でのちらつき解消確認** ← ユーザーへ依頼（手元に環境なし）
 
 ## レビュー
 
-### Issue #96 の根本原因
+### 実装の要点
 
-`useAgendaPersistence.ts` の実装は正しく、保存・復元・配線のいずれにも欠陥は無かった。
-真因は dependabot PR #66 が async-storage を `2.2.0`（SDK 54 想定）から `3.1.1` へメジャー bump したこと。
-
-すり抜けた構造的理由が 2 つある。
-
-1. **ignore パターンの穴**: `dependabot.yml` は `react-native-*` を ignore していたが、
-   `@react-native-async-storage/` はスコープ付きゆえマッチしなかった。
-2. **peer 制約の撤廃**: lockfile の差分が示すとおり、v3.1.1 の peer は `react-native: '*'` で
-   何でも受け入れる。v2.2.0 は `^0.0.0-0 || >=0.65 <1.0`。pnpm も dependabot も不整合を検知できなかった。
-
-症状が「クラッシュせず、復元もされず、エラーも出ない」だったのは、フックが失敗を
-`catch {}` / `.catch(() => {})` で握り潰していたため。バリデーション不一致も無言でスキップされていた。
+- 表示位置の唯一の情報源を shared value `slots`（id → 表示スロット）にし、行を absolute 配置へ変更。
+  ドラッグ中の退避・ドロップ確定はすべて UI スレッド上で `slots` を書き換えるだけになり、
+  store の `moveItem` commit はレイアウトへ一切影響しない（＝commit と transform の
+  フレームずれという競合自体が消滅）。
+- #103 の「リセットを 1 コミット遅らせる」機構（pendingReset / useLayoutEffect リセット）は全廃。
+  ドロップ後に JS 側から shared value を触る必要が無くなった。
+- 行高（rowOffset）測定前は従来どおり通常フローで描画し、測定後に absolute へ切り替える。
+  切り替えは同一 commit に初期 translateY ごと載るため見た目の変化は無い。
+- 副次改善: ドロップ時に指位置から確定スロットへ withTiming（150ms）で着地するようになった
+  （#103 は瞬間スナップだった）。
 
 ### 検証結果
 
 | 項目 | 結果 |
 | --- | --- |
-| async-storage と `bundledNativeModules.json` の一致 | 2.2.0 で完全一致 |
-| `expo-doctor` の async-storage 指摘 | 消滅 |
-| lockfile の peer 依存 | `react-native: '*'` → `>=0.65 <1.0` に正常化 |
-| Web バンドル生成 | 成功（7,490,079 bytes。設定変更前後で同一サイズ） |
-| `biome ci .` | exit 0（警告 15 件はすべて既存コード由来） |
+| `rtk proxy pnpm exec biome ci .` | exit 0（警告 17 件はすべて既存コード由来） |
 | `pnpm typecheck` | 6/6 成功 |
-| `pnpm test` | 8/8 成功 |
-| **Android 実機での復元動作** | **未検証**（Android SDK・実機とも手元に無い） |
-
-### Web 検証の限界（重要）
-
-Web の AsyncStorage は localStorage 実装であり、今回不整合を起こしたネイティブモジュールを通らない。
-したがって **Web でのランタイム検証は本修正を原理的に検証できない**。Android 実機での確認が必須である。
-
-### 副次対応: Issue #107
-
-`typescript@7.0.2`（PR #77 の bump）が `expo start` を全プラットフォームで起動不能にしていた。
-TS 7.0 は公開コンパイラ API を持たず `ts.sys` が undefined になるため、`@expo/cli@54` の
-`evaluateTsConfig()` が落ちる。CI の `tsc --noEmit` は通るため検知されていなかった。
-
-typescript は 7 系のまま追随する方針に基づき、`app.json` に `experiments.tsconfigPaths: false` を追加して回避した。
-対照実験で因果を確認済み（設定ありで起動成功・設定なしで同エラー再現）。
-本リポジトリはどの tsconfig にも `paths` を定義していないため機能低下は無い。
-解除条件（SDK 57 系への更新）は CLAUDE.md に記載した。
-
-### 未解決事項（別スコープ）
-
-- `@expo/vector-icons` が `14.0.4`（SDK 54 の想定は `^15.0.3`）。二重インストールも発生しており、
-  async-storage と同種の SDK 不整合。SDK 54 化（PR #69）の更新漏れと思われる。
-- `typescript@7.0.2` に対し `@expo/require-utils` が `^5.0.0` を要求する peer 警告が残存。
+| `pnpm test` | 48/48 成功 |
+| Web: 初期レイアウト（absolute 切替後） | 3 行が 92px 間隔で正しく積層 |
+| Web: ドラッグ並べ替え（2 スロット / 1 スロット） | 順序・座標とも正確、ずれ無し |
+| Web: リロード後の復元 | 並び順維持、slots 再同期正常 |
+| Web: 削除 | 残行が正しく詰まる |
+| Web: 追加 | 新項目が即座に正しいスロットへ（フォールバック経路も動作） |
+| **Android 実機でのちらつき解消** | **未検証**（Web ではスレッド競合が原理的に再現しないため） |
