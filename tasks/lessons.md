@@ -87,3 +87,4 @@
 - **何があったか**: `timerEngine.test.ts` へテストを追加する際、既存テストの `agenda[1]!.allocatedSec` という非 null アサーション記法に合わせて書いた。だが同記法は biome の `lint/style/noNonNullAssertion` 警告の発生源であり、追加分だけ警告が増えた。`biome ci .` は警告があっても exit 0 のため、「exit code 確認済み＝クリーン」と誤認していた。ユーザーから warn の指摘を受け、ファイル全体（19 箇所）を `?.` へ一括置換した。
 - **ルール**: 既存ファイルの記法に合わせる際は、その記法が lint 警告の発生源でないかを先に確認する（警告源なら linter の提案する記法で書く）。push 前の検証では exit code だけでなく、**自分が触ったファイルに警告が出ていないか**を `biome ci <触ったファイル>` で個別確認する。警告の総数が「既存由来」でも、自分の追加分が混ざっていれば増分は自分の責任である。
 - **副次の学び**: `biome lint --only=style/<rule> --write --unsafe <file>` でルール単位の一括自動修正ができる。テストの `expect(x!.prop)` は `expect(x?.prop)` へ置換しても、undefined なら `toBe` が失敗するため検証力は落ちない。
+- **追記（同日）**: biome の `--unsafe` 修正は文字どおり型安全でない。`expect(x!.prop)` のような検証位置は `?.` で無害だが、**算術・代入の途中の `!`**（`x!.a + y` / `prop: x!.a`）が `?.` になると `number | undefined` が流出し typecheck が落ちる。unsafe fix を当てたら push 前に `pnpm typecheck`（全体）と対象テストを必ず再実行する。今回これを怠り CI（test / typecheck）を一度落とした。
