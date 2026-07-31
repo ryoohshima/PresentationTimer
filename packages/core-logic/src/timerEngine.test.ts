@@ -270,6 +270,41 @@ describe("redistribute による比例再配分", () => {
     expect(next.agenda[1]!.allocatedSec).toBe(MIN_ALLOCATED_SEC);
   });
 
+  test("巻きでは MIN_ALLOCATED_SEC 未満の項目が引き上げられない（項目1=10秒を5秒で確定）", () => {
+    // delta=-5（巻き）。B は残差吸収枝: 下限は min(30, 5)=5 なので max が効かず 5+5=10 になる。
+    // 旧実装では max(30, 10)=30 となり「残り30秒」と表示されていた（報告バグの再現）
+    const agenda: AgendaItem[] = [
+      { id: "a", title: "A", plannedSec: 10, allocatedSec: 10, isLocked: false },
+      { id: "b", title: "B", plannedSec: 5, allocatedSec: 5, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 5,
+      totalPlannedSec: 15,
+      status: "running",
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(10);
+  });
+
+  test("押しでも MIN_ALLOCATED_SEC 未満の項目は引き上げず現割当を維持する", () => {
+    // delta=+3（押し）。B の下限は min(30, 5)=5 なので 30 へ膨らまず、圧縮もされない
+    const agenda: AgendaItem[] = [
+      { id: "a", title: "A", plannedSec: 10, allocatedSec: 10, isLocked: false },
+      { id: "b", title: "B", plannedSec: 5, allocatedSec: 5, isLocked: false },
+    ];
+    const state = makeState({
+      agenda,
+      currentIndex: 0,
+      elapsedInItemSec: 13,
+      totalPlannedSec: 15,
+      status: "running",
+    });
+    const next = redistribute(state);
+    expect(next.agenda[1]!.allocatedSec).toBe(5);
+  });
+
   test("再配分プールが空（全ロック）のとき state を変えない", () => {
     const agenda: AgendaItem[] = [
       { id: "a", title: "A", plannedSec: 300, allocatedSec: 300, isLocked: false },

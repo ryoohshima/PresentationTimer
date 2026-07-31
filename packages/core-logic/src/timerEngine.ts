@@ -3,7 +3,7 @@
 
 import type { AgendaItem, TimerState } from "@presentation-timer/types";
 
-/** 再配分後の 1 項目あたりの割当下限（秒）。これ未満には圧縮しない。 */
+/** 再配分後の 1 項目あたりの割当下限（秒）。これ未満には圧縮しない（もともと下回る項目は引き上げない）。 */
 export const MIN_ALLOCATED_SEC = 30;
 
 // --- 制御系（状態遷移） ---------------------------------------------------
@@ -90,7 +90,10 @@ export function advanceItem(state: TimerState): TimerState {
  * 現項目で生じた過不足を残項目の allocatedSec へ反映する（advanceItem 内部から利用）。
  *
  * proportional モード: 再配分プール（index > currentIndex かつ !isLocked）各項目の
- * plannedSec 比で delta を配分し、MIN_ALLOCATED_SEC でクランプして整数秒に丸める。
+ * plannedSec 比で delta を配分し、下限でクランプして整数秒に丸める。
+ * 下限は min(MIN_ALLOCATED_SEC, 現在の allocatedSec)。一律 MIN_ALLOCATED_SEC にすると
+ * もともと 30 秒未満の項目が巻き・押しのどちらでも 30 秒へ「引き上げ」られてしまうため、
+ * クランプは圧縮方向にのみ効かせる（下限の意図は docs/05 の「ゼロ／マイナス防止」）。
  * off モードおよびプールが空の場合は state をそのまま返す。
  */
 export function redistribute(state: TimerState): TimerState {
@@ -121,13 +124,14 @@ export function redistribute(state: TimerState): TimerState {
   const newAgenda = state.agenda.map((item, index) => {
     if (!poolIndexSet.has(index)) return item;
 
+    const minSec = Math.min(MIN_ALLOCATED_SEC, item.allocatedSec);
     let newAllocatedSec: number;
     if (index === lastPoolIndex) {
       // 残差吸収: 前項目の丸め誤差をここで吸収して合計を目標値に合わせる
-      newAllocatedSec = Math.max(MIN_ALLOCATED_SEC, targetTotal - sumAllocated);
+      newAllocatedSec = Math.max(minSec, targetTotal - sumAllocated);
     } else {
       const share = poolPlannedTotal === 0 ? 1 / pool.length : item.plannedSec / poolPlannedTotal;
-      newAllocatedSec = Math.round(Math.max(MIN_ALLOCATED_SEC, item.allocatedSec - delta * share));
+      newAllocatedSec = Math.round(Math.max(minSec, item.allocatedSec - delta * share));
     }
 
     sumAllocated += newAllocatedSec;
