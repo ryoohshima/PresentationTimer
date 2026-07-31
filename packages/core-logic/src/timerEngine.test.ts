@@ -204,9 +204,9 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(244);
-    expect(next.agenda[2]!.allocatedSec).toBe(146);
-    expect(state.agenda[1]!.allocatedSec).toBe(300); // イミュータブル
+    expect(next.agenda[1]?.allocatedSec).toBe(244);
+    expect(next.agenda[2]?.allocatedSec).toBe(146);
+    expect(state.agenda[1]?.allocatedSec).toBe(300); // イミュータブル
   });
 
   test("巻き（delta < 0）で残項目 allocatedSec が plannedSec 比で緩む", () => {
@@ -220,8 +220,8 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(356);
-    expect(next.agenda[2]!.allocatedSec).toBe(214);
+    expect(next.agenda[1]?.allocatedSec).toBe(356);
+    expect(next.agenda[2]?.allocatedSec).toBe(214);
   });
 
   test("過不足ゼロ（delta = 0）では allocatedSec が変化しない", () => {
@@ -250,8 +250,8 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(300); // ロック済み、不変
-    expect(next.agenda[2]!.allocatedSec).toBe(90);
+    expect(next.agenda[1]?.allocatedSec).toBe(300); // ロック済み、不変
+    expect(next.agenda[2]?.allocatedSec).toBe(90);
   });
 
   test("allocatedSec が MIN_ALLOCATED_SEC 未満になる場合はクランプされる", () => {
@@ -267,7 +267,7 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(MIN_ALLOCATED_SEC);
+    expect(next.agenda[1]?.allocatedSec).toBe(MIN_ALLOCATED_SEC);
   });
 
   test("巻きでは MIN_ALLOCATED_SEC 未満の項目が引き上げられない（項目1=10秒を5秒で確定）", () => {
@@ -285,7 +285,7 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(10);
+    expect(next.agenda[1]?.allocatedSec).toBe(10);
   });
 
   test("押しでは MIN_ALLOCATED_SEC 未満の項目も全体残りまで圧縮される（項目1=10秒を12秒で確定）", () => {
@@ -303,7 +303,7 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(3);
+    expect(next.agenda[1]?.allocatedSec).toBe(3);
   });
 
   test("押しが残割当を超える場合、MIN_ALLOCATED_SEC 未満の項目は 0 でクランプされ負にならない", () => {
@@ -320,7 +320,7 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(0);
+    expect(next.agenda[1]?.allocatedSec).toBe(0);
   });
 
   test("押しの比例配分枝（残差吸収でない項目）でも MIN_ALLOCATED_SEC 未満の項目が圧縮される", () => {
@@ -339,8 +339,8 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(4);
-    expect(next.agenda[2]!.allocatedSec).toBe(4);
+    expect(next.agenda[1]?.allocatedSec).toBe(4);
+    expect(next.agenda[2]?.allocatedSec).toBe(4);
   });
 
   test("再配分プールが空（全ロック）のとき state を変えない", () => {
@@ -387,8 +387,8 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(90);
-    expect(next.agenda[2]!.allocatedSec).toBe(90);
+    expect(next.agenda[1]?.allocatedSec).toBe(90);
+    expect(next.agenda[2]?.allocatedSec).toBe(90);
   });
 
   test("丸め残差は最後のプール項目で吸収される", () => {
@@ -410,11 +410,11 @@ describe("redistribute による比例再配分", () => {
       status: "running",
     });
     const next = redistribute(state);
-    expect(next.agenda[1]!.allocatedSec).toBe(100);
-    expect(next.agenda[2]!.allocatedSec).toBe(100);
-    expect(next.agenda[3]!.allocatedSec).toBe(99);
+    expect(next.agenda[1]?.allocatedSec).toBe(100);
+    expect(next.agenda[2]?.allocatedSec).toBe(100);
+    expect(next.agenda[3]?.allocatedSec).toBe(99);
     // プール合計が poolAllocatedTotal - delta = 300 - 1 = 299 に一致する
-    const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]!.allocatedSec, 0);
+    const poolTotal = [1, 2, 3].reduce((s, i) => s + next.agenda[i]?.allocatedSec, 0);
     expect(poolTotal).toBe(299);
   });
 });
@@ -423,11 +423,11 @@ describe("実行をまたぐ再配分の累積防止（Issue #98）", () => {
   /** 先頭項目を overSec だけ押して確定し、残りは割当どおりに消費して finished まで進める。 */
   const runSession = (initial: TimerState, overSec: number): TimerState => {
     let state = start(initial);
-    state = advanceItem({ ...state, elapsedInItemSec: state.agenda[0]!.allocatedSec + overSec });
+    state = advanceItem({ ...state, elapsedInItemSec: state.agenda[0]?.allocatedSec + overSec });
     while (state.status !== "finished") {
       state = advanceItem({
         ...state,
-        elapsedInItemSec: state.agenda[state.currentIndex]!.allocatedSec,
+        elapsedInItemSec: state.agenda[state.currentIndex]?.allocatedSec,
       });
     }
     return state;
