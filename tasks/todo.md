@@ -1,32 +1,17 @@
-# todo: 押しで「次へ」時に 30 秒未満の項目が圧縮されないバグの修正
+# todo: Issue #32 プライバシーポリシー整備
 
-> 前回タスク（Issue #96 / #107）は PR 反映済みのため本ファイルを置き換え。
-
-## 背景
-
-項目1=10秒・項目2=5秒で、項目1を押し2秒（経過12秒）で「次へ」→ 全体残り3秒なのに
-項目2のカウント（大きい数字 = `getRemainingSec`）が5秒からスタートする。
-原因: #112 で下限を `min(MIN_ALLOCATED_SEC, 現割当)` にした結果、もともと30秒未満の
-項目は押し（圧縮方向）でも「現割当」が下限になり、一切圧縮されなくなった。
+> 前回タスク（押し圧縮バグ）は PR #114 反映済みのため本ファイルを置き換え。
 
 ## 計画
 
-- [x] 原因特定（`redistribute` の minSec が圧縮を塞いでいる）
-- [x] `timerEngine.ts`: 下限を「割当 >= 30 の項目のみ 30、未満の項目は 0（マイナス防止のみ）」へ変更
-- [x] テスト修正: 「押しでも現割当を維持」→「押しでは残り時間まで圧縮される」（経過12秒→3秒）
-- [x] テスト追加: 押し超過で残りがマイナスになる境界（0 でクランプ）
-- [x] テスト追加: 残差吸収でない枝（3項目）での 30 秒未満圧縮
-- [x] `docs/05-core-logic.md` の下限記述を実装に同期
-- [x] `vitest` 実行・`biome ci .`（rtk proxy 経由）で検証
-- [x] コミット（f73f86b）
+- [x] Issue #32 と過去の Claude Action の作業状況を確認（リモートブランチに commit 7cba03b あり・PR 未作成）
+- [x] 旧 commit を最新 develop ベースへ cherry-pick（App.tsx はコンポーネント分割済みのためコンフリクト解消し Footer.tsx へ移植）
+- [x] 「個人情報を収集しない」前提の妥当性を現行コードで再確認（解析 SDK・外部通信なし、AsyncStorage のみ）
+- [x] 検証: biome ci（rtk proxy 生実行）/ tsc --noEmit / vite build すべて pass、dist/privacy.html 生成確認
+- [x] push（--force-with-lease）とドラフト PR #120 作成
+- [x] CI green 確認（react-doctor / test / lint / claude-review / typecheck すべて pass）
 
 ## レビュー
 
-- 修正は `redistribute` の下限 1 行（+コメント・docs 同期）のみ。
-  `minSec = allocatedSec >= MIN_ALLOCATED_SEC ? MIN_ALLOCATED_SEC : 0`
-- #112 の「min(30, 現割当)」は引き上げは防いだが、30 秒未満の項目の下限が
-  常に現割当となり圧縮方向を完全に塞いでいた（押しでも割当が減らない）。
-- 新仕様: 30 秒以上の項目は従来どおり 30 秒未満へ圧縮しない。
-  もともと 30 秒未満の短時間項目は 0 秒を下限に全量圧縮を許す（マイナスのみ防止）。
-- 検証: vitest 52/52 成功、`biome ci .` exit 0（警告 22 件は既存）、`tsc --noEmit` 成功。
-- 既存テスト 1 件（押しで現割当維持を固定していたもの）は新仕様に合わせて書き換えた。
+- 追加: apps/lp/public/privacy.html（143 行）、apps/lp/src/components/Footer.tsx にリンク追加
+- 判断留保（PR 本文に記載）: 問い合わせメール実在確認 / 公開 URL のデプロイ設定 / モバイル内導線 / Play Console 登録（人手）
