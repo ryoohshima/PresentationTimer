@@ -14,9 +14,15 @@ interface ToggleSwitchProps {
   value: boolean;
   onValueChange: (next: boolean) => void;
   accessibilityLabel?: string;
+  disabled?: boolean;
 }
 
-export function ToggleSwitch({ value, onValueChange, accessibilityLabel }: ToggleSwitchProps) {
+export function ToggleSwitch({
+  value,
+  onValueChange,
+  accessibilityLabel,
+  disabled = false,
+}: ToggleSwitchProps) {
   const knobPosition = useSharedValue(value ? 1 : 0);
 
   useEffect(() => {
@@ -30,8 +36,9 @@ export function ToggleSwitch({ value, onValueChange, accessibilityLabel }: Toggl
   return (
     <Pressable
       accessibilityRole="switch"
-      accessibilityState={{ checked: value }}
+      accessibilityState={{ checked: value, disabled }}
       accessibilityLabel={accessibilityLabel}
+      disabled={disabled}
       onPress={() => onValueChange(!value)}
       style={[styles.track, { backgroundColor: value ? "#22C55ED9" : "#14171A29" }]}
     >
