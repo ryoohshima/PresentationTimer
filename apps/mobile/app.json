@@ -29,6 +29,12 @@
     "plugins": ["expo-router"],
     "experiments": {
       "tsconfigPaths": false
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a0748982-d2b3-4c67-a028-43d745fe2417"
+      }
+    },
+    "owner": "ryo-ohshima"
   }
 }
