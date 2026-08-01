@@ -43,7 +43,8 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { state, setReallocationMode } = useTimerStore();
 
-  // 通知設定は現状 store 未対応（配信の仕組み自体が未実装）のため、UI 上の見た目のみ画面ローカルで保持する。
+  // 通知設定は現状 store 未対応（配信の仕組み自体が未実装）のため準備中としてグレーアウトし、
+  // UI 上の見た目のみ画面ローカルで保持する。
   const [remainingNotify, setRemainingNotify] = useState(true);
   const [overNotify, setOverNotify] = useState(true);
   const [vibration, setVibration] = useState(false);
@@ -89,9 +90,10 @@ export default function SettingsScreen() {
           </GlassCard>
         </View>
 
+        {/* 終了時刻固定モードが未実装のため、終了時刻の設定も準備中としてグレーアウトする。 */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>終了時刻</Text>
-          <GlassCard strong style={styles.endTimeCard}>
+          <Text style={styles.sectionLabel}>終了時刻（準備中）</Text>
+          <GlassCard strong style={[styles.endTimeCard, styles.cardDisabled]}>
             <Text style={styles.endTimeTitle}>発表の終了時刻</Text>
             <Text style={styles.endTimeValue}>{formatEndTime(state.endAtEpochSec)}</Text>
             <Feather name="chevron-right" size={20} color="#14171A66" />
@@ -100,14 +102,15 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>通知 / アラート</Text>
-          <GlassCard strong>
+          <Text style={styles.sectionLabel}>通知 / アラート（準備中）</Text>
+          <GlassCard strong style={styles.cardDisabled}>
             <View style={styles.notifRow}>
               <Text style={styles.notifTitle}>残りわずかで通知</Text>
               <ToggleSwitch
                 value={remainingNotify}
                 onValueChange={setRemainingNotify}
                 accessibilityLabel="残りわずかで通知"
+                disabled
               />
             </View>
             <View style={styles.divider} />
@@ -117,6 +120,7 @@ export default function SettingsScreen() {
                 value={overNotify}
                 onValueChange={setOverNotify}
                 accessibilityLabel="超過で通知"
+                disabled
               />
             </View>
             <View style={styles.divider} />
@@ -126,6 +130,7 @@ export default function SettingsScreen() {
                 value={vibration}
                 onValueChange={setVibration}
                 accessibilityLabel="項目の切り替えでバイブレーション"
+                disabled
               />
             </View>
           </GlassCard>
@@ -172,6 +177,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   modeRowDisabled: {
+    opacity: 0.4,
+  },
+  cardDisabled: {
     opacity: 0.4,
   },
   radio: {
