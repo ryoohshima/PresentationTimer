@@ -20,7 +20,7 @@ export function Footer() {
           color: "rgba(20,23,26,0.5)",
         }}
       >
-        TEMPO
+        プレゼンタイマー
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
         <a
@@ -29,7 +29,7 @@ export function Footer() {
         >
           プライバシーポリシー
         </a>
-        <div style={{ fontSize: 13, color: "rgba(20,23,26,0.4)" }}>© 2026 TEMPO</div>
+        <div style={{ fontSize: 13, color: "rgba(20,23,26,0.4)" }}>© 2026 プレゼンタイマー</div>
       </div>
     </div>
   );
