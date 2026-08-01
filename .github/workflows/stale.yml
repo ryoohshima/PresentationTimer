@@ -1,6 +1,6 @@
-name: Stale Issues / PRs
+name: Stale PRs
 
-# 古い Issue / PR を自動でクローズする。
+# 古い PR を自動でクローズする（Issue は対象外）。
 # 30 日無活動で stale ラベル付与、さらに 7 日無活動で自動クローズ。
 
 on:
@@ -20,15 +20,12 @@ jobs:
         with:
           days-before-stale: 30
           days-before-close: 7
-          stale-issue-label: stale
+          # Issue は stale 処理の対象外（-1 で無効化）
+          days-before-issue-stale: -1
+          days-before-issue-close: -1
           stale-pr-label: stale
-          exempt-issue-labels: "pinned,security,keep-open"
           exempt-pr-labels: "pinned,security,keep-open"
-          stale-issue-message: |
-            この Issue は 30 日間活動がないため stale としてマークされました。
-            7 日以内に追加コメントが無ければ自動でクローズされます。
           stale-pr-message: |
             この PR は 30 日間活動がないため stale としてマークされました。
             7 日以内に追加コメントが無ければ自動でクローズされます。
-          close-issue-message: 自動クローズしました。再度議論が必要な場合は新しい Issue を作成してください。
           close-pr-message: 自動クローズしました。継続作業が必要な場合は新しい PR を作成してください。
