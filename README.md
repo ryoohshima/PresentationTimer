@@ -3,6 +3,7 @@
 アジェンダ登録型・全画面プレゼンタイマーアプリ。Android をメインターゲットに、同一コードベースから iOS / Web へ展開する React Native モノレポ。
 
 - 公式ドメイン: [presentation-timer.net](https://presentation-timer.net)
+- プライバシーポリシー: [presentation-timer.net/privacy](https://presentation-timer.net/privacy)
 - 設計ドキュメント: [docs/](./docs/README.md)（背景・アーキテクチャ・データモデル・コアロジック等）
 
 ## 技術スタック
@@ -67,6 +68,20 @@ pnpm --filter @presentation-timer/mobile ios       # iOS シミュレータ
 pnpm --filter @presentation-timer/web dev          # Web クライアント
 pnpm --filter @presentation-timer/lp dev           # LP
 ```
+
+## デプロイ・配信
+
+- **LP (`apps/lp`)**: [Cloudflare Pages](https://pages.cloudflare.com/) でホスティング（プロジェクト名 `presentation-timer`）。カスタムドメイン [presentation-timer.net](https://presentation-timer.net) を紐付け済み。
+
+  ```sh
+  pnpm --filter @presentation-timer/lp build
+  npx wrangler pages deploy apps/lp/dist --project-name presentation-timer --branch main
+  ```
+
+  デプロイには `npx wrangler login` による Cloudflare 認証が必要。
+
+- **メール**: `support@presentation-timer.net` は Cloudflare Email Routing で転送設定済み。
+- **モバイル (Android)**: Expo [EAS Build](https://docs.expo.dev/build/introduction/) で aab を生成し Google Play で配信予定（Epic #10、掲載素材は [docs/09](./docs/09-play-store-listing.md)）。
 
 ## CI
 
