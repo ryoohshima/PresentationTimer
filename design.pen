@@ -122,8 +122,8 @@
                   "id": "iKpti",
                   "name": "Logo",
                   "fill": "$ink",
-                  "content": "プレゼンタイマー",
-                  "fontFamily": "Noto Sans JP",
+                  "content": "Presentation Timer",
+                  "fontFamily": "Space Grotesk",
                   "fontSize": 22,
                   "fontWeight": "700",
                   "letterSpacing": 0.5
@@ -150,7 +150,7 @@
                       "id": "Squa4",
                       "name": "NavCtaText",
                       "fill": "#FFFFFF",
-                      "content": "無料ではじめる",
+                      "content": "ブラウザで始める",
                       "fontFamily": "Noto Sans JP",
                       "fontSize": 14,
                       "fontWeight": "700"
@@ -227,7 +227,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "登壇の「間」を、\n最後まで美しく。",
+                      "content": "登壇の時間を、\n美しく。",
                       "lineHeight": 1.15,
                       "fontFamily": "Noto Sans JP",
                       "fontSize": 56,
@@ -240,7 +240,7 @@
                       "fill": "#14171AA6",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "アジェンダを組んでスタートするだけ。押しても巻いても、残り時間は自動で調整。本番中はスマホ1台で進行管理できます。",
+                      "content": "アジェンダを組んでスタートするだけ。押しても巻いても、残り時間は自動で調整。\n本番中はスマホ1台で進行管理できます。",
                       "lineHeight": 1.8,
                       "fontFamily": "Noto Sans JP",
                       "fontSize": 18,
@@ -287,10 +287,68 @@
                               "id": "k0EViu",
                               "name": "HeroCtaText",
                               "fill": "#FFFFFF",
-                              "content": "無料ではじめる",
+                              "content": "ブラウザで始める",
                               "fontFamily": "Noto Sans JP",
                               "fontSize": 16,
                               "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AEMUC",
+                          "name": "GooglePlayBadge",
+                          "fill": "#0F1115",
+                          "cornerRadius": 12,
+                          "stroke": "#FFFFFF29",
+                          "strokeWidth": 1,
+                          "gap": 12,
+                          "padding": [
+                            10,
+                            18,
+                            10,
+                            16
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "vN7xk",
+                              "name": "PlayIcon",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "play",
+                              "library": "lucide",
+                              "fill": "#FFFFFF"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "pu23f",
+                              "name": "BadgeTextCol",
+                              "layout": "vertical",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "cVbnL",
+                                  "name": "BadgeSmall",
+                                  "fill": "#FFFFFFB3",
+                                  "content": "GET IT ON",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 10,
+                                  "fontWeight": "600",
+                                  "letterSpacing": 0.6
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "bzqrb",
+                                  "name": "BadgeBig",
+                                  "fill": "#FFFFFF",
+                                  "content": "Google Play",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 18,
+                                  "fontWeight": "700"
+                                }
+                              ]
                             }
                           ]
                         }
@@ -325,297 +383,6 @@
                           }
                         }
                       }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "k5DBZ5",
-          "name": "Features",
-          "width": "fill_container",
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "x53xr",
-              "name": "FeaturesInner",
-              "width": 1180,
-              "layout": "vertical",
-              "gap": 12,
-              "padding": [
-                96,
-                32
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "oVfV5",
-                  "name": "FeaturesTitle",
-                  "fill": "$ink",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "やることは3つだけ",
-                  "textAlign": "center",
-                  "fontFamily": "Noto Sans JP",
-                  "fontSize": 36,
-                  "fontWeight": "900"
-                },
-                {
-                  "type": "frame",
-                  "id": "q3e41",
-                  "name": "FeaturesGrid",
-                  "width": "fill_container",
-                  "gap": 24,
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "xm7hH",
-                      "name": "FeatureCard",
-                      "width": "fill_container",
-                      "fill": "$glass-fill",
-                      "cornerRadius": 24,
-                      "stroke": "$glass-stroke",
-                      "strokeWidth": 1,
-                      "effect": [
-                        {
-                          "type": "background_blur",
-                          "radius": "$glass-blur"
-                        },
-                        {
-                          "type": "shadow",
-                          "shadowType": "outer",
-                          "color": "$glass-shadow",
-                          "offset": {
-                            "x": 0,
-                            "y": 12
-                          },
-                          "blur": 32
-                        }
-                      ],
-                      "layout": "vertical",
-                      "gap": 16,
-                      "padding": [
-                        36,
-                        28
-                      ],
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "XpmrG",
-                          "name": "FeatureIconTile",
-                          "width": 44,
-                          "height": 44,
-                          "fill": "$glass-fill-strong",
-                          "cornerRadius": 12,
-                          "stroke": "$glass-stroke",
-                          "strokeWidth": 1,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "OdPxp",
-                              "name": "FeatureIcon",
-                              "width": 24,
-                              "height": 24,
-                              "icon": "list-todo",
-                              "library": "lucide",
-                              "fill": "$accent-green"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "FO9rz",
-                          "name": "CardTitle",
-                          "fill": "$ink",
-                          "content": "アジェンダを組む",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 20,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "z5BhRe",
-                          "name": "CardText",
-                          "fill": "#14171A99",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "項目と時間配分を並べるだけ。順番はドラッグで自由に入れ替えられます。",
-                          "lineHeight": 1.75,
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 15,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "dbpzF",
-                      "name": "FeatureCard",
-                      "width": "fill_container",
-                      "fill": "$glass-fill",
-                      "cornerRadius": 24,
-                      "stroke": "$glass-stroke",
-                      "strokeWidth": 1,
-                      "effect": [
-                        {
-                          "type": "background_blur",
-                          "radius": "$glass-blur"
-                        },
-                        {
-                          "type": "shadow",
-                          "shadowType": "outer",
-                          "color": "$glass-shadow",
-                          "offset": {
-                            "x": 0,
-                            "y": 12
-                          },
-                          "blur": 32
-                        }
-                      ],
-                      "layout": "vertical",
-                      "gap": 16,
-                      "padding": [
-                        36,
-                        28
-                      ],
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "ujqfy",
-                          "name": "FeatureIconTile",
-                          "width": 44,
-                          "height": 44,
-                          "fill": "$glass-fill-strong",
-                          "cornerRadius": 12,
-                          "stroke": "$glass-stroke",
-                          "strokeWidth": 1,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "jb5Hn",
-                              "name": "FeatureIcon",
-                              "width": 24,
-                              "height": 24,
-                              "icon": "refresh-cw",
-                              "library": "lucide",
-                              "fill": "$accent-green"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "gLaAH",
-                          "name": "CardTitle",
-                          "fill": "$ink",
-                          "content": "自動で時間を再配分",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 20,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "q8bBv",
-                          "name": "CardText",
-                          "fill": "#14171A99",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "予定を超えても、後の項目の持ち時間を自動で圧縮。全体の終了時刻はブレません。",
-                          "lineHeight": 1.75,
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 15,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "Z2buMX",
-                      "name": "FeatureCard",
-                      "width": "fill_container",
-                      "fill": "$glass-fill",
-                      "cornerRadius": 24,
-                      "stroke": "$glass-stroke",
-                      "strokeWidth": 1,
-                      "effect": [
-                        {
-                          "type": "background_blur",
-                          "radius": "$glass-blur"
-                        },
-                        {
-                          "type": "shadow",
-                          "shadowType": "outer",
-                          "color": "$glass-shadow",
-                          "offset": {
-                            "x": 0,
-                            "y": 12
-                          },
-                          "blur": 32
-                        }
-                      ],
-                      "layout": "vertical",
-                      "gap": 16,
-                      "padding": [
-                        36,
-                        28
-                      ],
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "WxQW2",
-                          "name": "FeatureIconTile",
-                          "width": 44,
-                          "height": 44,
-                          "fill": "$glass-fill-strong",
-                          "cornerRadius": 12,
-                          "stroke": "$glass-stroke",
-                          "strokeWidth": 1,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon",
-                              "id": "G6UCwY",
-                              "name": "FeatureIcon",
-                              "width": 24,
-                              "height": 24,
-                              "icon": "eye",
-                              "library": "lucide",
-                              "fill": "$accent-green"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "v8YZa2",
-                          "name": "CardTitle",
-                          "fill": "$ink",
-                          "content": "遠くからでも読める",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 20,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "WURDP",
-                          "name": "CardText",
-                          "fill": "#14171A99",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "残り時間を画面いっぱいに表示。押し・巻きは色でひと目にわかります。",
-                          "lineHeight": 1.75,
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 15,
-                          "fontWeight": "normal"
-                        }
-                      ]
                     }
                   ]
                 }
@@ -663,12 +430,12 @@
                       "type": "ref",
                       "ref": "eHuov",
                       "name": "AgendaPhoneMock",
-                      "width": 280,
-                      "height": 608,
+                      "width": 320,
+                      "height": 692,
                       "descendants": {
                         "E7RKbY": {
                           "type": "frame",
-                          "id": "a9pzC",
+                          "id": "bvm75",
                           "name": "AgendaContent",
                           "width": "fill_container",
                           "height": "fill_container",
@@ -680,272 +447,157 @@
                             24,
                             16
                           ],
+                          "justifyContent": "space_between",
                           "children": [
                             {
-                              "type": "text",
-                              "id": "xJOWB",
-                              "name": "AgendaTitle",
-                              "fill": "$ink",
-                              "content": "アジェンダ",
-                              "fontFamily": "Noto Sans JP",
-                              "fontSize": 26,
-                              "fontWeight": "700"
-                            },
-                            {
                               "type": "frame",
-                              "id": "nlouH",
-                              "name": "AgendaRow",
+                              "id": "cXNDn",
+                              "name": "EditMain",
                               "width": "fill_container",
-                              "fill": "$glass-fill-strong",
-                              "cornerRadius": 16,
-                              "stroke": "$glass-stroke",
-                              "strokeWidth": 1,
-                              "effect": [
-                                {
-                                  "type": "background_blur",
-                                  "radius": "$glass-blur"
-                                },
-                                {
-                                  "type": "shadow",
-                                  "shadowType": "outer",
-                                  "color": "$glass-shadow",
-                                  "offset": {
-                                    "x": 0,
-                                    "y": 8
-                                  },
-                                  "blur": 24
-                                }
-                              ],
+                              "layout": "vertical",
                               "gap": 12,
-                              "padding": 16,
-                              "alignItems": "center",
                               "children": [
                                 {
-                                  "type": "text",
-                                  "id": "y01nrW",
-                                  "name": "RowBullet",
-                                  "fill": "#9CA3AF",
-                                  "content": "≡",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 18,
-                                  "fontWeight": "normal"
-                                },
-                                {
                                   "type": "frame",
-                                  "id": "FX49m",
-                                  "name": "RowTextCol",
+                                  "id": "zlbmS",
+                                  "name": "EditHeader",
                                   "width": "fill_container",
-                                  "layout": "vertical",
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "CXpVo",
-                                      "name": "RowTitle",
+                                      "id": "h1bjsB",
+                                      "name": "AgendaTitle",
                                       "fill": "$ink",
-                                      "content": "オープニング",
+                                      "content": "アジェンダ",
                                       "fontFamily": "Noto Sans JP",
-                                      "fontSize": 15,
+                                      "fontSize": 26,
                                       "fontWeight": "700"
                                     },
                                     {
-                                      "type": "text",
-                                      "id": "ujist",
-                                      "name": "RowDetail",
-                                      "fill": "#6B7280",
-                                      "content": "5分 00秒",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 13,
-                                      "fontWeight": "normal"
+                                      "type": "icon",
+                                      "id": "XsjBB",
+                                      "name": "SettingsIcon",
+                                      "width": 22,
+                                      "height": 22,
+                                      "icon": "settings",
+                                      "library": "lucide",
+                                      "fill": "$ink"
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "frame",
-                              "id": "zifwy",
-                              "name": "AgendaRow",
-                              "width": "fill_container",
-                              "fill": "$glass-fill-strong",
-                              "cornerRadius": 16,
-                              "stroke": "$accent-green",
-                              "strokeWidth": 1.5,
-                              "effect": [
-                                {
-                                  "type": "background_blur",
-                                  "radius": "$glass-blur"
                                 },
-                                {
-                                  "type": "shadow",
-                                  "shadowType": "outer",
-                                  "color": "$glass-shadow",
-                                  "offset": {
-                                    "x": 0,
-                                    "y": 8
-                                  },
-                                  "blur": 24
-                                }
-                              ],
-                              "gap": 12,
-                              "padding": 16,
-                              "alignItems": "center",
-                              "children": [
                                 {
                                   "type": "text",
-                                  "id": "FfRvI",
-                                  "name": "RowBullet",
-                                  "fill": "#9CA3AF",
-                                  "content": "≡",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 18,
-                                  "fontWeight": "normal"
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "s78ydz",
-                                  "name": "RowTextCol",
-                                  "width": "fill_container",
-                                  "layout": "vertical",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "ADeXm",
-                                      "name": "RowTitle",
-                                      "fill": "$ink",
-                                      "content": "本編",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 15,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "zRtD2",
-                                      "name": "RowDetail",
-                                      "fill": "#6B7280",
-                                      "content": "10分 00秒 ・ 固定",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 13,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "jtTZG",
-                                  "name": "LockedBadge",
-                                  "fill": "#16803D1A",
-                                  "cornerRadius": 100,
-                                  "padding": [
-                                    4,
-                                    12
-                                  ],
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "a1UahA",
-                                      "name": "LockedText",
-                                      "fill": "$accent-green",
-                                      "content": "固定",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 11,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "frame",
-                              "id": "BOCOZ",
-                              "name": "AgendaRow",
-                              "width": "fill_container",
-                              "fill": "$glass-fill-strong",
-                              "cornerRadius": 16,
-                              "stroke": "$glass-stroke",
-                              "strokeWidth": 1,
-                              "effect": [
-                                {
-                                  "type": "background_blur",
-                                  "radius": "$glass-blur"
-                                },
-                                {
-                                  "type": "shadow",
-                                  "shadowType": "outer",
-                                  "color": "$glass-shadow",
-                                  "offset": {
-                                    "x": 0,
-                                    "y": 8
-                                  },
-                                  "blur": 24
-                                }
-                              ],
-                              "gap": 12,
-                              "padding": 16,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "Vqky0",
-                                  "name": "RowBullet",
-                                  "fill": "#9CA3AF",
-                                  "content": "≡",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 18,
-                                  "fontWeight": "normal"
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "rs8lV",
-                                  "name": "RowTextCol",
-                                  "width": "fill_container",
-                                  "layout": "vertical",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "J0sls",
-                                      "name": "RowTitle",
-                                      "fill": "$ink",
-                                      "content": "質疑応答",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 15,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "U0G3m",
-                                      "name": "RowDetail",
-                                      "fill": "#6B7280",
-                                      "content": "5分 00秒",
-                                      "fontFamily": "Noto Sans JP",
-                                      "fontSize": 13,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "frame",
-                              "id": "g5PZP",
-                              "name": "AddItemRow",
-                              "width": "fill_container",
-                              "cornerRadius": 16,
-                              "stroke": "#14171A33",
-                              "strokeWidth": 1.5,
-                              "padding": 16,
-                              "justifyContent": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "H6etE",
-                                  "name": "AddItemText",
-                                  "fill": "#14171A66",
-                                  "content": "＋ 項目を追加",
+                                  "id": "tSCIX",
+                                  "name": "TotalLabel",
+                                  "fill": "#14171A8C",
+                                  "content": "合計 20:00",
                                   "fontFamily": "Noto Sans JP",
                                   "fontSize": 14,
                                   "fontWeight": "600"
+                                },
+                                {
+                                  "id": "aW9h0",
+                                  "type": "ref",
+                                  "ref": "aqEHR",
+                                  "name": "Row1",
+                                  "width": "fill_container"
+                                },
+                                {
+                                  "id": "l15yqj",
+                                  "type": "ref",
+                                  "ref": "aqEHR",
+                                  "name": "Row2",
+                                  "width": "fill_container",
+                                  "stroke": "$accent-green",
+                                  "strokeWidth": 1.5,
+                                  "descendants": {
+                                    "M2sJVE": {
+                                      "content": "本編"
+                                    },
+                                    "guZ5t": {
+                                      "type": "frame",
+                                      "id": "Qnwsg",
+                                      "name": "RowDetailRow",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "KILDO",
+                                          "name": "RowDetail",
+                                          "fill": "#6B7280",
+                                          "content": "10分 00秒",
+                                          "fontFamily": "Noto Sans JP",
+                                          "fontSize": 13,
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "KtGE8",
+                                          "name": "RowLockedSuffix",
+                                          "fill": "$accent-green",
+                                          "content": " ・時間固定",
+                                          "fontFamily": "Noto Sans JP",
+                                          "fontSize": 13,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    "sPwGu": {
+                                      "icon": "lock",
+                                      "fill": "$accent-green"
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "O0E7Q2",
+                                  "type": "ref",
+                                  "ref": "aqEHR",
+                                  "name": "Row3",
+                                  "width": "fill_container",
+                                  "descendants": {
+                                    "M2sJVE": {
+                                      "content": "質疑応答"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "PMjXT",
+                                  "name": "AddItemRow",
+                                  "width": "fill_container",
+                                  "fill": "$glass-fill",
+                                  "cornerRadius": 16,
+                                  "stroke": "$glass-stroke",
+                                  "strokeWidth": 1.5,
+                                  "padding": 16,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "qshzG",
+                                      "name": "AddItemText",
+                                      "fill": "$accent-green",
+                                      "content": "＋ 項目を追加",
+                                      "fontFamily": "Noto Sans JP",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
                                 }
                               ]
+                            },
+                            {
+                              "id": "feQcZ",
+                              "type": "ref",
+                              "ref": "P62dBk",
+                              "name": "StartButton",
+                              "width": "fill_container",
+                              "descendants": {
+                                "Byscn": {
+                                  "content": "開始"
+                                }
+                              }
                             }
                           ]
                         }
@@ -962,13 +614,43 @@
                   "gap": 20,
                   "children": [
                     {
+                      "type": "frame",
+                      "id": "nTH42",
+                      "name": "Eyebrow",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "zy2IL",
+                          "name": "EyebrowIcon",
+                          "width": 18,
+                          "height": 18,
+                          "icon": "sparkles",
+                          "library": "lucide",
+                          "fill": "$accent-green"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ZFHHS",
+                          "name": "EyebrowLabel",
+                          "fill": "$accent-green",
+                          "content": "たったひとつのステップ",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.8
+                        }
+                      ]
+                    },
+                    {
                       "type": "text",
                       "id": "dPiNT",
                       "name": "AgendaHeading",
                       "fill": "$ink",
-                      "content": "本番前に、さっと準備。",
+                      "content": "アジェンダを組む。\n準備はそれだけ。",
                       "fontFamily": "Noto Sans JP",
-                      "fontSize": 32,
+                      "fontSize": 38,
                       "fontWeight": "900"
                     },
                     {
@@ -978,7 +660,7 @@
                       "fill": "#14171AA6",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "項目名と時間を入力するだけ。長押しで並べ替え、譲れない項目は「固定」して再配分の対象から外せます。",
+                      "content": "項目名と時間を並べるだけ。あとは本番中、アプリが残り時間を自動で調整します。",
                       "lineHeight": 1.85,
                       "fontFamily": "Noto Sans JP",
                       "fontSize": 16,
@@ -1010,13 +692,45 @@
               ],
               "children": [
                 {
+                  "type": "frame",
+                  "id": "FrX75",
+                  "name": "Eyebrow",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "QZ4VW",
+                      "name": "EyebrowIcon",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "eye",
+                      "library": "lucide",
+                      "fill": "$accent-green"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gcHst",
+                      "name": "EyebrowLabel",
+                      "fill": "$accent-green",
+                      "content": "遠くからでも読める",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "700",
+                      "letterSpacing": 0.8
+                    }
+                  ]
+                },
+                {
                   "type": "text",
                   "id": "vHrEd",
                   "name": "ScreensTitle",
                   "fill": "$ink",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "本番画面、3つの状態",
+                  "content": "進捗をわかりやすく。",
                   "textAlign": "center",
                   "fontFamily": "Noto Sans JP",
                   "fontSize": 36,
@@ -1051,35 +765,6 @@
                       "gap": 16,
                       "alignItems": "center",
                       "children": [
-                        {
-                          "type": "frame",
-                          "id": "UuOfw",
-                          "name": "VariantPill",
-                          "fill": "$glass-dark-fill",
-                          "cornerRadius": 100,
-                          "stroke": "$glass-dark-stroke",
-                          "strokeWidth": 1,
-                          "effect": {
-                            "type": "background_blur",
-                            "radius": "$glass-blur"
-                          },
-                          "padding": [
-                            4,
-                            12
-                          ],
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Hk74z",
-                              "name": "VariantPillText",
-                              "fill": "#FFFFFF",
-                              "content": "余裕あり",
-                              "fontFamily": "Space Grotesk",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
                         {
                           "id": "xpXB6",
                           "type": "ref",
@@ -1178,20 +863,6 @@
                               }
                             }
                           }
-                        },
-                        {
-                          "type": "text",
-                          "id": "oVKI3",
-                          "name": "VariantDesc",
-                          "fill": "#14171A8C",
-                          "textGrowth": "fixed-width",
-                          "width": 280,
-                          "content": "時間に余裕がある間は落ち着いたグリーン。進捗バーで進行も一目瞭然です。",
-                          "lineHeight": 1.7,
-                          "textAlign": "center",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 14,
-                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -1203,35 +874,6 @@
                       "gap": 16,
                       "alignItems": "center",
                       "children": [
-                        {
-                          "type": "frame",
-                          "id": "K5WjX",
-                          "name": "VariantPill",
-                          "fill": "$glass-dark-fill",
-                          "cornerRadius": 100,
-                          "stroke": "$glass-dark-stroke",
-                          "strokeWidth": 1,
-                          "effect": {
-                            "type": "background_blur",
-                            "radius": "$glass-blur"
-                          },
-                          "padding": [
-                            4,
-                            12
-                          ],
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "ZLbhj",
-                              "name": "VariantPillText",
-                              "fill": "#FFFFFF",
-                              "content": "残りわずか",
-                              "fontFamily": "Space Grotesk",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
                         {
                           "id": "QNe4G",
                           "type": "ref",
@@ -1336,24 +978,13 @@
                                 "z6QeUG": {
                                   "content": "定刻",
                                   "fill": "$accent-yellow-deep"
+                                },
+                                "m1KXAU": {
+                                  "content": "全体 残り 07:14 / 20:00"
                                 }
                               }
                             }
                           }
-                        },
-                        {
-                          "type": "text",
-                          "id": "Hbezu",
-                          "name": "VariantDesc",
-                          "fill": "#14171A8C",
-                          "textGrowth": "fixed-width",
-                          "width": 280,
-                          "content": "残りわずかになると黄色に切り替わり、まとめに入る合図を送ります。",
-                          "lineHeight": 1.7,
-                          "textAlign": "center",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 14,
-                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -1365,35 +996,6 @@
                       "gap": 16,
                       "alignItems": "center",
                       "children": [
-                        {
-                          "type": "frame",
-                          "id": "DKn4p",
-                          "name": "VariantPill",
-                          "fill": "$glass-dark-fill",
-                          "cornerRadius": 100,
-                          "stroke": "$glass-dark-stroke",
-                          "strokeWidth": 1,
-                          "effect": {
-                            "type": "background_blur",
-                            "radius": "$glass-blur"
-                          },
-                          "padding": [
-                            4,
-                            12
-                          ],
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Bkqy8",
-                              "name": "VariantPillText",
-                              "fill": "#FFFFFF",
-                              "content": "超過（押し）",
-                              "fontFamily": "Space Grotesk",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
                         {
                           "id": "i0mn2",
                           "type": "ref",
@@ -1502,26 +1104,15 @@
                                   "content": "押し 01:30",
                                   "fill": "$accent-red-deep"
                                 },
+                                "m1KXAU": {
+                                  "content": "全体 残り -01:30 / 20:00"
+                                },
                                 "ObYqU": {
                                   "content": "最後の項目です"
                                 }
                               }
                             }
                           }
-                        },
-                        {
-                          "type": "text",
-                          "id": "j1kOx8",
-                          "name": "VariantDesc",
-                          "fill": "#14171A8C",
-                          "textGrowth": "fixed-width",
-                          "width": 280,
-                          "content": "超過すると赤に反転。押している時間も数字で正確に把握できます。",
-                          "lineHeight": 1.7,
-                          "textAlign": "center",
-                          "fontFamily": "Noto Sans JP",
-                          "fontSize": 14,
-                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -1628,7 +1219,7 @@
                       "id": "DIOaE",
                       "name": "CtaButtonText",
                       "fill": "#0B0D10",
-                      "content": "無料ではじめる",
+                      "content": "ブラウザで始める",
                       "fontFamily": "Noto Sans JP",
                       "fontSize": 16,
                       "fontWeight": "700"
@@ -1653,8 +1244,8 @@
               "id": "wyGNr",
               "name": "FooterLogo",
               "fill": "#14171A80",
-              "content": "プレゼンタイマー",
-              "fontFamily": "Noto Sans JP",
+              "content": "Presentation Timer",
+              "fontFamily": "Space Grotesk",
               "fontSize": 15,
               "fontWeight": "700"
             },
@@ -1663,8 +1254,8 @@
               "id": "OBU1E",
               "name": "FooterCopy",
               "fill": "#14171A66",
-              "content": "© 2026 プレゼンタイマー",
-              "fontFamily": "Noto Sans JP",
+              "content": "© 2026 Presentation Timer",
+              "fontFamily": "Space Grotesk",
               "fontSize": 13,
               "fontWeight": "normal"
             }
@@ -1941,7 +1532,7 @@
       "fill": "$glass-fill-strong",
       "cornerRadius": 16,
       "stroke": "$glass-stroke",
-      "strokeWidth": 1,
+      "strokeWidth": 1.5,
       "effect": [
         {
           "type": "background_blur",
@@ -2115,6 +1706,16 @@
               "fontFamily": "Noto Sans JP",
               "fontSize": 18,
               "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "m1KXAU",
+              "name": "TotalRemaining",
+              "fill": "#14171A8C",
+              "content": "全体 残り 13:42 / 20:00",
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 15,
+              "fontWeight": "600"
             }
           ]
         },
@@ -2231,17 +1832,7 @@
                   "id": "yVVGV",
                   "name": "BackLink",
                   "fill": "#14171A8C",
-                  "content": "一時停止して編集に戻る",
-                  "fontFamily": "Noto Sans JP",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "wfnhh",
-                  "name": "SettingsLink",
-                  "fill": "#14171A8C",
-                  "content": "設定",
+                  "content": "編集に戻る",
                   "fontFamily": "Noto Sans JP",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -2370,7 +1961,31 @@
                               "content": "本編"
                             },
                             "guZ5t": {
-                              "content": "10分 00秒 ・ 固定"
+                              "type": "frame",
+                              "id": "NziQl",
+                              "name": "RowDetailRow",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "aWtQN",
+                                  "name": "RowDetail",
+                                  "fill": "#6B7280",
+                                  "content": "10分 00秒",
+                                  "fontFamily": "Noto Sans JP",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "yxkOX",
+                                  "name": "RowLockedSuffix",
+                                  "fill": "$accent-green",
+                                  "content": " ・時間固定",
+                                  "fontFamily": "Noto Sans JP",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                }
+                              ]
                             },
                             "sPwGu": {
                               "icon": "lock",
@@ -2749,7 +2364,7 @@
                       "id": "FBAWf",
                       "name": "ItemEditModal",
                       "width": "fill_container",
-                      "fill": "#FFFFFFF2",
+                      "fill": "#FFFFFF",
                       "cornerRadius": 16,
                       "stroke": "$glass-stroke",
                       "strokeWidth": 1,
@@ -3225,7 +2840,10 @@
                     },
                     "z6QeUG": {
                       "content": "定刻",
-                      "fill": "$accent-yellow-deep"
+                      "fill": "#14171A8C"
+                    },
+                    "m1KXAU": {
+                      "content": "全体 残り 07:14 / 20:00"
                     }
                   }
                 }
@@ -3357,6 +2975,9 @@
                     "z6QeUG": {
                       "content": "押し 01:30",
                       "fill": "$accent-red-deep"
+                    },
+                    "m1KXAU": {
+                      "content": "全体 残り 03:30 / 20:00"
                     },
                     "ObYqU": {
                       "content": "最後の項目です"
@@ -3721,7 +3342,6 @@
                     20,
                     24
                   ],
-                  "justifyContent": "space_between",
                   "children": [
                     {
                       "type": "frame",
@@ -3870,6 +3490,7 @@
                                   "type": "frame",
                                   "id": "f9QPrU",
                                   "name": "ModeRow",
+                                  "opacity": 0.4,
                                   "width": "fill_container",
                                   "gap": 12,
                                   "padding": 16,
@@ -3898,7 +3519,7 @@
                                           "id": "t45kz",
                                           "name": "ModeTitle",
                                           "fill": "$ink",
-                                          "content": "終了時刻固定",
+                                          "content": "終了時刻固定（準備中）",
                                           "fontFamily": "Noto Sans JP",
                                           "fontSize": 15,
                                           "fontWeight": "700"
@@ -3993,7 +3614,7 @@
                               "id": "rwZu7",
                               "name": "EndTimeLabel",
                               "fill": "#14171A8C",
-                              "content": "終了時刻",
+                              "content": "終了時刻（準備中）",
                               "fontFamily": "Noto Sans JP",
                               "fontSize": 13,
                               "fontWeight": "700",
@@ -4003,6 +3624,7 @@
                               "type": "frame",
                               "id": "aDJnl",
                               "name": "EndTimeCard",
+                              "opacity": 0.4,
                               "width": "fill_container",
                               "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
@@ -4048,8 +3670,8 @@
                                   "id": "J4pUo",
                                   "name": "EndTimeValue",
                                   "fill": "#14171A8C",
-                                  "content": "15:30",
-                                  "fontFamily": "Space Grotesk",
+                                  "content": "未設定",
+                                  "fontFamily": "Noto Sans JP",
                                   "fontSize": 15,
                                   "fontWeight": "600"
                                 },
@@ -4090,7 +3712,7 @@
                               "id": "T86a1U",
                               "name": "NotifLabel",
                               "fill": "#14171A8C",
-                              "content": "通知 / アラート",
+                              "content": "通知 / アラート（準備中）",
                               "fontFamily": "Noto Sans JP",
                               "fontSize": 13,
                               "fontWeight": "700",
@@ -4100,6 +3722,7 @@
                               "type": "frame",
                               "id": "Ekbl2",
                               "name": "NotifCard",
+                              "opacity": 0.4,
                               "width": "fill_container",
                               "fill": "$glass-fill-strong",
                               "cornerRadius": 16,
@@ -4242,22 +3865,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "id": "k7rGd4",
-                      "type": "ref",
-                      "ref": "P62dBk",
-                      "name": "CloseButton",
-                      "width": "fill_container",
-                      "fill": "$glass-fill-strong",
-                      "stroke": "$glass-stroke",
-                      "strokeWidth": 1,
-                      "descendants": {
-                        "Byscn": {
-                          "content": "閉じる",
-                          "fill": "$ink"
-                        }
-                      }
                     }
                   ]
                 }
