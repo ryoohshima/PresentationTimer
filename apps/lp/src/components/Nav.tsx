@@ -1,32 +1,48 @@
+import { FONT_DISPLAY, GLASS_FILL, GLASS_SHADOW, GLASS_STROKE, glassBlur } from "../tokens.js";
+
 export function Nav() {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        maxWidth: 1180,
-        margin: "0 auto",
-        padding: "28px 32px",
-      }}
-    >
+    <div style={{ display: "flex", justifyContent: "center", padding: "20px 32px 8px" }}>
       <div
         style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontWeight: 700,
-          fontSize: 22,
-          letterSpacing: 0.5,
+          ...glassBlur(),
+          width: "100%",
+          maxWidth: 1180,
+          background: GLASS_FILL,
+          borderRadius: 100,
+          border: `1px solid ${GLASS_STROKE}`,
+          boxShadow: `0 8px 24px ${GLASS_SHADOW}`,
+          padding: "16px 28px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        TEMPO
+        <div
+          style={{
+            fontFamily: FONT_DISPLAY,
+            fontWeight: 700,
+            fontSize: 22,
+            letterSpacing: 0.5,
+          }}
+        >
+          Presentation Timer
+        </div>
+        <a
+          href="#cta"
+          className="lp-nav-cta"
+          style={{
+            ...glassBlur(),
+            fontWeight: 700,
+            fontSize: 14,
+            padding: "12px 24px",
+            borderRadius: 100,
+            border: "1px solid rgba(255,255,255,0.2)",
+          }}
+        >
+          ブラウザで始める
+        </a>
       </div>
-      <a
-        href="#cta"
-        className="lp-nav-cta"
-        style={{ fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 100 }}
-      >
-        無料ではじめる
-      </a>
     </div>
   );
 }
