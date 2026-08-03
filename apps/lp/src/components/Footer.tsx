@@ -1,3 +1,5 @@
+import { FONT_DISPLAY } from "../tokens.js";
+
 export function Footer() {
   return (
     <div
@@ -14,13 +16,13 @@ export function Footer() {
     >
       <div
         style={{
-          fontFamily: "'Space Grotesk', sans-serif",
+          fontFamily: FONT_DISPLAY,
           fontWeight: 700,
           fontSize: 15,
           color: "rgba(20,23,26,0.5)",
         }}
       >
-        プレゼンタイマー
+        Presentation Timer
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
         <a
@@ -29,7 +31,9 @@ export function Footer() {
         >
           プライバシーポリシー
         </a>
-        <div style={{ fontSize: 13, color: "rgba(20,23,26,0.4)" }}>© 2026 プレゼンタイマー</div>
+        <div style={{ fontFamily: FONT_DISPLAY, fontSize: 13, color: "rgba(20,23,26,0.4)" }}>
+          © 2026 Presentation Timer
+        </div>
       </div>
     </div>
   );

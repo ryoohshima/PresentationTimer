@@ -1,18 +1,74 @@
-import { IOSDevice } from "./IOSDevice.js";
+import type { ReactNode } from "react";
+import {
+  ACCENT_GREEN,
+  FONT_EYEBROW,
+  GLASS_FILL,
+  GLASS_FILL_STRONG,
+  GLASS_SHADOW,
+  GLASS_STROKE,
+  glassBlur,
+  INK,
+} from "../tokens.js";
+import {
+  LockIcon,
+  LockOpenIcon,
+  PencilIcon,
+  SettingsIcon,
+  SparklesIcon,
+  TrashIcon,
+} from "./icons.js";
+import { PhoneMock } from "./PhoneMock.js";
+import { PillButton } from "./PillButton.js";
 
-const AGENDA_ROWS = [
-  { title: "オープニング", detail: "5分 00秒", locked: false },
-  { title: "本編", detail: "10分 00秒 ・ 固定", locked: true },
-  { title: "質疑応答", detail: "5分 00秒", locked: false },
-];
+const ICON_GRAY = "#9CA3AF";
+
+function AgendaRow({
+  title,
+  locked = false,
+  detail,
+}: {
+  title: string;
+  locked?: boolean;
+  detail: ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        ...glassBlur(),
+        background: GLASS_FILL_STRONG,
+        borderRadius: 16,
+        border: `1.5px solid ${locked ? ACCENT_GREEN : GLASS_STROKE}`,
+        boxShadow: `0 8px 24px ${GLASS_SHADOW}`,
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        padding: 16,
+      }}
+    >
+      <span style={{ fontFamily: FONT_EYEBROW, fontSize: 18, color: ICON_GRAY }}>≡</span>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+        <div style={{ fontSize: 16, fontWeight: 700, color: INK }}>{title}</div>
+        <div style={{ fontSize: 13, color: "#6B7280" }}>{detail}</div>
+      </div>
+      <PencilIcon size={20} color={ICON_GRAY} />
+      {locked ? (
+        <LockIcon size={20} color={ACCENT_GREEN} />
+      ) : (
+        <LockOpenIcon size={20} color={ICON_GRAY} />
+      )}
+      <TrashIcon size={20} color={ICON_GRAY} />
+    </div>
+  );
+}
 
 export function AgendaEditShowcase() {
   return (
     <div
       style={{
-        background: "#F1F0EC",
-        borderTop: "1px solid rgba(20,23,26,0.08)",
-        borderBottom: "1px solid rgba(20,23,26,0.08)",
+        ...glassBlur(),
+        background: GLASS_FILL,
+        borderTop: `1px solid ${GLASS_STROKE}`,
+        borderBottom: `1px solid ${GLASS_STROKE}`,
       }}
     >
       <div
@@ -23,71 +79,89 @@ export function AgendaEditShowcase() {
           display: "flex",
           alignItems: "center",
           gap: 64,
-          flexWrap: "wrap-reverse",
+          flexWrap: "wrap",
         }}
       >
         <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "center" }}>
-          <IOSDevice title="アジェンダ" width={280} height={606}>
-            <div style={{ padding: "8px 0 24px" }}>
-              {AGENDA_ROWS.map((row) => (
+          <PhoneMock width={320} height={692}>
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: 12,
+                padding: "8px 16px 24px",
+                minHeight: 0,
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <div
-                  key={row.title}
                   style={{
-                    margin: "0 16px 10px",
-                    background: "#fff",
-                    borderRadius: 16,
-                    padding: "14px 16px",
                     display: "flex",
                     alignItems: "center",
-                    gap: 12,
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-                    border: row.locked ? "1.5px solid #16803D" : undefined,
+                    justifyContent: "space-between",
                   }}
                 >
-                  <span style={{ color: "#9ca3af", fontSize: 18 }}>≡</span>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: 15 }}>{row.title}</div>
-                    <div style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>{row.detail}</div>
-                  </div>
-                  {row.locked && (
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: "#16803D",
-                        background: "rgba(22,128,61,0.1)",
-                        padding: "4px 10px",
-                        borderRadius: 100,
-                      }}
-                    >
-                      固定
-                    </span>
-                  )}
+                  <div style={{ fontSize: 26, fontWeight: 700, color: INK }}>アジェンダ</div>
+                  <SettingsIcon size={22} color={INK} />
                 </div>
-              ))}
-              <div
-                style={{
-                  margin: "16px 16px 0",
-                  textAlign: "center",
-                  border: "1.5px dashed rgba(20,23,26,0.2)",
-                  borderRadius: 16,
-                  padding: 14,
-                  color: "rgba(20,23,26,0.4)",
-                  fontSize: 14,
-                  fontWeight: 600,
-                }}
-              >
-                ＋ 項目を追加
+                <div style={{ fontSize: 14, fontWeight: 600, color: "rgba(20,23,26,0.55)" }}>
+                  合計 20:00
+                </div>
+                <AgendaRow title="オープニング" detail="5分 00秒" />
+                <AgendaRow
+                  title="本編"
+                  locked
+                  detail={
+                    <>
+                      10分 00秒
+                      <span style={{ color: ACCENT_GREEN, fontWeight: 600 }}> ・時間固定</span>
+                    </>
+                  }
+                />
+                <AgendaRow title="質疑応答" detail="5分 00秒" />
+                <div
+                  style={{
+                    background: GLASS_FILL,
+                    borderRadius: 16,
+                    border: `1.5px solid ${GLASS_STROKE}`,
+                    padding: 16,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <span style={{ fontSize: 14, fontWeight: 700, color: ACCENT_GREEN }}>
+                    ＋ 項目を追加
+                  </span>
+                </div>
               </div>
+              <PillButton label="開始" />
             </div>
-          </IOSDevice>
+          </PhoneMock>
         </div>
         <div style={{ flex: "1 1 400px", minWidth: 300 }}>
-          <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: -0.5, margin: "0 0 20px" }}>
-            本番前に、さっと準備。
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+            <SparklesIcon size={18} color={ACCENT_GREEN} />
+            <span
+              style={{
+                fontFamily: FONT_EYEBROW,
+                fontSize: 13,
+                fontWeight: 700,
+                letterSpacing: 0.8,
+                color: ACCENT_GREEN,
+              }}
+            >
+              たったひとつのステップ
+            </span>
+          </div>
+          <h2 style={{ fontSize: 38, fontWeight: 900, margin: "0 0 20px" }}>
+            アジェンダを組む。
+            <br />
+            準備はそれだけ。
           </h2>
           <p style={{ fontSize: 16, lineHeight: 1.85, color: "rgba(20,23,26,0.65)", margin: 0 }}>
-            項目名と時間を入力するだけ。長押しで並べ替え、譲れない項目は「固定」して再配分の対象から外せます。
+            項目名と時間を並べるだけ。あとは本番中、アプリが残り時間を自動で調整します。
           </p>
         </div>
       </div>

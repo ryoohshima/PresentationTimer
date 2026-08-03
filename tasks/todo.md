@@ -1,6 +1,27 @@
-# todo: Issue #31 Google Play Console 登録・掲載・審査申請
+# todo: LP を design.pen の新デザイン（Liquid Glass）へ追随させる
 
-> 前回タスク（Issue #32 プライバシーポリシー）は PR #120 マージ済みのため本ファイルを置き換え。
+背景: 8b06d39 で design.pen のみ刷新済み（--stat で確認）。apps/lp の実装は旧デザインのままだった。
+
+- [x] design.pen から LP フレーム（bi8Au）の全構造・スタイル・変数を取得
+- [x] 使用コンポーネント（PhoneMock / AppTimerContent / AppAgendaRow / PillButton）を取得
+- [x] LP フレームのスクリーンショットで視覚確認
+- [x] apps/lp 実装コードの現状把握
+- [x] 実装をデザインへ追随
+  - 新規: tokens.ts / icons.tsx / PhoneMock.tsx / TimerScreen.tsx / PillButton.tsx
+  - 書換: App.tsx / Nav / Hero / AgendaEditShowcase / ScreenVariants / Cta / Footer / index.css / index.html（Inter 追加）
+  - 廃止(未削除): Features.tsx / SignalLegendStrip.tsx / IOSDevice.tsx / TimerMock.tsx（削除コマンドが許可されず手動削除待ち）
+- [x] typecheck / build / biome ci（rtk proxy 生実行）すべて成功
+- [x] ブラウザで視覚検証（1440px フルページをデザインと突き合わせ、ボタン折返しと Hero 改行位置を修正）
+
+## Review
+
+- デザイン変数は `src/tokens.ts` に 1:1 で写した（glass-fill 等）。backdrop-filter は -webkit- 込みで `glassBlur()` に集約。
+- 意図的なデザインとの差分: フッターのプライバシーポリシーリンクは法的必要性から維持（design.pen には無い）。
+- Google Play バッジはリンク先未定のため非リンクの表示のみ（ストア公開後に URL を付ける）。
+
+---
+
+# （前タスク・進行中）Issue #31 Google Play Console 登録・掲載・審査申請
 
 ## 前提（確認済みの事実）
 

@@ -1,5 +1,13 @@
-import { IOSDevice } from "./IOSDevice.js";
-import { TimerMock } from "./TimerMock.js";
+import {
+  ACCENT_GREEN,
+  FONT_EYEBROW,
+  GLASS_FILL_STRONG,
+  GLASS_STROKE,
+  glassBlur,
+} from "../tokens.js";
+import { PlayIcon } from "./icons.js";
+import { PhoneMock } from "./PhoneMock.js";
+import { TimerScreen } from "./TimerScreen.js";
 
 export function Hero() {
   return (
@@ -17,13 +25,16 @@ export function Hero() {
       <div style={{ flex: "1 1 460px", minWidth: 320 }}>
         <div
           style={{
+            ...glassBlur(),
             display: "inline-block",
+            fontFamily: FONT_EYEBROW,
             fontSize: 13,
             fontWeight: 700,
             letterSpacing: 1.5,
-            color: "#16803D",
-            background: "rgba(22,128,61,0.1)",
-            padding: "6px 14px",
+            color: ACCENT_GREEN,
+            background: GLASS_FILL_STRONG,
+            border: `1px solid ${GLASS_STROKE}`,
+            padding: "8px 16px",
             borderRadius: 100,
             marginBottom: 24,
           }}
@@ -36,13 +47,12 @@ export function Hero() {
             lineHeight: 1.15,
             fontWeight: 900,
             margin: "0 0 24px",
-            letterSpacing: -1,
             textWrap: "balance",
           }}
         >
-          登壇の「間」を、
+          登壇の時間を、
           <br />
-          最後まで美しく。
+          美しく。
         </h1>
         <p
           style={{
@@ -50,53 +60,72 @@ export function Hero() {
             lineHeight: 1.8,
             color: "rgba(20,23,26,0.65)",
             margin: "0 0 36px",
-            maxWidth: 440,
           }}
         >
-          アジェンダを組んでスタートするだけ。押しても巻いても、残り時間は自動で調整。本番中はスマホ1台で進行管理できます。
+          アジェンダを組んでスタートするだけ。押しても巻いても、残り時間は自動で調整。
+          <br />
+          本番中はスマホ1台で進行管理できます。
         </p>
         <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
           <a
             href="#cta"
             className="lp-hero-cta"
             style={{
+              ...glassBlur(),
               fontWeight: 700,
               fontSize: 16,
               padding: "16px 32px",
               borderRadius: 100,
+              border: "1px solid rgba(255,255,255,0.4)",
+              boxShadow: "0 10px 28px rgba(22,128,61,0.3)",
               display: "inline-block",
             }}
           >
-            無料ではじめる
+            ブラウザで始める
           </a>
-          <a
-            href="#screens"
-            className="lp-hero-secondary"
-            style={{ fontWeight: 700, fontSize: 15, paddingBottom: 2 }}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              background: "#0F1115",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.16)",
+              padding: "10px 18px 10px 16px",
+            }}
           >
-            3つの画面案を見る ↓
-          </a>
+            <PlayIcon size={24} color="#fff" />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontFamily: FONT_EYEBROW,
+                  fontSize: 10,
+                  fontWeight: 600,
+                  letterSpacing: 0.6,
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                GET IT ON
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_EYEBROW,
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: "#fff",
+                }}
+              >
+                Google Play
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "center" }}>
-        <IOSDevice width={300} height={649} dark>
-          <TimerMock
-            size="large"
-            background="#0B0D10"
-            textColor="#fff"
-            nowLabelColor="rgba(255,255,255,0.4)"
-            time="08:42"
-            timeColor="#22C55E"
-            progressPercent={38}
-            progressTrackColor="rgba(255,255,255,0.12)"
-            progressFillColor="#22C55E"
-            nextBg="rgba(255,255,255,0.06)"
-            nextLabelColor="rgba(255,255,255,0.45)"
-            nextTextColor="rgba(255,255,255,0.85)"
-            nextText="質疑応答（5:00）"
-          />
-        </IOSDevice>
+        <PhoneMock width={300} height={648}>
+          <TimerScreen timeFontSize={90} />
+        </PhoneMock>
       </div>
     </div>
   );

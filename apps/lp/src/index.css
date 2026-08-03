@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background: #fafaf8;
+  background: #eef3ef;
 }
 
 button {
@@ -27,35 +27,24 @@ a:hover {
 }
 
 .lp-nav-cta {
-  background: #14171a;
+  background: rgba(20, 23, 26, 0.6);
   color: #fff;
 }
 
 .lp-nav-cta:hover {
-  background: #16803d;
+  background: rgba(20, 23, 26, 0.8);
   color: #fff;
   text-decoration: none;
 }
 
 .lp-hero-cta {
-  background: #16803d;
+  background: rgba(22, 128, 61, 0.9);
   color: #fff;
 }
 
 .lp-hero-cta:hover {
-  background: #0f6b30;
+  background: rgba(15, 107, 48, 0.95);
   color: #fff;
-  text-decoration: none;
-}
-
-.lp-hero-secondary {
-  color: #14171a;
-  border-bottom: 2px solid #14171a;
-}
-
-.lp-hero-secondary:hover {
-  color: #16803d;
-  border-color: #16803d;
   text-decoration: none;
 }
 
