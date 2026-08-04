@@ -12,17 +12,14 @@ import { TimerScreen } from "./TimerScreen.js";
 export function Hero() {
   return (
     <div
+      className="lp-split"
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 64,
         maxWidth: 1180,
         margin: "0 auto",
-        padding: "24px 32px 80px",
-        flexWrap: "wrap",
+        padding: "24px clamp(20px, 5vw, 32px) 80px",
       }}
     >
-      <div style={{ flex: "1 1 460px", minWidth: 320 }}>
+      <div className="lp-split-text">
         <div
           style={{
             ...glassBlur(),
@@ -43,7 +40,7 @@ export function Hero() {
         </div>
         <h1
           style={{
-            fontSize: 56,
+            fontSize: "clamp(36px, 11vw, 56px)",
             lineHeight: 1.15,
             fontWeight: 900,
             margin: "0 0 24px",
@@ -66,7 +63,10 @@ export function Hero() {
           <br />
           本番中はスマホ1台で進行管理できます。
         </p>
-        <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+        <div
+          className="lp-row"
+          style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}
+        >
           <a
             href="#cta"
             className="lp-hero-cta"
@@ -122,7 +122,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "center" }}>
+      <div className="lp-split-media">
         <PhoneMock width={300} height={648}>
           <TimerScreen timeFontSize={90} />
         </PhoneMock>

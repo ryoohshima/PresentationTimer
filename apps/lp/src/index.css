@@ -58,3 +58,68 @@ a:hover {
   color: #0b0d10;
   text-decoration: none;
 }
+
+/* 端末モックとテキストを左右に並べるセクション。
+   メディアクエリで上書きする宣言はインラインに書くと特異性で勝てないため、ここに集約する */
+.lp-split {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 64px;
+}
+
+/* flex-basis + gap + 端末モック幅(320) + 左右パディング(64) = 768px で flex-wrap が起きる。
+   下のブレークポイント(800px)を必ずこれより上に置くこと。
+   逆転すると「折り返したのに左揃えのまま」という中途半端な幅が生まれる */
+.lp-split-text {
+  flex: 1 1 320px;
+  min-width: 300px;
+}
+
+.lp-split-media {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.lp-footer {
+  justify-content: space-between;
+}
+
+/* 2 カラムが縦積みになる幅。積んだ後は全セクションを中央揃えで統一する */
+@media (max-width: 800px) {
+  .lp-split {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* 縦積み時は見出しを端末モックより先に出す */
+  .lp-split-text {
+    order: -1;
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .lp-split-media {
+    width: 100%;
+  }
+
+  .lp-row {
+    justify-content: center;
+  }
+
+  .lp-footer {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ロゴと CTA が横に並びきらない幅。CTA はヒーロー内の同じボタンで代替する */
+@media (max-width: 560px) {
+  .lp-nav-cta {
+    display: none;
+  }
+}

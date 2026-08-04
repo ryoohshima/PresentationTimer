@@ -14,7 +14,7 @@ export function Nav() {
       style={{
         display: "flex",
         justifyContent: "center",
-        padding: "20px 32px 8px",
+        padding: "20px clamp(16px, 4vw, 32px) 8px",
       }}
     >
       <div
@@ -26,7 +26,7 @@ export function Nav() {
           borderRadius: 100,
           border: `1px solid ${GLASS_STROKE}`,
           boxShadow: `0 8px 24px ${GLASS_SHADOW}`,
-          padding: "16px 28px",
+          padding: "16px clamp(16px, 3vw, 28px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -38,8 +38,9 @@ export function Nav() {
             style={{
               fontFamily: FONT_DISPLAY,
               fontWeight: 700,
-              fontSize: 22,
+              fontSize: "clamp(18px, 5vw, 22px)",
               letterSpacing: 0.5,
+              whiteSpace: "nowrap",
             }}
           >
             Presentation Timer

@@ -5,7 +5,7 @@ export function Cta() {
     <div
       id="cta"
       style={{
-        padding: "72px 32px 96px",
+        padding: "72px clamp(20px, 5vw, 32px) 96px",
         display: "flex",
         justifyContent: "center",
       }}
@@ -25,7 +25,7 @@ export function Cta() {
           textAlign: "center",
         }}
       >
-        <h2 style={{ fontSize: 38, fontWeight: 900, margin: 0 }}>
+        <h2 style={{ fontSize: "clamp(26px, 7vw, 38px)", fontWeight: 900, margin: 0 }}>
           次のプレゼンから、時間に追われない。
         </h2>
         <p style={{ fontSize: 16, color: "rgba(20,23,26,0.55)", margin: 0 }}>

@@ -3,12 +3,12 @@ import { FONT_DISPLAY } from "../tokens.js";
 export function Footer() {
   return (
     <div
+      className="lp-footer"
       style={{
         maxWidth: 1180,
         margin: "0 auto",
-        padding: 32,
+        padding: "32px clamp(20px, 5vw, 32px)",
         display: "flex",
-        justifyContent: "space-between",
         alignItems: "center",
         flexWrap: "wrap",
         gap: 12,
