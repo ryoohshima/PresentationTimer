@@ -96,6 +96,27 @@ export function TrashIcon({ size, color }: { size: number; color: string }) {
   );
 }
 
+// design.pen の App Icon コンポーネント（512 座標系）と 1:1 対応するブランドマーク
+export function AppMarkIcon({ size, color }: { size: number; color: string }) {
+  return (
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 512 512" fill="none">
+      <path
+        d="M372.87 167.17A154.88 154.88 0 1 0 372.87 344.83"
+        stroke={color}
+        strokeWidth={42.24}
+      />
+      <g stroke={color} strokeWidth={22} strokeLinecap="round">
+        <path d="M256 256l71.1-56.78" />
+        <path d="M256 256l71.1 56.78" />
+        <path d="M415.34 292.04a44 44 0 0 0 0-72.08" />
+        <path d="M435.35 309.93a70.4 70.4 0 0 0 0-107.86" opacity={0.75} />
+        <path d="M457.34 325.63a96.8 96.8 0 0 0 0-139.26" opacity={0.5} />
+      </g>
+      <circle cx="246" cy="256" r="19.8" fill={color} />
+    </svg>
+  );
+}
+
 export function PlayIcon({ size, color }: { size: number; color: string }) {
   return (
     <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill={color}>

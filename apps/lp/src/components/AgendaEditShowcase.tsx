@@ -72,17 +72,14 @@ export function AgendaEditShowcase() {
       }}
     >
       <div
+        className="lp-split"
         style={{
           maxWidth: 1180,
           margin: "0 auto",
-          padding: "96px 32px",
-          display: "flex",
-          alignItems: "center",
-          gap: 64,
-          flexWrap: "wrap",
+          padding: "clamp(64px, 12vw, 96px) clamp(20px, 5vw, 32px)",
         }}
       >
-        <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "center" }}>
+        <div className="lp-split-media">
           <PhoneMock width={320} height={692}>
             <div
               style={{
@@ -140,8 +137,11 @@ export function AgendaEditShowcase() {
             </div>
           </PhoneMock>
         </div>
-        <div style={{ flex: "1 1 400px", minWidth: 300 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+        <div className="lp-split-text">
+          <div
+            className="lp-row"
+            style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}
+          >
             <SparklesIcon size={18} color={ACCENT_GREEN} />
             <span
               style={{
@@ -155,7 +155,7 @@ export function AgendaEditShowcase() {
               たったひとつのステップ
             </span>
           </div>
-          <h2 style={{ fontSize: 38, fontWeight: 900, margin: "0 0 20px" }}>
+          <h2 style={{ fontSize: "clamp(28px, 8.5vw, 38px)", fontWeight: 900, margin: "0 0 20px" }}>
             アジェンダを組む。
             <br />
             準備はそれだけ。

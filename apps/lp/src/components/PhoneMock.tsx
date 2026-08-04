@@ -19,6 +19,7 @@ export function PhoneMock({ children, width = 300, height = 648 }: PhoneMockProp
     <div
       style={{
         width,
+        maxWidth: "100%",
         height,
         borderRadius: 48,
         overflow: "hidden",

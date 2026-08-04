@@ -47,7 +47,7 @@ export function ScreenVariants() {
       style={{
         maxWidth: 1180,
         margin: "0 auto",
-        padding: "96px 32px",
+        padding: "clamp(64px, 12vw, 96px) clamp(20px, 5vw, 32px)",
         display: "flex",
         flexDirection: "column",
         gap: 12,
@@ -67,7 +67,14 @@ export function ScreenVariants() {
           遠くからでも読める
         </span>
       </div>
-      <h2 style={{ fontSize: 36, fontWeight: 900, margin: 0, textAlign: "center" }}>
+      <h2
+        style={{
+          fontSize: "clamp(26px, 8vw, 36px)",
+          fontWeight: 900,
+          margin: 0,
+          textAlign: "center",
+        }}
+      >
         進捗をわかりやすく。
       </h2>
       <p
