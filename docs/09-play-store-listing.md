@@ -102,7 +102,7 @@
 |---|---|---|
 | アプリアイコン | 512×512 PNG（32bit、1MB 以下） | `docs/assets/icon-512.png`（不透明・白背景） |
 | フィーチャーグラフィック | 1024×500 PNG/JPEG（必須） | `docs/assets/feature-graphic.png` |
-| スマホスクリーンショット | 2〜8 枚。縦横比 16:9 または 9:16、辺 320〜3840px | `docs/assets/screenshot-01-agenda.png` 〜 `screenshot-04-settings.png`（1080×1920） |
+| スマホスクリーンショット | 2〜8 枚。縦横比 16:9 または 9:16、辺 320〜3840px | `docs/assets/screenshot-01-agenda.png` 〜 `screenshot-05-settings.png`（1080×1920、5 枚） |
 | 7"/10" タブレット | 任意（タブレット対応を謳う場合） | 後回しで可 |
 
 ## 提出までのフロー（個人アカウントの制約）
