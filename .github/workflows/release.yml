@@ -1,0 +1,59 @@
+# Release: `v*` タグの push でリリース一式を実行する。
+# 検証 → EAS production build → Play Console へ submit → main へ反映 → GitHub Release 作成。
+# main への反映を最後に置くのは、ビルド／提出が失敗したときに main を進めないため。
+# なお GITHUB_TOKEN による push では CI は発火しないので、タグは CI が緑の develop コミットに打つこと。
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: タグが develop 上のコミットか確認
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/develop
+
+      - name: タグと app.json の version が一致するか確認
+        run: |
+          version=$(jq -r .expo.version apps/mobile/app.json)
+          [ "v$version" = "$GITHUB_REF_NAME" ] || {
+            echo "::error::タグ $GITHUB_REF_NAME と app.json の version ($version) が一致しない"
+            exit 1
+          }
+
+      - uses: expo/expo-github-action@v9
+        with:
+          eas-version: latest
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Android を production ビルド
+        working-directory: apps/mobile
+        run: eas build --platform android --profile production --non-interactive
+
+      - name: Play Console へ提出
+        working-directory: apps/mobile
+        run: eas submit --platform android --latest --profile production --non-interactive
+
+      - name: main へ反映
+        run: git push origin "$GITHUB_SHA:refs/heads/main"
+
+      - name: GitHub Release を作成
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes
