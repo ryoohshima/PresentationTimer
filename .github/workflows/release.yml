@@ -48,9 +48,10 @@ jobs:
       # packager は eas-cli 自体の入手手段。pnpm だと eas-cli の依存に含まれる
       # dtrace-provider のビルドスクリプト無視が ERR_PNPM_IGNORED_BUILDS で
       # 終了コード 1 になるため npm を使う。
+      # eas-version は固定する。latest だと CLI の破壊的変更でリリースが突然止まる。
       - uses: expo/expo-github-action@v9
         with:
-          eas-version: latest
+          eas-version: 21.6.0
           packager: npm
           token: ${{ secrets.EXPO_TOKEN }}
 
