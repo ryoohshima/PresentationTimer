@@ -45,10 +45,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
+      # packager は eas-cli 自体の入手手段。pnpm だと eas-cli の依存に含まれる
+      # dtrace-provider のビルドスクリプト無視が ERR_PNPM_IGNORED_BUILDS で
+      # 終了コード 1 になるため npm を使う。
       - uses: expo/expo-github-action@v9
         with:
           eas-version: latest
-          packager: pnpm
+          packager: npm
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Android を production ビルド
